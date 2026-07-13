@@ -1,0 +1,65 @@
+# ========================================
+# EDUSPHERE - Robots.txt
+# ========================================
+
+# Allowed bots
+User-agent: *
+Allow: /
+
+# Disallowed paths
+Disallow: /admin/
+Disallow: /api/
+Disallow: /assets/
+Disallow: /components/
+Disallow: /data/
+Disallow: /docs/
+Disallow: /node_modules/
+
+# Sitemap Location
+Sitemap: https://edusphere.com/sitemap.xml
+
+# Crawl Delay
+Crawl-delay: 1
+
+# ========================================
+# GOOGLE BOT
+# ========================================
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ========================================
+# BING BOT
+# ========================================
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ========================================
+# YANDEX BOT
+# ========================================
+User-agent: YandexBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ========================================
+# DUCKDUCKGO BOT
+# ========================================
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# ========================================
+# SEO SETTINGS
+# ========================================
+# Prevent archive/caching
+User-agent: *
+Noarchive: /
+
+# Prevent snippet (optional)
+# User-agent: *
+# Nosnippet: /

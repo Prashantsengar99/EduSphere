@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account - EduSphere</title>
+    
+    <meta name="description" content="Create your EduSphere account to access student portal, parent portal, and more." />
+    <meta name="keywords" content="register, create account, sign up, student portal" />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/register.html" />
+    
+    <meta property="og:title" content="Create Account - EduSphere" />
+    <meta property="og:description" content="Create your EduSphere account." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/register.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    
+    <style>
+        .auth-container {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: color 0.3s ease;
+        }
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+        .form-group {
+            position: relative;
+        }
+        .auth-error {
+            color: var(--error);
+            font-size: var(--font-size-sm);
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .auth-error.show {
+            display: block;
+        }
+        .auth-success {
+            color: var(--success);
+            font-size: var(--font-size-sm);
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .auth-success.show {
+            display: block;
+        }
+        .btn-loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .btn-loading .btn-text {
+            visibility: hidden;
+        }
+        .btn-loading .btn-spinner {
+            display: inline-block !important;
+        }
+        .btn-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            position: absolute;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            background: var(--gray-200);
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+        .password-strength-text {
+            font-size: var(--font-size-xs);
+            margin-top: 0.25rem;
+            color: var(--gray-500);
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <!-- ===== LOADER ===== -->
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="academics.html" class="nav-link">Academics</a>
+                    <a href="programs.html" class="nav-link">Programs</a>
+                    <a href="admissions.html" class="nav-link">Admissions</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <a href="login.html" class="hidden sm:inline-flex btn btn-primary btn-sm">Login</a>
+                    <button id="menu-btn" class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed top-[70px] left-0 right-0 bg-white dark:bg-secondary shadow-2xl" aria-hidden="true">
+            <div class="container py-6">
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Home</a>
+                    <a href="about.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">About</a>
+                    <a href="academics.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Academics</a>
+                    <a href="programs.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Programs</a>
+                    <a href="admissions.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Admissions</a>
+                    <a href="contact.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Contact</a>
+                    <div class="border-t border-gray-100 dark:border-gray-800 my-2"></div>
+                    <a href="login.html" class="btn btn-primary mt-2 w-full text-center">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== REGISTER FORM ===== -->
+    <main id="main" class="page-transition">
+        <div class="auth-container">
+            <div class="auth-card" data-animate>
+                <div class="card p-6 md:p-8 hover:shadow-2xl transition-all duration-500">
+                    <!-- Logo -->
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span class="text-white font-bold text-2xl">E</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-secondary">Create Account</h2>
+                        <p class="text-gray-500 text-sm mt-1">Join the EduSphere community</p>
+                    </div>
+
+                    <!-- Error/Success Messages -->
+                    <div id="auth-error" class="auth-error"></div>
+                    <div id="auth-success" class="auth-success"></div>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="space-y-4" novalidate>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-firstname">First Name *</label>
+                                <input type="text" id="reg-firstname" name="firstName" required 
+                                       class="form-input" placeholder="John" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reg-lastname">Last Name *</label>
+                                <input type="text" id="reg-lastname" name="lastName" required 
+                                       class="form-input" placeholder="Doe" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="reg-email">Email Address *</label>
+                            <input type="email" id="reg-email" name="email" required 
+                                   class="form-input" placeholder="john@example.com" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="reg-password">Password *</label>
+                            <div class="relative">
+                                <input type="password" id="reg-password" name="password" required 
+                                       class="form-input pr-12" placeholder="Min 6 characters" 
+                                       minlength="6" />
+                                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="password-strength-bar"></div>
+                            </div>
+                            <div class="password-strength-text" id="password-strength-text">Enter a password</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="reg-confirm">Confirm Password *</label>
+                            <div class="relative">
+                                <input type="password" id="reg-confirm" name="confirmPassword" required 
+                                       class="form-input pr-12" placeholder="Confirm your password" />
+                                <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="reg-role">I am a *</label>
+                            <select id="reg-role" name="role" required class="form-select">
+                                <option value="">Select your role</option>
+                                <option value="student">Student</option>
+                                <option value="parent">Parent</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="alumni">Alumni</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-start gap-2 text-sm">
+                            <input type="checkbox" id="reg-terms" required class="mt-1 rounded border-gray-300 text-primary focus:ring-primary" />
+                            <label for="reg-terms" class="text-gray-600 dark:text-gray-400">
+                                I agree to the 
+                                <a href="terms.html" class="text-primary hover:underline">Terms of Service</a> 
+                                and 
+                                <a href="privacy.html" class="text-primary hover:underline">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" id="register-submit" class="btn btn-primary w-full btn-lg ripple relative">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-spinner"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="mt-6 text-center text-sm text-gray-500">
+                        Already have an account? 
+                        <a href="login.html" class="text-primary font-semibold hover:underline">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding-sm">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+      <!-- ========================================
+    SCRIPTS - FIXED VERSION
+    ======================================== -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+    
+    <script>
+        console.log('📄 Register page loaded');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already logged in
+            if (Auth.isLoggedIn()) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Password toggle
+            document.querySelectorAll('.password-toggle').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.closest('.relative').querySelector('input');
+                    const type = input.type === 'password' ? 'text' : 'password';
+                    input.type = type;
+                    this.innerHTML = type === 'password' 
+                        ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+                        : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+                });
+            });
+
+            // Password strength
+            const passwordInput = document.getElementById('reg-password');
+            const strengthBar = document.getElementById('password-strength-bar');
+            const strengthText = document.getElementById('password-strength-text');
+
+            passwordInput.addEventListener('input', function() {
+                const val = this.value;
+                let strength = 0;
+                let text = '';
+
+                if (val.length >= 6) strength++;
+                if (val.length >= 10) strength++;
+                if (/[a-z]/.test(val) && /[A-Z]/.test(val)) strength++;
+                if (/\d/.test(val)) strength++;
+                if (/[^a-zA-Z0-9]/.test(val)) strength++;
+
+                const percent = (strength / 5) * 100;
+                strengthBar.style.width = percent + '%';
+
+                if (strength === 0) {
+                    strengthBar.style.background = 'var(--gray-300)';
+                    text = 'Enter a password';
+                } else if (strength <= 2) {
+                    strengthBar.style.background = 'var(--error)';
+                    text = 'Weak password';
+                } else if (strength <= 3) {
+                    strengthBar.style.background = 'var(--warning)';
+                    text = 'Fair password';
+                } else if (strength <= 4) {
+                    strengthBar.style.background = 'var(--primary)';
+                    text = 'Good password';
+                } else {
+                    strengthBar.style.background = 'var(--success)';
+                    text = 'Strong password!';
+                }
+
+                strengthText.textContent = text;
+            });
+
+            // Register form submission - FIXED
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('📤 Register form submitted');
+                
+                const firstName = document.getElementById('reg-firstname').value.trim();
+                const lastName = document.getElementById('reg-lastname').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const password = document.getElementById('reg-password').value;
+                const confirm = document.getElementById('reg-confirm').value;
+                const role = document.getElementById('reg-role').value;
+                const terms = document.getElementById('reg-terms').checked;
+                const errorEl = document.getElementById('auth-error');
+                const successEl = document.getElementById('auth-success');
+                const submitBtn = document.getElementById('register-submit');
+
+                // Reset
+                errorEl.classList.remove('show');
+                errorEl.textContent = '';
+                successEl.classList.remove('show');
+                successEl.textContent = '';
+
+                console.log('📧 Email:', email);
+                console.log('👤 Name:', firstName, lastName);
+                console.log('🎭 Role:', role);
+
+                // Validate
+                if (!firstName || !lastName || !email || !password || !confirm || !role) {
+                    errorEl.textContent = 'Please fill in all required fields.';
+                    errorEl.classList.add('show');
+                    console.log('❌ Validation failed: Empty fields');
+                    return;
+                }
+
+                if (password !== confirm) {
+                    errorEl.textContent = 'Passwords do not match.';
+                    errorEl.classList.add('show');
+                    console.log('❌ Validation failed: Passwords don\'t match');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    errorEl.textContent = 'Password must be at least 6 characters.';
+                    errorEl.classList.add('show');
+                    console.log('❌ Validation failed: Password too short');
+                    return;
+                }
+
+                if (!terms) {
+                    errorEl.textContent = 'Please agree to the Terms of Service and Privacy Policy.';
+                    errorEl.classList.add('show');
+                    console.log('❌ Validation failed: Terms not accepted');
+                    return;
+                }
+
+                // Show loading
+                submitBtn.classList.add('btn-loading');
+                submitBtn.disabled = true;
+                console.log('⏳ Registration in progress...');
+
+                // Attempt registration
+                setTimeout(() => {
+                    console.log('🔐 Calling Auth.register()...');
+                    const result = Auth.register(firstName, lastName, email, password, role);
+                    console.log('📊 Registration result:', result);
+                    
+                    if (result.success) {
+                        console.log('✅ Registration successful!');
+                        successEl.textContent = 'Account created successfully! Redirecting to login...';
+                        successEl.classList.add('show');
+                        setTimeout(() => {
+                            console.log('➡️ Redirecting to login...');
+                            window.location.href = 'login.html';
+                        }, 1500);
+                    } else {
+                        console.log('❌ Registration failed:', result.message);
+                        errorEl.textContent = result.message || 'Registration failed. Please try again.';
+                        errorEl.classList.add('show');
+                        submitBtn.classList.remove('btn-loading');
+                        submitBtn.disabled = false;
+                    }
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Service - EduSphere</title>
+    
+    <meta name="description" content="EduSphere Terms of Service. Read our terms and conditions for using our website and services." />
+    <meta name="keywords" content="terms, terms of service, terms and conditions, legal" />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/terms.html" />
+    
+    <meta property="og:title" content="Terms of Service - EduSphere" />
+    <meta property="og:description" content="EduSphere Terms of Service." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/terms.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ===== FAVICON ===== -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#2563EB" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+    
+    <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group" aria-label="EduSphere Home">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-8" role="navigation" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="academics.html" class="nav-link">Academics</a>
+                    <a href="programs.html" class="nav-link">Programs</a>
+                    <a href="admissions.html" class="nav-link">Admissions</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <a href="login.html" class="hidden sm:inline-flex btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Login
+                    </a>
+                    <button id="menu-btn" class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed top-[70px] left-0 right-0 bg-white dark:bg-secondary shadow-2xl" role="navigation" aria-label="Mobile Navigation" aria-hidden="true">
+            <div class="container py-6">
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Home</a>
+                    <a href="about.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">About</a>
+                    <a href="academics.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Academics</a>
+                    <a href="programs.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Programs</a>
+                    <a href="admissions.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Admissions</a>
+                    <a href="contact.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Contact</a>
+                    <div class="border-t border-gray-100 dark:border-gray-800 my-2"></div>
+                    <a href="login.html" class="btn btn-primary mt-2 w-full text-center">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="page-transition">
+        <!-- ===== PAGE HEADER ===== -->
+        <section class="relative pt-[70px] lg:pt-[80px] py-20 hero-gradient-premium">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="pattern-overlay"></div>
+            <div class="container relative z-10">
+                <div class="max-w-4xl mx-auto text-center" data-animate>
+                    <span class="section-badge mb-4">
+                        <span>📜</span> Terms of Service
+                    </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight">
+                        Terms of <span class="gradient-text">Service</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+                        Please read these terms carefully before using our website and services.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TERMS CONTENT ===== -->
+        <section class="section-padding relative section-bg-subtle" aria-label="Terms Content">
+            <div class="container">
+                <div class="max-w-4xl mx-auto prose prose-lg dark:prose-invert" data-animate>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <strong>Last Updated:</strong> January 1, 2024
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">1. Acceptance of Terms</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        By accessing and using the EduSphere website and services, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">2. Use of Website</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        You agree to use our website for lawful purposes only. You may not:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2">
+                        <li>Use the website in any way that violates applicable laws</li>
+                        <li>Attempt to gain unauthorized access to our systems</li>
+                        <li>Transmit harmful code or viruses</li>
+                        <li>Harass or threaten others</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">3. Intellectual Property</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        All content on this website, including text, graphics, logos, and images, is the property of EduSphere and is protected by copyright and other intellectual property laws.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">4. Privacy Policy</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Your use of our website is also governed by our <a href="privacy.html" class="text-primary hover:underline">Privacy Policy</a>. Please review our Privacy Policy to understand how we collect and use your information.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">5. Limitation of Liability</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        EduSphere is not liable for any damages arising from the use of our website or services. We provide our services "as is" without warranties of any kind.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">6. Changes to Terms</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        We reserve the right to modify these terms at any time. Your continued use of our website after changes constitutes acceptance of the new terms.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-secondary mt-8 mb-4">7. Contact Us</h2>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        If you have questions about these Terms of Service, please contact us at:
+                    </p>
+                    <div class="glass p-6 rounded-2xl mt-4">
+                        <p class="text-gray-600 dark:text-gray-400">
+                            <strong>Email:</strong> legal@edusphere.com<br />
+                            <strong>Phone:</strong> +1 (555) 123-4567<br />
+                            <strong>Address:</strong> 123 Education Street, Learning City, LC 10001
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                    <div class="flex gap-3 mt-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📘</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">🐦</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📸</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">💼</a>
+                    </div>
+                </div>
+              <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                        <li><a href="campus.html" class="footer-link">Campus</a></li>
+                        <li><a href="events.html" class="footer-link">Event</a></li>
+                        <li><a href="faculty.html" class="footer-link">faculty</a></li>
+                        <li><a href="facilities.html" class="footer-link">facilities</a></li>
+                        <li><a href="gallery.html" class="footer-link">gallery</a></li>
+         
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+
+    <!-- ===== PERFORMANCE ===== -->
+<script src="assets/js/performance.js" defer></script>
+
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog - EduSphere</title>
+    
+    <meta name="description" content="Read the latest articles, insights, and stories from the EduSphere community. Stay updated with education news and events." />
+    <meta name="keywords" content="blog, articles, education, news, insights, stories" />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/blog.html" />
+    
+    <meta property="og:title" content="Blog - EduSphere" />
+    <meta property="og:description" content="Read the latest articles, insights, and stories from the EduSphere community." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/blog.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ===== FAVICON ===== -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#2563EB" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+    
+    <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group" aria-label="EduSphere Home">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-8" role="navigation" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="academics.html" class="nav-link">Academics</a>
+                    <a href="programs.html" class="nav-link">Programs</a>
+                    <a href="admissions.html" class="nav-link">Admissions</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <a href="login.html" class="hidden sm:inline-flex btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Login
+                    </a>
+                    <button id="menu-btn" class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed top-[70px] left-0 right-0 bg-white dark:bg-secondary shadow-2xl" role="navigation" aria-label="Mobile Navigation" aria-hidden="true">
+            <div class="container py-6">
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Home</a>
+                    <a href="about.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">About</a>
+                    <a href="academics.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Academics</a>
+                    <a href="programs.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Programs</a>
+                    <a href="admissions.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Admissions</a>
+                    <a href="contact.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Contact</a>
+                    <div class="border-t border-gray-100 dark:border-gray-800 my-2"></div>
+                    <a href="login.html" class="btn btn-primary mt-2 w-full text-center">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="page-transition">
+        <!-- ===== PAGE HEADER ===== -->
+        <section class="relative pt-[70px] lg:pt-[80px] py-20 hero-gradient-premium">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="pattern-overlay"></div>
+            <div class="container relative z-10">
+                <div class="max-w-4xl mx-auto text-center" data-animate>
+                    <span class="section-badge mb-4">
+                        <span>📝</span> Blog
+                    </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight">
+                        Insights & <span class="gradient-text">Stories</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+                        Stay updated with the latest news, insights, and stories from the EduSphere community.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BLOG LISTING ===== -->
+        <section class="section-padding relative section-bg-subtle" aria-label="Blog Posts">
+            <div class="container">
+                <!-- Categories -->
+                <div class="flex flex-wrap gap-2 justify-center mb-12" data-animate>
+                    <button class="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-all duration-300">All</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300">Education</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300">Achievements</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300">Community</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300">Technology</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-primary hover:text-white transition-all duration-300">Events</button>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children" data-animate>
+                    <!-- Blog Post 1 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">📝</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-primary">Education</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Jan 15, 2024</span>
+                                <span>•</span>
+                                <span>⏱️ 5 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">The Future of Education Technology</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">Exploring how AI and digital tools are transforming the classroom experience and preparing students for tomorrow.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Dr. Sarah Johnson</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 2 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🏆</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-accent">Achievements</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Jan 10, 2024</span>
+                                <span>•</span>
+                                <span>⏱️ 3 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">Celebrating Excellence: Annual Awards 2024</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">Recognizing outstanding achievements of our students and faculty who have made us proud.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Prof. Michael Chen</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 3 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🌱</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-primary">Community</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Jan 5, 2024</span>
+                                <span>•</span>
+                                <span>⏱️ 4 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">Building a Sustainable Future Together</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">Our commitment to environmental education and green initiatives for a better tomorrow.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Ms. Emma Davis</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 4 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">💻</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-accent">Technology</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Dec 20, 2023</span>
+                                <span>•</span>
+                                <span>⏱️ 6 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">Digital Literacy in the Modern Classroom</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">How we're preparing students for a digital-first world through comprehensive tech education.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Mr. Vikram Rao</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 5 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🎨</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-primary">Events</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Dec 15, 2023</span>
+                                <span>•</span>
+                                <span>⏱️ 3 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">Annual Art Exhibition 2023: A Creative Showcase</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">Students showcased their artistic talents at our annual art exhibition.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Ms. Ananya Gupta</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 6 -->
+                    <article class="card overflow-hidden group hover:shadow-2xl transition-all duration-500">
+                        <div class="relative h-56 bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center overflow-hidden">
+                            <span class="text-6xl group-hover:scale-110 transition-transform duration-300">🤝</span>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-full text-xs font-semibold text-accent">Community</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                                <span>📅 Dec 10, 2023</span>
+                                <span>•</span>
+                                <span>⏱️ 4 min read</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+                                <a href="blog-single.html">Parent-Teacher Collaboration for Student Success</a>
+                            </h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">Building strong partnerships between parents and teachers for better student outcomes.</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <span class="text-xs text-gray-400">By Dr. Anand Sharma</span>
+                                <a href="blog-single.html" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:gap-3 transition-all duration-300">
+                                    Read More
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center gap-2 mt-12" data-animate>
+                    <button class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-all duration-300">1</button>
+                    <button class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-white transition-all duration-300">2</button>
+                    <button class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-white transition-all duration-300">3</button>
+                    <button class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-white transition-all duration-300">Next →</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                    <div class="flex gap-3 mt-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📘</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">🐦</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📸</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">💼</a>
+                    </div>
+                </div>
+                 <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                        <li><a href="campus.html" class="footer-link">Campus</a></li>
+                        <li><a href="events.html" class="footer-link">Event</a></li>
+                        <li><a href="faculty.html" class="footer-link">faculty</a></li>
+                        <li><a href="facilities.html" class="footer-link">facilities</a></li>
+                        <li><a href="gallery.html" class="footer-link">gallery</a></li>
+         
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+
+    <!-- ===== PERFORMANCE ===== -->
+<script src="assets/js/performance.js" defer></script>
+
+</body>
+</html>

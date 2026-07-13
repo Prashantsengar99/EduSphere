@@ -1,0 +1,709 @@
+/* ========================================
+   EDUSPHERE - PREMIUM BACKGROUNDS (ULTIMATE)
+   ======================================== */
+
+/* ===== CSS VARIABLES FOR BACKGROUNDS ===== */
+:root {
+  --bg-overlay-light: rgba(255, 255, 255, 0.85);
+  --bg-overlay-dark: rgba(15, 23, 42, 0.85);
+  --bg-card-light: rgba(255, 255, 255, 0.92);
+  --bg-card-dark: rgba(15, 23, 42, 0.92);
+  --bg-glass-light: rgba(255, 255, 255, 0.75);
+  --bg-glass-dark: rgba(15, 23, 42, 0.75);
+}
+
+[data-theme="dark"] {
+  --bg-overlay-light: rgba(15, 23, 42, 0.85);
+  --bg-card-light: rgba(15, 23, 42, 0.92);
+  --bg-glass-light: rgba(15, 23, 42, 0.75);
+}
+
+/* ========================================
+   BODY BACKGROUND
+   ======================================== */
+body {
+  background: var(--bg-gradient-light);
+  min-height: 100vh;
+  position: relative;
+  color: var(--secondary);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ========================================
+   ANIMATED MESH BACKGROUND
+   ======================================== */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: 
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+  animation: meshFloat 25s ease-in-out infinite alternate;
+}
+
+[data-theme="dark"] .mesh-bg {
+  background: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+}
+
+@keyframes meshFloat {
+  0% {
+    transform: scale(1) rotate(0deg) translate(0, 0);
+  }
+  33% {
+    transform: scale(1.05) rotate(1deg) translate(10px, -10px);
+  }
+  66% {
+    transform: scale(1.1) rotate(2deg) translate(-10px, 10px);
+  }
+  100% {
+    transform: scale(1.05) rotate(3deg) translate(0, 0);
+  }
+}
+
+/* ========================================
+   NOISE TEXTURE - ENHANCED
+   ======================================== */
+.noise-texture {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  animation: noiseMove 0.5s steps(5) infinite;
+}
+
+[data-theme="dark"] .noise-texture {
+  opacity: 0.05;
+}
+
+@keyframes noiseMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(5px, -5px); }
+}
+
+/* ========================================
+   SECTION BACKGROUNDS
+   ======================================== */
+.section-bg-primary {
+  background: var(--bg-gradient-primary);
+  position: relative;
+  color: white;
+}
+
+.section-bg-subtle {
+  background: var(--bg-gradient-subtle);
+  position: relative;
+}
+
+.section-bg-mesh {
+  background: var(--bg-mesh-1);
+  position: relative;
+}
+
+.section-bg-glass {
+  background: var(--bg-glass-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+}
+
+[data-theme="dark"] .section-bg-glass {
+  background: var(--bg-glass-dark);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   GRADIENT ORBS - ENHANCED
+   ======================================== */
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.25;
+  transition: opacity 0.6s ease;
+}
+
+.gradient-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--primary);
+  top: -250px;
+  right: -150px;
+  animation: orbFloat1 20s ease-in-out infinite;
+}
+
+.gradient-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--accent);
+  bottom: -200px;
+  left: -150px;
+  animation: orbFloat2 25s ease-in-out infinite reverse;
+}
+
+.gradient-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--primary);
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbPulse 12s ease-in-out infinite;
+  opacity: 0.15;
+}
+
+.gradient-orb-4 {
+  width: 250px;
+  height: 250px;
+  background: var(--accent);
+  top: 10%;
+  left: 10%;
+  animation: orbFloat3 18s ease-in-out infinite;
+  opacity: 0.12;
+}
+
+[data-theme="dark"] .gradient-orb {
+  opacity: 0.35;
+}
+
+[data-theme="dark"] .gradient-orb-3 {
+  opacity: 0.2;
+}
+
+[data-theme="dark"] .gradient-orb-4 {
+  opacity: 0.18;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-40px, 30px) scale(1.1);
+  }
+  50% {
+    transform: translate(20px, -40px) scale(0.9);
+  }
+  75% {
+    transform: translate(-20px, 20px) scale(1.05);
+  }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -40px) scale(1.1);
+  }
+  50% {
+    transform: translate(-40px, 20px) scale(0.9);
+  }
+  75% {
+    transform: translate(20px, -30px) scale(1.05);
+  }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.2) rotate(120deg);
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.8) rotate(240deg);
+  }
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0.3;
+  }
+}
+
+/* ========================================
+   PATTERN OVERLAY
+   ======================================== */
+.pattern-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: 
+    radial-gradient(circle at 20% 50%, var(--primary) 1px, transparent 1px),
+    radial-gradient(circle at 80% 50%, var(--accent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 20%, var(--primary) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px, 15px 45px;
+}
+
+[data-theme="dark"] .pattern-overlay {
+  opacity: 0.06;
+}
+
+/* ========================================
+   HERO BACKGROUND - ULTIMATE
+   ======================================== */
+.hero-gradient-premium {
+  position: relative;
+  background: 
+    radial-gradient(ellipse at 15% 50%, rgba(37, 99, 235, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(37, 99, 235, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+}
+
+[data-theme="dark"] .hero-gradient-premium {
+  background: 
+    radial-gradient(ellipse at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 50%, rgba(6, 182, 212, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+}
+
+.hero-gradient-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
+  animation: heroGlow 15s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .hero-gradient-premium::before {
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+}
+
+@keyframes heroGlow {
+  0% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* ========================================
+   CARD BACKGROUNDS - ULTIMATE
+   ======================================== */
+.card-premium {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] .card-premium {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-premium:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.10);
+}
+
+[data-theme="dark"] .card-premium:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   GLASS CARDS - ULTIMATE
+   ======================================== */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .glass:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   GLASS DARK - ENHANCED
+   ======================================== */
+.glass-dark {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+[data-theme="dark"] .glass-dark {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   TEXT COLORS - ULTIMATE FIX
+   ======================================== */
+/* Light Mode - Default */
+.text-secondary {
+  color: #0F172A !important;
+}
+.text-gray-900 {
+  color: #111827 !important;
+}
+.text-gray-800 {
+  color: #1F2937 !important;
+}
+.text-gray-700 {
+  color: #374151 !important;
+}
+.text-gray-600 {
+  color: #4B5563 !important;
+}
+.text-gray-500 {
+  color: #6B7280 !important;
+}
+.text-gray-400 {
+  color: #9CA3AF !important;
+}
+.text-gray-300 {
+  color: #D1D5DB !important;
+}
+.text-white {
+  color: #FFFFFF !important;
+}
+.text-black {
+  color: #000000 !important;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .text-secondary {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .text-gray-900 {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .text-gray-800 {
+  color: #F1F5F9 !important;
+}
+[data-theme="dark"] .text-gray-700 {
+  color: #E2E8F0 !important;
+}
+[data-theme="dark"] .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .text-gray-500 {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .text-gray-400 {
+  color: #64748B !important;
+}
+[data-theme="dark"] .text-gray-300 {
+  color: #475569 !important;
+}
+[data-theme="dark"] .text-white {
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .text-black {
+  color: #0F172A !important;
+}
+
+/* ========================================
+   CARD TEXT COLORS - FORCED VISIBILITY
+   ======================================== */
+.card .text-secondary,
+.card * .text-secondary {
+  color: #0F172A !important;
+}
+.card .text-gray-600,
+.card * .text-gray-600 {
+  color: #4B5563 !important;
+}
+.card .text-gray-500,
+.card * .text-gray-500 {
+  color: #6B7280 !important;
+}
+.card .text-gray-400,
+.card * .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+[data-theme="dark"] .card .text-secondary,
+[data-theme="dark"] .card * .text-secondary {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .card .text-gray-600,
+[data-theme="dark"] .card * .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .card .text-gray-500,
+[data-theme="dark"] .card * .text-gray-500 {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .card .text-gray-400,
+[data-theme="dark"] .card * .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* ========================================
+   GLASS CARD TEXT - FORCED VISIBILITY
+   ======================================== */
+.glass .text-secondary,
+.glass * .text-secondary {
+  color: #0F172A !important;
+}
+.glass .text-gray-600,
+.glass * .text-gray-600 {
+  color: #4B5563 !important;
+}
+.glass .text-gray-500,
+.glass * .text-gray-500 {
+  color: #6B7280 !important;
+}
+.glass .text-gray-400,
+.glass * .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+[data-theme="dark"] .glass .text-secondary,
+[data-theme="dark"] .glass * .text-secondary {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .glass .text-gray-600,
+[data-theme="dark"] .glass * .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .glass .text-gray-500,
+[data-theme="dark"] .glass * .text-gray-500 {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .glass .text-gray-400,
+[data-theme="dark"] .glass * .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* ========================================
+   HERO TEXT - FORCED VISIBILITY
+   ======================================== */
+.hero-gradient-premium .text-secondary,
+.hero-gradient-premium * .text-secondary {
+  color: #0F172A !important;
+}
+.hero-gradient-premium .text-gray-600,
+.hero-gradient-premium * .text-gray-600 {
+  color: #4B5563 !important;
+}
+.hero-gradient-premium .text-gray-500,
+.hero-gradient-premium * .text-gray-500 {
+  color: #6B7280 !important;
+}
+.hero-gradient-premium .text-gray-400,
+.hero-gradient-premium * .text-gray-400 {
+  color: #9CA3AF !important;
+}
+
+[data-theme="dark"] .hero-gradient-premium .text-secondary,
+[data-theme="dark"] .hero-gradient-premium * .text-secondary {
+  color: #F8FAFC !important;
+}
+[data-theme="dark"] .hero-gradient-premium .text-gray-600,
+[data-theme="dark"] .hero-gradient-premium * .text-gray-600 {
+  color: #CBD5E1 !important;
+}
+[data-theme="dark"] .hero-gradient-premium .text-gray-500,
+[data-theme="dark"] .hero-gradient-premium * .text-gray-500 {
+  color: #94A3B8 !important;
+}
+[data-theme="dark"] .hero-gradient-premium .text-gray-400,
+[data-theme="dark"] .hero-gradient-premium * .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* ========================================
+   SECTION BADGE - ENHANCED
+   ======================================== */
+.section-badge {
+  background: rgba(37, 99, 235, 0.10) !important;
+  color: var(--primary) !important;
+  border: 1px solid rgba(37, 99, 235, 0.10);
+}
+
+[data-theme="dark"] .section-badge {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.15);
+  color: #60A5FA !important;
+}
+
+/* ========================================
+   FOOTER - ENHANCED
+   ======================================== */
+footer.bg-secondary {
+  background: #0F172A !important;
+}
+
+[data-theme="dark"] footer.bg-secondary {
+  background: #0F172A !important;
+}
+
+footer .text-gray-400 {
+  color: #94A3B8 !important;
+}
+
+[data-theme="dark"] footer .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* ========================================
+   BACK TO TOP - ENHANCED
+   ======================================== */
+#back-to-top {
+  background: var(--primary-gradient) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+}
+
+#back-to-top:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+  color: white !important;
+}
+
+/* ========================================
+   RESPONSIVE - ENHANCED
+   ======================================== */
+@media (max-width: 1024px) {
+  .gradient-orb-1 {
+    width: 300px;
+    height: 300px;
+    top: -150px;
+    right: -100px;
+  }
+  .gradient-orb-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -125px;
+    left: -100px;
+  }
+  .gradient-orb-3 {
+    width: 200px;
+    height: 200px;
+  }
+  .gradient-orb-4 {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gradient-orb-1 {
+    width: 200px;
+    height: 200px;
+    top: -100px;
+    right: -80px;
+  }
+  .gradient-orb-2 {
+    width: 180px;
+    height: 180px;
+    bottom: -90px;
+    left: -80px;
+  }
+  .gradient-orb-3 {
+    width: 150px;
+    height: 150px;
+  }
+  .gradient-orb-4 {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-bg,
+  .gradient-orb,
+  .noise-texture,
+  .hero-gradient-premium::before {
+    animation: none !important;
+  }
+  .mesh-bg {
+    transform: none !important;
+  }
+  .gradient-orb {
+    opacity: 0.15 !important;
+  }
+  .card-premium,
+  .glass {
+    transition: none !important;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  .mesh-bg,
+  .noise-texture,
+  .gradient-orb,
+  .pattern-overlay {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .glass {
+    background: white !important;
+    backdrop-filter: none !important;
+    border: 1px solid #ddd !important;
+  }
+  .card-premium {
+    background: white !important;
+    backdrop-filter: none !important;
+    border: 1px solid #ddd !important;
+  }
+}

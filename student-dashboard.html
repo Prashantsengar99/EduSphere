@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Portal - EduSphere</title>
+    
+    <meta name="description" content="EduSphere Student Portal - Access your courses, assignments, grades, and more." />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/student-dashboard.html" />
+    
+    <meta property="og:title" content="Student Portal - EduSphere" />
+    <meta property="og:description" content="EduSphere Student Portal" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/student-dashboard.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    
+    <style>
+        .portal-sidebar {
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .portal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .portal-sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .portal-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-base);
+            color: var(--gray-600);
+        }
+        .portal-link:hover {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+        .portal-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        .portal-link .badge {
+            margin-left: auto;
+        }
+        .fee-card {
+            transition: all var(--transition-base);
+        }
+        .fee-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .fee-status-paid {
+            color: var(--success);
+            background: var(--success-50);
+        }
+        .fee-status-pending {
+            color: var(--warning);
+            background: var(--warning-50);
+        }
+        .fee-status-overdue {
+            color: var(--error);
+            background: var(--error-50);
+        }
+        /* Payment Modal */
+        .payment-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+        }
+        .payment-modal.active {
+            display: flex;
+        }
+        .payment-modal-content {
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .payment-method {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        .payment-method:hover {
+            border-color: var(--primary);
+            background: var(--primary-50);
+        }
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: var(--primary-50);
+        }
+        .payment-method input[type="radio"] {
+            display: none;
+        }
+        .payment-success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--success-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 40px;
+            color: var(--success);
+            animation: successPulse 1s ease;
+        }
+        @keyframes successPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        @media (max-width: 1024px) {
+            .portal-sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <!-- ===== LOADER ===== -->
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-secondary hidden sm:inline">Student Portal</span>
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    
+                    <div class="flex items-center gap-3">
+                        <span id="user-name-display" class="text-sm font-medium text-secondary hidden sm:inline"></span>
+                        <button id="logout-btn" class="btn btn-outline btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== STUDENT PORTAL ===== -->
+    <main id="main" class="page-transition pt-[70px] lg:pt-[80px]">
+        <div class="container py-6 lg:py-8">
+            <div class="grid lg:grid-cols-4 gap-6">
+                <!-- Sidebar -->
+                <aside class="portal-sidebar lg:col-span-1">
+                    <div class="glass p-4 rounded-2xl space-y-1">
+                        <div class="flex items-center gap-3 p-3 border-b border-gray-200 dark:border-gray-700">
+                            <div id="user-avatar" class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xl">U</div>
+                            <div>
+                                <p id="sidebar-user-name" class="font-semibold text-secondary">Student</p>
+                                <p id="sidebar-user-email" class="text-xs text-gray-500">student@edusphere.com</p>
+                            </div>
+                        </div>
+                        
+                        <a href="student-dashboard.html" class="portal-link active">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Dashboard
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            Courses
+                            <span class="badge badge-primary text-xs px-2 py-0.5 ml-auto">4</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path d="M12 14l9-5-9-5-9 5 9 5z"/></svg>
+                            Assignments
+                            <span class="badge badge-accent text-xs px-2 py-0.5 ml-auto">2</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            Grades
+                            <span class="badge badge-primary text-xs px-2 py-0.5 ml-auto">A+</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                            Attendance
+                            <span class="badge badge-success text-xs px-2 py-0.5 ml-auto">95%</span>
+                        </a>
+                        <!-- NEW: Fee Payment Link -->
+                        <a href="#fee-section" class="portal-link" onclick="document.getElementById('fee-section').scrollIntoView({behavior:'smooth'})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7H7M17 12H7M17 17H7"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                            Fee Payment
+                            <span class="badge badge-warning text-xs px-2 py-0.5 ml-auto">Due</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                            Resources
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            Messages
+                            <span class="badge badge-accent text-xs px-2 py-0.5 ml-auto">3</span>
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="lg:col-span-3 space-y-6">
+                    <!-- Welcome Banner -->
+                    <div class="glass p-6 md:p-8 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/10">
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 justify-between">
+                            <div>
+                                <h1 class="text-2xl md:text-3xl font-heading font-bold text-secondary">
+                                    Welcome back, <span id="dashboard-user-name" class="gradient-text">Student</span>! 🎓
+                                </h1>
+                                <p class="text-gray-500 mt-1">Here's what's happening in your academic journey</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold">Student</span>
+                                <span class="px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-semibold">Class 10-A</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-primary">8</p>
+                            <p class="text-xs text-gray-500">Courses</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-accent">12</p>
+                            <p class="text-xs text-gray-500">Assignments</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-success">95%</p>
+                            <p class="text-xs text-gray-500">Attendance</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-warning">A+</p>
+                            <p class="text-xs text-gray-500">GPA</p>
+                        </div>
+                    </div>
+
+                    <!-- ========================================
+                    FEE SECTION - NEW
+                    ======================================== -->
+                    <section id="fee-section">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-secondary">💰 Fee Management</h3>
+                            <span class="text-sm text-gray-500">Academic Year 2024-25</span>
+                        </div>
+
+                        <!-- Fee Summary Cards -->
+                        <div class="grid sm:grid-cols-3 gap-4 mb-6">
+                            <div class="glass p-4 rounded-xl text-center fee-card">
+                                <p class="text-sm text-gray-500">Total Fee</p>
+                                <p class="text-2xl font-bold text-secondary">₹48,000</p>
+                            </div>
+                            <div class="glass p-4 rounded-xl text-center fee-card">
+                                <p class="text-sm text-gray-500">Paid</p>
+                                <p class="text-2xl font-bold text-success">₹36,000</p>
+                            </div>
+                            <div class="glass p-4 rounded-xl text-center fee-card">
+                                <p class="text-sm text-gray-500">Pending</p>
+                                <p class="text-2xl font-bold text-warning">₹12,000</p>
+                            </div>
+                        </div>
+
+                        <!-- Fee Breakdown -->
+                        <div class="glass p-4 rounded-xl mb-6">
+                            <h4 class="font-semibold text-secondary mb-3">Fee Breakdown</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-secondary">Tuition Fee</p>
+                                        <p class="text-xs text-gray-500">Annual tuition fee</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-secondary">₹24,000</p>
+                                        <span class="text-xs text-success">✓ Paid</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-secondary">Lab Fee</p>
+                                        <p class="text-xs text-gray-500">Science lab charges</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-secondary">₹6,000</p>
+                                        <span class="text-xs text-success">✓ Paid</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                    <div>
+                                        <p class="font-medium text-secondary">Library Fee</p>
+                                        <p class="text-xs text-gray-500">Library & resources</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-secondary">₹4,000</p>
+                                        <span class="text-xs text-success">✓ Paid</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warning/10 dark:bg-warning/5 rounded-lg border-l-4 border-warning">
+                                    <div>
+                                        <p class="font-medium text-secondary">Sports Fee</p>
+                                        <p class="text-xs text-gray-500">Sports & activities</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-secondary">₹6,000</p>
+                                        <span class="text-xs text-warning font-semibold">⚠️ Pending</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-warning/10 dark:bg-warning/5 rounded-lg border-l-4 border-warning">
+                                    <div>
+                                        <p class="font-medium text-secondary">Transport Fee</p>
+                                        <p class="text-xs text-gray-500">Bus service charges</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold text-secondary">₹8,000</p>
+                                        <span class="text-xs text-warning font-semibold">⚠️ Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pay Now Button -->
+                        <div class="flex flex-wrap gap-4">
+                            <button id="pay-now-btn" class="btn btn-primary btn-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 2v20M17 7H7M17 12H7M17 17H7"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                                Pay Now (₹12,000)
+                            </button>
+                            <button class="btn btn-outline">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M4 4v16h16"/><polyline points="20 10 12 18 8 14"/></svg>
+                                Download Receipt
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Recent Courses -->
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary mb-4">📚 Your Courses</h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="card p-4 hover:shadow-xl transition-all duration-300">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl">📐</div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">Mathematics</h4>
+                                        <p class="text-xs text-gray-500">Mr. Sharma • 8:00 AM</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Progress</span>
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-primary">75%</span>
+                                </div>
+                            </div>
+                            <div class="card p-4 hover:shadow-xl transition-all duration-300">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-xl">🔬</div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">Science</h4>
+                                        <p class="text-xs text-gray-500">Dr. Patel • 9:30 AM</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Progress</span>
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-accent rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-accent">60%</span>
+                                </div>
+                            </div>
+                            <div class="card p-4 hover:shadow-xl transition-all duration-300">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center text-xl">📝</div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">English</h4>
+                                        <p class="text-xs text-gray-500">Ms. Gupta • 11:00 AM</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Progress</span>
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-success rounded-full" style="width: 90%"></div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-success">90%</span>
+                                </div>
+                            </div>
+                            <div class="card p-4 hover:shadow-xl transition-all duration-300">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center text-xl">💻</div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">Computer Science</h4>
+                                        <p class="text-xs text-gray-500">Mr. Rao • 1:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Progress</span>
+                                    <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-warning rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-warning">45%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Assignments -->
+                    <div>
+                        <h3 class="text-lg font-bold text-secondary mb-4">📋 Upcoming Assignments</h3>
+                        <div class="space-y-3">
+                            <div class="glass p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-secondary">Math Chapter 8 - Algebra</h4>
+                                    <p class="text-xs text-gray-500">Due: Jan 25, 2024 • Mr. Sharma</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-warning/10 text-warning text-xs font-semibold">In Progress</span>
+                            </div>
+                            <div class="glass p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-secondary">Science Project - Solar System</h4>
+                                    <p class="text-xs text-gray-500">Due: Jan 28, 2024 • Dr. Patel</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-error/10 text-error text-xs font-semibold">Pending</span>
+                            </div>
+                            <div class="glass p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+                                <div>
+                                    <h4 class="font-semibold text-secondary">English Essay - Climate Change</h4>
+                                    <p class="text-xs text-gray-500">Due: Feb 1, 2024 • Ms. Gupta</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================
+    PAYMENT MODAL
+    ======================================== -->
+    <div id="payment-modal" class="payment-modal">
+        <div class="payment-modal-content">
+            <div class="card p-6 md:p-8">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-secondary">💳 Make Payment</h3>
+                    <button id="close-modal" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="glass p-4 rounded-xl mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">Amount to Pay</p>
+                            <p class="text-2xl font-bold text-secondary">₹12,000</p>
+                        </div>
+                        <div>
+                            <span class="px-3 py-1 rounded-full bg-warning/10 text-warning text-xs font-semibold">Pending</span>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-400">Academic Year 2024-25 • Sports Fee + Transport Fee</div>
+                </div>
+
+                <!-- Payment Methods -->
+                <p class="text-sm font-semibold text-secondary mb-3">Select Payment Method</p>
+                <div class="space-y-3 mb-6">
+                    <label class="payment-method selected">
+                        <input type="radio" name="payment-method" value="card" checked />
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl">💳</div>
+                            <div>
+                                <p class="font-semibold text-secondary">Credit / Debit Card</p>
+                                <p class="text-xs text-gray-500">Visa, Mastercard, RuPay</p>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="upi" />
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-xl">📱</div>
+                            <div>
+                                <p class="font-semibold text-secondary">UPI</p>
+                                <p class="text-xs text-gray-500">Google Pay, PhonePe, Paytm</p>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment-method" value="netbanking" />
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center text-xl">🏦</div>
+                            <div>
+                                <p class="font-semibold text-secondary">Net Banking</p>
+                                <p class="text-xs text-gray-500">All major banks</p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Card Details (shown when card selected) -->
+                <div id="card-details" class="space-y-4 mb-6">
+                    <div>
+                        <label class="form-label">Card Number</label>
+                        <input type="text" class="form-input" placeholder="1234 5678 9012 3456" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="form-label">Expiry Date</label>
+                            <input type="text" class="form-input" placeholder="MM/YY" />
+                        </div>
+                        <div>
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-input" placeholder="***" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">Card Holder Name</label>
+                        <input type="text" class="form-input" placeholder="John Doe" />
+                    </div>
+                </div>
+
+                <!-- Pay Button -->
+                <button id="confirm-payment" class="btn btn-primary w-full btn-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 2v20M17 7H7M17 12H7M17 17H7"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                    Pay ₹12,000
+                </button>
+
+                <!-- Success Message (hidden initially) -->
+                <div id="payment-success" class="text-center hidden">
+                    <div class="payment-success-icon">✓</div>
+                    <h4 class="text-xl font-bold text-secondary mt-4">Payment Successful!</h4>
+                    <p class="text-gray-500 text-sm mt-2">Your payment has been processed successfully.</p>
+                    <p class="text-gray-400 text-xs mt-1">Transaction ID: #EDU-2024-001234</p>
+                    <button id="close-success" class="btn btn-primary mt-4">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding-sm">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and has student role
+            const currentUser = window.Auth?.getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (currentUser.role !== 'student') {
+                const roles = {
+                    'teacher': 'teacher-dashboard.html',
+                    'principal': 'principal-dashboard.html',
+                    'admin': 'admin-dashboard.html'
+                };
+                window.location.href = roles[currentUser.role] || 'login.html';
+                return;
+            }
+
+            // Update user info
+            const name = currentUser.firstName || 'Student';
+            document.getElementById('dashboard-user-name').textContent = name;
+            document.getElementById('user-name-display').textContent = name;
+            document.getElementById('sidebar-user-name').textContent = name;
+            document.getElementById('sidebar-user-email').textContent = currentUser.email || 'student@edusphere.com';
+            
+            const avatar = document.getElementById('user-avatar');
+            if (avatar) avatar.textContent = (name[0] || 'S').toUpperCase();
+
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                window.Auth?.logout();
+                window.location.href = 'index.html';
+            });
+
+            // ========================================
+            // PAYMENT MODAL - FEE SYSTEM
+            // ========================================
+            
+            // Open payment modal
+            document.getElementById('pay-now-btn').addEventListener('click', function() {
+                document.getElementById('payment-modal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close payment modal
+            function closeModal() {
+                document.getElementById('payment-modal').classList.remove('active');
+                document.body.style.overflow = '';
+                // Reset to payment form
+                document.getElementById('payment-success').classList.add('hidden');
+                document.querySelector('.card > div:not(.flex)').style.display = 'block';
+                document.getElementById('confirm-payment').style.display = 'inline-flex';
+            }
+
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('close-success').addEventListener('click', closeModal);
+
+            // Close modal on background click
+            document.getElementById('payment-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            // Payment method selection
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                    this.classList.add('selected');
+                    this.querySelector('input[type="radio"]').checked = true;
+                    
+                    // Show/hide card details
+                    const isCard = this.querySelector('input[value="card"]')?.checked;
+                    document.getElementById('card-details').style.display = isCard ? 'block' : 'none';
+                });
+            });
+
+            // Confirm payment
+            document.getElementById('confirm-payment').addEventListener('click', function() {
+                // Show loading
+                this.innerHTML = '<span class="btn-spinner" style="display:inline-block;"></span> Processing...';
+                this.disabled = true;
+
+                // Simulate payment processing
+                setTimeout(() => {
+                    // Hide payment form, show success
+                    document.querySelector('.card > div:not(.flex)').style.display = 'none';
+                    this.style.display = 'none';
+                    document.getElementById('payment-success').classList.remove('hidden');
+                    
+                    // Update fee status (demo)
+                    document.querySelectorAll('.bg-warning\\/10').forEach(el => {
+                        el.classList.remove('bg-warning/10', 'border-warning', 'dark:bg-warning/5');
+                        el.classList.add('bg-success/10', 'border-success', 'dark:bg-success/5');
+                        const span = el.querySelector('span.text-warning');
+                        if (span) {
+                            span.className = 'text-xs text-success font-semibold';
+                            span.textContent = '✓ Paid';
+                        }
+                    });
+                    
+                    // Update pending amount
+                    document.querySelector('.text-warning.font-bold').textContent = '₹0';
+                    document.querySelector('.text-warning.font-bold').className = 'text-2xl font-bold text-success';
+                    
+                    // Update badge
+                    document.querySelector('.badge.badge-warning').className = 'badge badge-success text-xs px-2 py-0.5 ml-auto';
+                    document.querySelector('.badge.badge-success').textContent = 'Paid';
+                    
+                }, 2000);
+            });
+        });
+    </script>
+</body> 
+</html>

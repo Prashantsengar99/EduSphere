@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - EduSphere</title>
+    
+    <meta name="description" content="Login to your EduSphere account to access student portal, parent portal, and more." />
+    <meta name="keywords" content="login, student portal, parent portal, account" />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/login.html" />
+    
+    <meta property="og:title" content="Login - EduSphere" />
+    <meta property="og:description" content="Login to your EduSphere account." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/login.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ===== FAVICON ===== -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#2563EB" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+    
+    <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group" aria-label="EduSphere Home">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-8" role="navigation" aria-label="Main Navigation">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="academics.html" class="nav-link">Academics</a>
+                    <a href="programs.html" class="nav-link">Programs</a>
+                    <a href="admissions.html" class="nav-link">Admissions</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <button id="menu-btn" class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed top-[70px] left-0 right-0 bg-white dark:bg-secondary shadow-2xl" role="navigation" aria-label="Mobile Navigation" aria-hidden="true">
+            <div class="container py-6">
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Home</a>
+                    <a href="about.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">About</a>
+                    <a href="academics.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Academics</a>
+                    <a href="programs.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Programs</a>
+                    <a href="admissions.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Admissions</a>
+                    <a href="contact.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Contact</a>
+                    <div class="border-t border-gray-100 dark:border-gray-800 my-2"></div>
+                    <a href="login.html" class="btn btn-primary mt-2 w-full text-center">Login</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="page-transition min-h-screen flex items-center justify-center pt-[70px] lg:pt-[80px]">
+        <!-- ===== LOGIN FORM ===== -->
+        <section class="section-padding w-full">
+            <div class="container">
+                <div class="max-w-md mx-auto" data-animate>
+                    <div class="card p-8 hover:shadow-2xl transition-all duration-500">
+                        <div class="text-center mb-8">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <span class="text-white font-bold text-2xl">E</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-secondary">Welcome Back</h2>
+                            <p class="text-gray-500 text-sm mt-1">Login to your EduSphere account</p>
+                        </div>
+
+                        <form data-validate action="#" method="POST" class="space-y-6">
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required class="form-input" placeholder="Enter your email" />
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="password">Password</label>
+                                <input type="password" id="password" name="password" required class="form-input" placeholder="Enter your password" />
+                            </div>
+
+                            <div class="flex items-center justify-between text-sm">
+                                <label class="flex items-center gap-2 text-gray-600 dark:text-gray-400 cursor-pointer">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" />
+                                    Remember me
+                                </label>
+                                <a href="forgot-password.html" class="text-primary hover:underline">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-full btn-lg ripple">
+                                <span>Sign In</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                            </button>
+                        </form>
+
+                        <div class="mt-6 text-center text-sm text-gray-500">
+                            Don't have an account? <a href="register.html" class="text-primary hover:underline">Create one</a>
+                        </div>
+
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-white dark:bg-secondary text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-[#4285F4]"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                                Google
+                            </button>
+                            <button class="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-[#1877F2]"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                Facebook
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                    <div class="flex gap-3 mt-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📘</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">🐦</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📸</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">💼</a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="blog.html" class="footer-link">Blog</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                        <li><a href="campus.html" class="footer-link">Campus</a></li>
+                        <li><a href="events.html" class="footer-link">Event</a></li>
+                        <li><a href="faculty.html" class="footer-link">faculty</a></li>
+                        <li><a href="facilities.html" class="footer-link">facilities</a></li>
+                        <li><a href="gallery.html" class="footer-link">gallery</a></li>
+         
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+    
+
+    <!-- ===== PERFORMANCE ===== -->
+<script src="assets/js/performance.js" defer></script>
+</body>
+</html>

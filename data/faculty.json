@@ -1,0 +1,24 @@
+{
+  "faculty": [
+    {
+      "id": 1,
+      "name": "Dr. Anand Sharma",
+      "role": "Principal",
+      "department": "Administration",
+      "qualification": "Ph.D. in Education",
+      "experience": "25 years",
+      "image": "/assets/images/faculty/anand-sharma.jpg",
+      "bio": "Visionary educator with a passion for holistic student development."
+    },
+    {
+      "id": 2,
+      "name": "Prof. Meera Patel",
+      "role": "Head of Mathematics",
+      "department": "Mathematics",
+      "qualification": "M.Sc., B.Ed.",
+      "experience": "18 years",
+      "image": "/assets/images/faculty/meera-patel.jpg",
+      "bio": "Innovative mathematics educator known for making complex concepts simple."
+    }
+  ]
+}

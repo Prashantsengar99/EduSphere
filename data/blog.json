@@ -1,0 +1,43 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "The Future of Education Technology",
+      "excerpt": "Exploring how AI and digital tools are transforming the classroom experience.",
+      "category": "Education",
+      "readTime": "5 min read",
+      "date": "2024-01-15",
+      "image": "/assets/images/blog/tech-education.jpg",
+      "author": {
+        "name": "Dr. Sarah Johnson",
+        "role": "Director of Technology"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Celebrating Excellence: Annual Awards 2024",
+      "excerpt": "Recognizing outstanding achievements of our students and faculty.",
+      "category": "Achievements",
+      "readTime": "3 min read",
+      "date": "2024-01-10",
+      "image": "/assets/images/blog/awards.jpg",
+      "author": {
+        "name": "Prof. Michael Chen",
+        "role": "Academic Coordinator"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Building a Sustainable Future Together",
+      "excerpt": "Our commitment to environmental education and green initiatives.",
+      "category": "Community",
+      "readTime": "4 min read",
+      "date": "2024-01-05",
+      "image": "/assets/images/blog/sustainability.jpg",
+      "author": {
+        "name": "Ms. Emma Davis",
+        "role": "Sustainability Officer"
+      }
+    }
+  ]
+}
