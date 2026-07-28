@@ -2,9 +2,6 @@
 // EDUSPHERE - Backend Server (VERCEL COMPATIBLE)
 // ============================================================
 
-// Load environment variables
-require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,15 +9,20 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // ============================================================
+// ENVIRONMENT VARIABLES (Hardcoded for Vercel)
+// ============================================================
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
+const JWT_SECRET = process.env.JWT_SECRET || 'edusphere_super_secret_key_2024_secure';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@edusphere.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+
+// ============================================================
 // MODELS
 // ============================================================
-// Note: Models must be required after mongoose is initialized
-// but before they are used
-
 let User, Course, Fee, Attendance, Assignment, Notification, Settings;
 
 // ============================================================
-// CREATE EXPRESS APP - MUST BE FIRST
+// CREATE EXPRESS APP
 // ============================================================
 const app = express();
 
@@ -33,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================================
-// ROOT ROUTE - MUST BE BEFORE ANYTHING ELSE
+// ROOT ROUTE
 // ============================================================
 app.get('/', (req, res) => {
   res.json({
@@ -56,8 +58,6 @@ app.get('/', (req, res) => {
 // ============================================================
 // MONGODB CONNECTION
 // ============================================================
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
-
 let cached = global.mongoose;
 
 if (!cached) {
@@ -108,8 +108,8 @@ async function initializeDatabase() {
         const admin = new User({
           firstName: 'Super',
           lastName: 'Admin',
-          email: process.env.ADMIN_EMAIL || 'admin@edusphere.com',
-          password: process.env.ADMIN_PASSWORD || 'admin123',
+          email: ADMIN_EMAIL,
+          password: ADMIN_PASSWORD,
           role: 'admin',
           status: 'active'
         });
@@ -135,7 +135,7 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'No token provided' });
     }
     await connectDB();
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    const decoded = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'User not found' });
@@ -193,7 +193,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id },
-      process.env.JWT_SECRET || 'secret',
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 
