@@ -1,30 +1,10 @@
 // ============================================================
-// ROOT ROUTE - For Vercel
-// ============================================================
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'EduSphere API is running!',
-    version: '1.0.0',
-    endpoints: {
-      health: '/api/health',
-      login: '/api/auth/login',
-      users: '/api/users',
-      courses: '/api/courses',
-      fees: '/api/fees',
-      attendance: '/api/attendance',
-      settings: '/api/settings',
-      stats: '/api/dashboard/stats'
-    }
-  });
-});
-
-
-// ============================================================
 // EDUSPHERE - Backend Server (VERCEL COMPATIBLE)
 // ============================================================
 
+// Load environment variables
 require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -34,19 +14,15 @@ const jwt = require('jsonwebtoken');
 // ============================================================
 // MODELS
 // ============================================================
-const User = require('./models/User');
-const Course = require('./models/Course');
-const Fee = require('./models/Fee');
-const Attendance = require('./models/Attendance');
-const Assignment = require('./models/Assignment');
-const Notification = require('./models/Notification');
-const Settings = require('./models/Settings');
+// Note: Models must be required after mongoose is initialized
+// but before they are used
+
+let User, Course, Fee, Attendance, Assignment, Notification, Settings;
 
 // ============================================================
-// EXPRESS APP
+// CREATE EXPRESS APP - MUST BE FIRST
 // ============================================================
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
@@ -57,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================================
-// ROOT ROUTE - FIX 404
+// ROOT ROUTE - MUST BE BEFORE ANYTHING ELSE
 // ============================================================
 app.get('/', (req, res) => {
   res.json({
@@ -82,51 +58,72 @@ app.get('/', (req, res) => {
 // ============================================================
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
 
-let isConnected = false;
+let cached = global.mongoose;
 
-const connectDB = async () => {
-  if (isConnected) {
-    console.log('✅ Using existing connection');
-    return;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
   }
-  try {
-    console.log('🔄 Connecting to MongoDB...');
-    await mongoose.connect(MONGODB_URI, {
+
+  if (!cached.promise) {
+    const opts = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    };
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log('✅ MongoDB Connected!');
+      
+      // Load models after connection
+      User = require('./models/User');
+      Course = require('./models/Course');
+      Fee = require('./models/Fee');
+      Attendance = require('./models/Attendance');
+      Assignment = require('./models/Assignment');
+      Notification = require('./models/Notification');
+      Settings = require('./models/Settings');
+      
+      return mongoose;
     });
-    isConnected = true;
-    console.log('✅ MongoDB Connected!');
-    await initializeDatabase();
-  } catch (error) {
-    console.error('❌ MongoDB Error:', error.message);
-    isConnected = false;
   }
-};
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
 
 // ============================================================
 // INITIALIZE DATABASE
 // ============================================================
-const initializeDatabase = async () => {
+async function initializeDatabase() {
   try {
-    const adminExists = await User.findOne({ role: 'admin' });
-    if (!adminExists) {
-      const admin = new User({
-        firstName: 'Super',
-        lastName: 'Admin',
-        email: process.env.ADMIN_EMAIL || 'admin@edusphere.com',
-        password: process.env.ADMIN_PASSWORD || 'admin123',
-        role: 'admin',
-        status: 'active'
-      });
-      await admin.save();
-      console.log('✅ Admin created!');
+    await connectDB();
+    if (User) {
+      const adminExists = await User.findOne({ role: 'admin' });
+      if (!adminExists) {
+        const admin = new User({
+          firstName: 'Super',
+          lastName: 'Admin',
+          email: process.env.ADMIN_EMAIL || 'admin@edusphere.com',
+          password: process.env.ADMIN_PASSWORD || 'admin123',
+          role: 'admin',
+          status: 'active'
+        });
+        await admin.save();
+        console.log('✅ Admin created!');
+      }
     }
   } catch (err) {
     console.error('Init error:', err);
   }
-};
+}
+
+// Call init on startup (non-blocking)
+initializeDatabase();
 
 // ============================================================
 // AUTH MIDDLEWARE
@@ -137,6 +134,7 @@ const authMiddleware = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ success: false, message: 'No token provided' });
     }
+    await connectDB();
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
@@ -214,6 +212,10 @@ app.post('/api/auth/login', async (req, res) => {
     console.error(err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
+});
+
+app.get('/api/auth/me', authMiddleware, async (req, res) => {
+  res.json({ success: true, user: req.user });
 });
 
 // ============================================================
@@ -537,15 +539,3 @@ app.use((err, req, res, next) => {
 // EXPORT FOR VERCEL
 // ============================================================
 module.exports = app;
-
-// ============================================================
-// START SERVER (Local)
-// ============================================================
-if (require.main === module) {
-  connectDB().then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`📧 Admin: ${process.env.ADMIN_EMAIL || 'admin@edusphere.com'}`);
-    });
-  });
-}
