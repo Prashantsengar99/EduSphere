@@ -1,5 +1,5 @@
 // ============================================================
-// EDUSPHERE - Backend Server (VERCEL COMPATIBLE)
+// EDUSPHERE - Backend Server (VERCEL OPTIMIZED)
 // ============================================================
 
 const express = require('express');
@@ -9,12 +9,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // ============================================================
-// ENVIRONMENT VARIABLES (Hardcoded for Vercel)
+// ENVIRONMENT VARIABLES
 // ============================================================
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
 const JWT_SECRET = process.env.JWT_SECRET || 'edusphere_super_secret_key_2024_secure';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@edusphere.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 // ============================================================
 // MODELS
@@ -22,7 +20,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 let User, Course, Fee, Attendance, Assignment, Notification, Settings;
 
 // ============================================================
-// CREATE EXPRESS APP
+// EXPRESS APP
 // ============================================================
 const app = express();
 
@@ -56,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 // ============================================================
-// MONGODB CONNECTION
+// MONGODB CONNECTION (with retry)
 // ============================================================
 let cached = global.mongoose;
 
@@ -64,7 +62,7 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-async function connectDB() {
+async function connectDB(retries = 3) {
   if (cached.conn) {
     return cached.conn;
   }
@@ -73,25 +71,38 @@ async function connectDB() {
     const opts = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
+      retryWrites: true,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('✅ MongoDB Connected!');
-      
-      // Load models after connection
-      User = require('./models/User');
-      Course = require('./models/Course');
-      Fee = require('./models/Fee');
-      Attendance = require('./models/Attendance');
-      Assignment = require('./models/Assignment');
-      Notification = require('./models/Notification');
-      Settings = require('./models/Settings');
-      
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log('✅ MongoDB Connected!');
+        
+        // Load models
+        User = require('./models/User');
+        Course = require('./models/Course');
+        Fee = require('./models/Fee');
+        Attendance = require('./models/Attendance');
+        Assignment = require('./models/Assignment');
+        Notification = require('./models/Notification');
+        Settings = require('./models/Settings');
+        
+        return mongoose;
+      })
+      .catch((err) => {
+        console.error('❌ MongoDB Connection Error:', err.message);
+        cached.promise = null;
+        
+        if (retries > 0) {
+          console.log(`🔄 Retrying connection... (${retries} attempts left)`);
+          return connectDB(retries - 1);
+        }
+        throw err;
+      });
   }
+  
   cached.conn = await cached.promise;
   return cached.conn;
 }
@@ -108,8 +119,8 @@ async function initializeDatabase() {
         const admin = new User({
           firstName: 'Super',
           lastName: 'Admin',
-          email: ADMIN_EMAIL,
-          password: ADMIN_PASSWORD,
+          email: 'admin@edusphere.com',
+          password: 'admin123',
           role: 'admin',
           status: 'active'
         });
@@ -166,7 +177,11 @@ app.get('/api/health', async (req, res) => {
       database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ 
+      success: false, 
+      message: error.message,
+      database: 'Disconnected'
+    });
   }
 });
 
@@ -212,10 +227,6 @@ app.post('/api/auth/login', async (req, res) => {
     console.error(err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
-});
-
-app.get('/api/auth/me', authMiddleware, async (req, res) => {
-  res.json({ success: true, user: req.user });
 });
 
 // ============================================================
