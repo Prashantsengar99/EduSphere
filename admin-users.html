@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management - Admin Panel</title>
+    
+    <meta name="description" content="Admin Panel - Manage users, create accounts, and control access." />
+    <meta name="author" content="EduSphere" />
+    <link rel="canonical" href="https://edusphere.com/admin-users.html" />
+    
+    <meta property="og:title" content="User Management - Admin Panel" />
+    <meta property="og:description" content="Admin Panel - User Management" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://edusphere.com/admin-users.html" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.console && console.warn) {
+            const _warn = console.warn;
+            console.warn = function() {
+                if (arguments[0] && String(arguments[0]).includes('tailwindcss.com should not be used in production')) return;
+                _warn.apply(console, arguments);
+            };
+        }
+    </script>
+    
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/utilities.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/backgrounds.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    
+    <style>
+        .portal-sidebar {
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .portal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .portal-sidebar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .portal-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-base);
+            color: var(--gray-600);
+        }
+        .portal-link:hover {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+        .portal-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        .portal-link .badge {
+            margin-left: auto;
+        }
+        .user-card {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .role-badge {
+            font-size: 0.6rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+        }
+        .role-badge.admin { background: var(--primary-50); color: var(--primary); }
+        .role-badge.teacher { background: var(--accent-50); color: var(--accent); }
+        .role-badge.student { background: var(--success-50); color: var(--success); }
+        .role-badge.principal { background: var(--warning-50); color: var(--warning); }
+        .role-badge.parent { background: var(--info-50); color: var(--info); }
+        .status-badge { font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-weight: 600; }
+        .status-badge.active { background: var(--success-50); color: var(--success); }
+        .status-badge.inactive { background: var(--error-50); color: var(--error); }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes modalSlide {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .form-input { padding-left: 2.75rem !important; }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+        @media (max-width: 1024px) {
+            .portal-sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mesh-bg"></div>
+    <div class="noise-texture"></div>
+
+    <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
+        <div class="loader-container">
+            <div class="loader-ring"></div>
+            <div class="loader-logo">E</div>
+        </div>
+        <style>
+            .loader-container {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .loader-ring {
+                position: absolute;
+                inset: 0;
+                border: 3px solid transparent;
+                border-top-color: var(--primary);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .loader-ring::before {
+                content: '';
+                position: absolute;
+                inset: 8px;
+                border: 3px solid transparent;
+                border-top-color: var(--accent);
+                border-radius: 50%;
+                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            }
+            .loader-logo {
+                font-family: var(--font-heading);
+                font-size: 24px;
+                font-weight: 800;
+                background: var(--primary-gradient);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        </style>
+    </div>
+
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                    </span>
+                </a>
+
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-secondary hidden sm:inline">👑 Admin Panel</span>
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    
+                    <div class="flex items-center gap-3">
+                        <span id="user-name-display" class="text-sm font-medium text-secondary hidden sm:inline"></span>
+                        <button id="logout-btn" class="btn btn-outline btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="page-transition pt-[70px] lg:pt-[80px]">
+        <div class="container py-6 lg:py-8">
+            <div class="grid lg:grid-cols-4 gap-6">
+                <!-- Sidebar -->
+                <aside class="portal-sidebar lg:col-span-1">
+                    <div class="glass p-4 rounded-2xl space-y-1">
+                        <div class="flex items-center gap-3 p-3 border-b border-gray-200 dark:border-gray-700">
+                            <div id="user-avatar" class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xl">A</div>
+                            <div>
+                                <p id="sidebar-user-name" class="font-semibold text-secondary">Admin</p>
+                                <p id="sidebar-user-email" class="text-xs text-gray-500">admin@edusphere.com</p>
+                            </div>
+                        </div>
+                        
+                        <a href="admin-dashboard.html" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Dashboard
+                        </a>
+                        <a href="admin-users.html" class="portal-link active">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                            Users
+                            <span class="badge badge-primary text-xs px-2 py-0.5 ml-auto" id="user-count">0</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                            Reports
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><polyline points="20 10 12 18 8 14"/></svg>
+                            Analytics
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            Messages
+                            <span class="badge badge-accent text-xs px-2 py-0.5 ml-auto">3</span>
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7H7M17 12H7M17 17H7"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                            Fee Management
+                        </a>
+                        <a href="#" class="portal-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            System Settings
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="lg:col-span-3 space-y-6">
+                    <!-- Header -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div>
+                            <h1 class="text-2xl font-bold text-secondary">👤 User Management</h1>
+                            <p class="text-sm text-gray-500">Create, manage, and control user accounts</p>
+                        </div>
+                        <button id="create-user-btn" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 5v14M5 12h14"/></svg>
+                            Create User
+                        </button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-primary" id="total-users">0</p>
+                            <p class="text-xs text-gray-500">Total Users</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-success" id="active-users">0</p>
+                            <p class="text-xs text-gray-500">Active</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-warning" id="inactive-users">0</p>
+                            <p class="text-xs text-gray-500">Inactive</p>
+                        </div>
+                        <div class="glass p-4 rounded-xl text-center">
+                            <p class="text-2xl font-bold text-accent" id="admin-count">0</p>
+                            <p class="text-xs text-gray-500">Admins</p>
+                        </div>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="glass p-4 rounded-2xl overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <th class="text-left py-3 px-3 text-gray-500 font-semibold">User</th>
+                                    <th class="text-left py-3 px-3 text-gray-500 font-semibold">Role</th>
+                                    <th class="text-left py-3 px-3 text-gray-500 font-semibold">Status</th>
+                                    <th class="text-left py-3 px-3 text-gray-500 font-semibold">Created</th>
+                                    <th class="text-left py-3 px-3 text-gray-500 font-semibold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Users will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================
+    CREATE USER MODAL
+    ======================================== -->
+    <div id="create-user-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="card p-6 md:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-secondary">👤 Create New User</h3>
+                    <button class="close-modal p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+
+                <form id="create-user-form" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="form-group relative">
+                            <label class="form-label" for="user-firstname">First Name *</label>
+                            <input type="text" id="user-firstname" name="firstName" required class="form-input" placeholder="John" />
+                        </div>
+                        <div class="form-group relative">
+                            <label class="form-label" for="user-lastname">Last Name *</label>
+                            <input type="text" id="user-lastname" name="lastName" required class="form-input" placeholder="Doe" />
+                        </div>
+                    </div>
+
+                    <div class="form-group relative">
+                        <label class="form-label" for="user-email">Email Address *</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </span>
+                            <input type="email" id="user-email" name="email" required class="form-input" placeholder="john@example.com" />
+                        </div>
+                    </div>
+
+                    <div class="form-group relative">
+                        <label class="form-label" for="user-password">Password *</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 6h12v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6z"/><circle cx="12" cy="13" r="2"/><path d="M8 21h8"/></svg>
+                            </span>
+                            <input type="password" id="user-password" name="password" required class="form-input" placeholder="Min 6 characters" minlength="6" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="user-role">Role *</label>
+                        <select id="user-role" name="role" required class="form-select">
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="parent">Parent</option>
+                            <option value="principal">Principal</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div id="create-user-message" class="text-sm hidden"></div>
+
+                    <button type="submit" class="btn btn-primary w-full btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 5v14M5 12h14"/></svg>
+                        Create User
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+    UPDATE USER MODAL
+    ======================================== -->
+    <div id="update-user-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="card p-6 md:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-secondary">✏️ Edit User</h3>
+                    <button class="close-modal p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all hover:scale-110">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+
+                <form id="update-user-form" class="space-y-4">
+                    <input type="hidden" id="update-user-id" />
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="form-group relative">
+                            <label class="form-label" for="update-firstname">First Name</label>
+                            <input type="text" id="update-firstname" class="form-input" placeholder="John" />
+                        </div>
+                        <div class="form-group relative">
+                            <label class="form-label" for="update-lastname">Last Name</label>
+                            <input type="text" id="update-lastname" class="form-input" placeholder="Doe" />
+                        </div>
+                    </div>
+
+                    <div class="form-group relative">
+                        <label class="form-label" for="update-email">Email</label>
+                        <input type="email" id="update-email" class="form-input" placeholder="john@example.com" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="update-role">Role</label>
+                        <select id="update-role" class="form-select">
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="parent">Parent</option>
+                            <option value="principal">Principal</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="update-status">Status</label>
+                        <select id="update-status" class="form-select">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div id="update-user-message" class="text-sm hidden"></div>
+
+                    <div class="flex gap-3">
+                        <button type="submit" class="btn btn-primary flex-1">Update User</button>
+                        <button type="button" id="reset-password-btn" class="btn btn-outline flex-1">Reset Password</button>
+                    </div>
+                    <button type="button" id="delete-user-btn" class="btn btn-danger w-full">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-secondary text-white" role="contentinfo">
+        <div class="container section-padding-sm">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">E</span>
+                        </div>
+                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
+                        <li><a href="academics.html" class="footer-link">Academics</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
+                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="text-gray-400">📍 123 Education Street</li>
+                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
+                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/loader.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/navbar.js"></script>
+    <script src="assets/js/scroll.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/performance.js" defer></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = window.Auth?.getCurrentUser();
+            
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (currentUser.role !== 'admin') {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Update user info
+            const name = currentUser.firstName || 'Admin';
+            document.getElementById('user-name-display').textContent = name;
+            document.getElementById('sidebar-user-name').textContent = name;
+            document.getElementById('sidebar-user-email').textContent = currentUser.email || 'admin@edusphere.com';
+            const avatar = document.getElementById('user-avatar');
+            if (avatar) avatar.textContent = (name[0] || 'A').toUpperCase();
+
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                window.Auth?.logout();
+                window.location.href = 'index.html';
+            });
+
+            // ========================================
+            // USER MANAGEMENT
+            // ========================================
+            
+            function renderUsers() {
+                const users = window.Auth?.getAllUsers() || [];
+                const tbody = document.getElementById('users-table-body');
+                const totalUsers = document.getElementById('total-users');
+                const activeUsers = document.getElementById('active-users');
+                const inactiveUsers = document.getElementById('inactive-users');
+                const adminCount = document.getElementById('admin-count');
+                const userCountBadge = document.getElementById('user-count');
+
+                const active = users.filter(u => u.isActive !== false);
+                const inactive = users.filter(u => u.isActive === false);
+                const admins = users.filter(u => u.role === 'admin');
+
+                totalUsers.textContent = users.length;
+                activeUsers.textContent = active.length;
+                inactiveUsers.textContent = inactive.length;
+                adminCount.textContent = admins.length;
+                userCountBadge.textContent = users.length;
+
+                tbody.innerHTML = users.map(user => `
+                    <tr class="border-b border-gray-100 dark:border-gray-800 user-card">
+                        <td class="py-3 px-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                                    ${(user.firstName?.[0] || 'U').toUpperCase()}
+                                </div>
+                                <div>
+                                    <span class="font-medium text-secondary">${user.firstName || ''} ${user.lastName || ''}</span>
+                                    <p class="text-xs text-gray-400">${user.email || ''}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="role-badge ${user.role}">${user.role || 'user'}</span>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="status-badge ${user.isActive !== false ? 'active' : 'inactive'}">
+                                ${user.isActive !== false ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-xs text-gray-400">
+                            ${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="flex gap-2">
+                                <button class="edit-user-btn btn btn-primary btn-sm" data-user-id="${user.id}">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Create User Modal
+            const createModal = document.getElementById('create-user-modal');
+            const updateModal = document.getElementById('update-user-modal');
+
+            document.getElementById('create-user-btn').addEventListener('click', function() {
+                createModal.classList.add('active');
+                document.getElementById('create-user-form').reset();
+                document.getElementById('create-user-message').classList.add('hidden');
+            });
+
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal-overlay').classList.remove('active');
+                });
+            });
+
+            createModal.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+            updateModal.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // Create User Form
+            document.getElementById('create-user-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('user-firstname').value.trim();
+                const lastName = document.getElementById('user-lastname').value.trim();
+                const email = document.getElementById('user-email').value.trim();
+                const password = document.getElementById('user-password').value;
+                const role = document.getElementById('user-role').value;
+                const messageEl = document.getElementById('create-user-message');
+
+                if (!firstName || !lastName || !email || !password) {
+                    messageEl.className = 'text-sm text-error show';
+                    messageEl.textContent = 'All fields are required.';
+                    return;
+                }
+
+                if (password.length < 6) {
+                    messageEl.className = 'text-sm text-error show';
+                    messageEl.textContent = 'Password must be at least 6 characters.';
+                    return;
+                }
+
+                const result = window.Auth?.createUser(firstName, lastName, email, password, role, currentUser.id);
+                
+                if (result && result.success) {
+                    messageEl.className = 'text-sm text-success show';
+                    messageEl.textContent = 'User created successfully!';
+                    renderUsers();
+                    setTimeout(() => {
+                        createModal.classList.remove('active');
+                    }, 1000);
+                } else {
+                    messageEl.className = 'text-sm text-error show';
+                    messageEl.textContent = result?.message || 'Failed to create user.';
+                }
+            });
+
+            // Edit User
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('edit-user-btn')) {
+                    const userId = e.target.dataset.userId;
+                    const users = window.Auth?.getAllUsers() || [];
+                    const user = users.find(u => u.id === userId);
+                    
+                    if (user) {
+                        document.getElementById('update-user-id').value = user.id;
+                        document.getElementById('update-firstname').value = user.firstName || '';
+                        document.getElementById('update-lastname').value = user.lastName || '';
+                        document.getElementById('update-email').value = user.email || '';
+                        document.getElementById('update-role').value = user.role || 'student';
+                        document.getElementById('update-status').value = user.isActive !== false ? 'true' : 'false';
+                        document.getElementById('update-user-message').classList.add('hidden');
+                        updateModal.classList.add('active');
+                    }
+                }
+            });
+
+            // Update User
+            document.getElementById('update-user-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const userId = document.getElementById('update-user-id').value;
+                const firstName = document.getElementById('update-firstname').value.trim();
+                const lastName = document.getElementById('update-lastname').value.trim();
+                const email = document.getElementById('update-email').value.trim();
+                const role = document.getElementById('update-role').value;
+                const isActive = document.getElementById('update-status').value === 'true';
+                const messageEl = document.getElementById('update-user-message');
+
+                const result = window.Auth?.updateUser(userId, { firstName, lastName, email, role, isActive });
+                
+                if (result && result.success) {
+                    messageEl.className = 'text-sm text-success show';
+                    messageEl.textContent = 'User updated successfully!';
+                    renderUsers();
+                    setTimeout(() => {
+                        updateModal.classList.remove('active');
+                    }, 1000);
+                } else {
+                    messageEl.className = 'text-sm text-error show';
+                    messageEl.textContent = result?.message || 'Failed to update user.';
+                }
+            });
+
+            // Reset Password
+            document.getElementById('reset-password-btn').addEventListener('click', function() {
+                const userId = document.getElementById('update-user-id').value;
+                const newPassword = prompt('Enter new password (min 6 characters):');
+                
+                if (newPassword && newPassword.length >= 6) {
+                    const result = window.Auth?.resetUserPassword(userId, newPassword);
+                    const messageEl = document.getElementById('update-user-message');
+                    
+                    if (result && result.success) {
+                        messageEl.className = 'text-sm text-success show';
+                        messageEl.textContent = 'Password reset successfully!';
+                    } else {
+                        messageEl.className = 'text-sm text-error show';
+                        messageEl.textContent = result?.message || 'Failed to reset password.';
+                    }
+                } else if (newPassword !== null) {
+                    alert('Password must be at least 6 characters.');
+                }
+            });
+
+            // Delete User
+            document.getElementById('delete-user-btn').addEventListener('click', function() {
+                const userId = document.getElementById('update-user-id').value;
+                const users = window.Auth?.getAllUsers() || [];
+                const user = users.find(u => u.id === userId);
+                
+                if (!user) return;
+                
+                if (user.role === 'admin') {
+                    const adminCount = users.filter(u => u.role === 'admin').length;
+                    if (adminCount <= 1) {
+                        alert('Cannot delete the last admin user.');
+                        return;
+                    }
+                }
+                
+                if (confirm(`Are you sure you want to delete user: ${user.firstName || ''} ${user.lastName || ''}?`)) {
+                    const result = window.Auth?.deleteUser(userId);
+                    const messageEl = document.getElementById('update-user-message');
+                    
+                    if (result && result.success) {
+                        messageEl.className = 'text-sm text-success show';
+                        messageEl.textContent = 'User deleted successfully!';
+                        renderUsers();
+                        setTimeout(() => {
+                            updateModal.classList.remove('active');
+                        }, 1000);
+                    } else {
+                        messageEl.className = 'text-sm text-error show';
+                        messageEl.textContent = result?.message || 'Failed to delete user.';
+                    }
+                }
+            });
+
+            // Initial render
+            renderUsers();
+        });
+    </script>
+</body>
+</html>

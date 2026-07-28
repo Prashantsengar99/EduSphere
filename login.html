@@ -19,49 +19,395 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Suppress Tailwind CDN warning
-        if (window.console && console.warn) {
-            const _warn = console.warn;
-            console.warn = function() {
-                if (arguments[0] && String(arguments[0]).includes('tailwindcss.com should not be used in production')) return;
-                _warn.apply(console, arguments);
-            };
-        }
-    </script>
-
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/assets/images/icons/icon-192x192.svg" />
     <meta name="theme-color" content="#2563EB" />
     
-    <link rel="stylesheet" href="assets/css/variables.css" />
-    <link rel="stylesheet" href="assets/css/utilities.css" />
-    <link rel="stylesheet" href="assets/css/animations.css" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/backgrounds.css" />
-    <link rel="stylesheet" href="assets/css/responsive.css" />
-    
     <style>
-        /* ===== LOGIN PAGE SPECIFIC ===== */
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-gradient: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            --accent: #7C3AED;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --success-50: #ECFDF5;
+            --error: #EF4444;
+            --error-50: #FEF2F2;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --shadow-card: 0 20px 60px rgba(0,0,0,0.08), 0 10px 30px rgba(0,0,0,0.04);
+            --shadow-hover: 0 30px 80px rgba(37,99,235,0.12), 0 15px 40px rgba(0,0,0,0.06);
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        [data-theme="dark"] {
+            --gray-50: #0F172A;
+            --gray-100: #1E293B;
+            --gray-200: #334155;
+            --gray-300: #475569;
+            --gray-400: #64748B;
+            --gray-500: #94A3B8;
+            --gray-600: #CBD5E1;
+            --gray-700: #E2E8F0;
+            --gray-800: #F1F5F9;
+            --gray-900: #F8FAFC;
+            --shadow-card: 0 20px 60px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.2);
+            --shadow-hover: 0 30px 80px rgba(37,99,235,0.15), 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--gray-50);
+            color: var(--gray-800);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        [data-theme="dark"] body {
+            background: #0F172A;
+        }
+
+        /* ===== MESH BACKGROUND ===== */
+        .mesh-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(37,99,235,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(124,58,237,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(37,99,235,0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        [data-theme="dark"] .mesh-bg {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(37,99,235,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(37,99,235,0.05) 0%, transparent 50%);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ===== NAVBAR ===== */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] #navbar {
+            background: rgba(15,23,42,0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #navbar.scrolled {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        [data-theme="dark"] #navbar.scrolled {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        @media (min-width: 1024px) {
+            .navbar-inner {
+                height: 80px;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+        }
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        [data-theme="dark"] .logo-text {
+            color: var(--gray-900);
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+        }
+
+        .theme-toggle:hover {
+            background: var(--gray-100);
+            transform: scale(1.1);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            background: var(--gray-200);
+        }
+
+        .menu-btn {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray-600);
+        }
+
+        .menu-btn:hover {
+            background: var(--gray-100);
+            transform: scale(1.1);
+        }
+
+        [data-theme="dark"] .menu-btn:hover {
+            background: var(--gray-200);
+        }
+
+        @media (min-width: 1024px) {
+            .menu-btn {
+                display: none;
+            }
+        }
+
+        /* ===== MOBILE MENU ===== */
+        #mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+            z-index: 999;
+        }
+
+        [data-theme="dark"] #mobile-menu {
+            background: var(--gray-100);
+        }
+
+        @media (min-width: 1024px) {
+            #mobile-menu {
+                display: none !important;
+            }
+        }
+
+        #mobile-menu.open {
+            display: block;
+        }
+
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mobile-nav a {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--gray-700);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .mobile-nav a:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] .mobile-nav a:hover {
+            background: var(--gray-200);
+        }
+
+        .mobile-nav .btn-primary {
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37,99,235,0.35);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-lg {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== LOGIN PAGE ===== */
         .login-container {
             min-height: calc(100vh - 160px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem 1rem;
+            margin-top: 70px;
             position: relative;
         }
-        
-        /* Floating orbs for login page */
+
         .login-orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
             pointer-events: none;
-            opacity: 0.15;
+            opacity: 0.12;
             animation: orbFloat 15s ease-in-out infinite;
         }
+
         .login-orb-1 {
             width: 400px;
             height: 400px;
@@ -70,6 +416,7 @@
             right: -100px;
             animation-delay: 0s;
         }
+
         .login-orb-2 {
             width: 300px;
             height: 300px;
@@ -78,6 +425,7 @@
             left: -80px;
             animation-delay: 3s;
         }
+
         .login-orb-3 {
             width: 200px;
             height: 200px;
@@ -86,186 +434,250 @@
             left: 50%;
             transform: translate(-50%, -50%);
             animation: orbPulse 8s ease-in-out infinite;
-            opacity: 0.08;
+            opacity: 0.06;
         }
-        
+
         @keyframes orbFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
             33% { transform: translate(30px, -30px) scale(1.1); }
             66% { transform: translate(-20px, 20px) scale(0.9); }
         }
-        
+
         @keyframes orbPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.08; }
-            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.15; }
+            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.06; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.12; }
         }
 
         /* ===== LOGIN CARD ===== */
         .login-card {
             position: relative;
-            overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 440px;
+            width: 100%;
+            transition: var(--transition);
+            box-shadow: var(--shadow-card);
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(37,99,235,0.03) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .login-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(37,99,235,0.12), 0 10px 30px rgba(0,0,0,0.05);
-        }
-        [data-theme="dark"] .login-card:hover {
-            box-shadow: 0 20px 60px rgba(37,99,235,0.08), 0 10px 30px rgba(0,0,0,0.2);
+
+        [data-theme="dark"] .login-card {
+            background: var(--gray-100);
+            border-color: rgba(255,255,255,0.05);
         }
 
-        /* ===== LOGO ANIMATION ===== */
-        .login-logo {
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .login-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
         }
-        .login-logo:hover {
+
+        .login-logo-wrapper {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 8px 30px rgba(37,99,235,0.2);
+            transition: var(--transition);
+        }
+
+        .login-logo-icon:hover {
             transform: scale(1.05) rotate(-3deg);
         }
 
-        /* ===== FORM INPUTS ===== */
-        .login-input {
-            padding-left: 2.75rem !important;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .login-logo-icon span {
+            color: white;
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
         }
-        .login-input:focus {
-            transform: scale(1.01);
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+
+        .login-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
         }
-        .login-input-icon {
+
+        [data-theme="dark"] .login-title {
+            color: var(--gray-900);
+        }
+
+        .login-subtitle {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            margin-bottom: 0.4rem;
+        }
+
+        [data-theme="dark"] .form-label {
+            color: var(--gray-300);
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .form-input-icon {
             position: absolute;
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray-400);
-            transition: color 0.3s ease;
             pointer-events: none;
+            transition: color 0.3s ease;
         }
-        .form-group:focus-within .login-input-icon {
+
+        .form-group:focus-within .form-input-icon {
             color: var(--primary);
         }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            background: white;
+            color: var(--gray-800);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        [data-theme="dark"] .form-input {
+            background: var(--gray-200);
+            border-color: var(--gray-300);
+            color: var(--gray-900);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+            transform: scale(1.01);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .form-input-password {
+            padding-right: 3rem;
+        }
+
         .password-toggle-btn {
             position: absolute;
             right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray-400);
-            transition: all 0.3s ease;
-            cursor: pointer;
             background: none;
             border: none;
+            cursor: pointer;
             padding: 0.25rem;
+            transition: var(--transition);
         }
+
         .password-toggle-btn:hover {
             color: var(--primary);
-            transform: translateY(-50%) scale(1.1);
         }
 
-        /* ===== REMEMBER ME ===== */
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+
+        [data-theme="dark"] .remember-me {
+            color: var(--gray-400);
+        }
+
         .remember-checkbox {
-            appearance: none;
             width: 18px;
             height: 18px;
-            border: 2px solid var(--gray-300);
-            border-radius: var(--radius-sm);
+            accent-color: var(--primary);
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            flex-shrink: 0;
-        }
-        .remember-checkbox:checked {
-            background: var(--primary-gradient);
-            border-color: var(--primary);
-        }
-        .remember-checkbox:checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
-        }
-        .remember-checkbox:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
         }
 
-        /* ===== SOCIAL BUTTONS ===== */
-        .social-btn {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .social-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .social-btn:hover::before {
-            opacity: 0.05;
-        }
-        .social-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-        .social-btn:active {
-            transform: scale(0.98);
+        .forgot-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
         }
 
-        /* ===== DIVIDER ===== */
-        .divider-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
-        }
-        [data-theme="dark"] .divider-line {
-            background: linear-gradient(90deg, transparent, var(--gray-700), transparent);
+        .forgot-link:hover {
+            text-decoration: underline;
         }
 
-        /* ===== ERROR/SUCCESS ===== */
+        /* ===== AUTH MESSAGES ===== */
         .auth-message {
             padding: 0.75rem 1rem;
-            border-radius: var(--radius-lg);
-            font-size: var(--font-size-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
             display: none;
+            margin-bottom: 1rem;
             animation: messageSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
         .auth-message.show {
             display: block;
         }
+
         .auth-message.error {
             background: var(--error-50);
             color: var(--error);
             border: 1px solid var(--error);
         }
+
         .auth-message.success {
             background: var(--success-50);
             color: var(--success);
             border: 1px solid var(--success);
         }
+
         [data-theme="dark"] .auth-message.error {
             background: rgba(239,68,68,0.15);
             border-color: rgba(239,68,68,0.3);
+            color: #F87171;
         }
+
         [data-theme="dark"] .auth-message.success {
             background: rgba(16,185,129,0.15);
             border-color: rgba(16,185,129,0.3);
+            color: #34D399;
         }
+
         @keyframes messageSlide {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -277,12 +689,15 @@
             pointer-events: none;
             position: relative;
         }
+
         .btn-loading .btn-text {
             visibility: hidden;
         }
+
         .btn-loading .btn-spinner {
             display: inline-block !important;
         }
+
         .btn-spinner {
             display: none;
             width: 22px;
@@ -293,45 +708,387 @@
             animation: spin 0.8s linear infinite;
             position: absolute;
         }
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 640px) {
-            .login-orb-1 { width: 200px; height: 200px; top: -50px; right: -50px; }
-            .login-orb-2 { width: 150px; height: 150px; bottom: -40px; left: -40px; }
-            .login-orb-3 { width: 120px; height: 120px; }
-            .login-card { padding: 1.5rem !important; }
+        /* ===== DIVIDER ===== */
+        .divider {
+            position: relative;
+            margin: 1.5rem 0;
         }
 
-        /* ===== FLOATING PARTICLES ===== */
-        .login-particles {
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+        }
+
+        [data-theme="dark"] .divider-line {
+            background: linear-gradient(90deg, transparent, var(--gray-400), transparent);
+        }
+
+        .divider-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        [data-theme="dark"] .divider-text {
+            background: var(--gray-100);
+        }
+
+        /* ===== SOCIAL BUTTONS ===== */
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            background: white;
+            color: var(--gray-700);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] .social-btn {
+            background: var(--gray-200);
+            border-color: var(--gray-300);
+            color: var(--gray-800);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .social-btn:active {
+            transform: scale(0.98);
+        }
+
+        .social-btn .google { color: #4285F4; }
+        .social-btn .facebook { color: #1877F2; }
+
+        /* ===== REGISTER LINK ===== */
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== SHAKE ANIMATION ===== */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--gray-800);
+            color: white;
+            padding: 2rem 0 1rem;
+            margin-top: 2rem;
+        }
+
+        [data-theme="dark"] footer {
+            background: #0F172A;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-brand p {
+            color: var(--gray-400);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--gray-700);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--gray-400);
+        }
+
+        /* ===== PARTICLES ===== */
+        .particles-container {
             position: absolute;
             inset: 0;
             overflow: hidden;
             pointer-events: none;
         }
-        .login-particle {
+
+        .particle {
             position: absolute;
             width: 4px;
             height: 4px;
             background: var(--primary);
             border-radius: 50%;
-            opacity: 0.15;
+            opacity: 0.1;
             animation: particleFloat 20s linear infinite;
         }
+
         @keyframes particleFloat {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.15; }
-            90% { opacity: 0.15; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
             100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            z-index: 9998;
+            transition: width 0.1s linear;
+        }
+
+        /* ===== BACK TO TOP ===== */
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            z-index: 999;
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #back-to-top:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(37,99,235,0.4);
+        }
+
+        /* ===== SKIP LINK ===== */
+        .skip-link {
+            position: fixed;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0 0 8px 8px;
+            z-index: 9999;
+            font-weight: 600;
+            transition: top 0.3s ease;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* ===== LOADER ===== */
+        .loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: var(--gray-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        [data-theme="dark"] .loader-wrapper {
+            background: #0F172A;
+        }
+
+        .loader-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader-ring {
+            position: absolute;
+            inset: 0;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        .loader-ring::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+        }
+
+        .loader-logo {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .login-container {
+                margin-top: 60px;
+                padding: 1rem 0.75rem;
+                min-height: calc(100vh - 140px);
+            }
+
+            .login-orb-1 {
+                width: 200px;
+                height: 200px;
+                top: -50px;
+                right: -50px;
+            }
+
+            .login-orb-2 {
+                width: 150px;
+                height: 150px;
+                bottom: -40px;
+                left: -40px;
+            }
+
+            .login-orb-3 {
+                width: 120px;
+                height: 120px;
+            }
+
+            .login-card {
+                padding: 1.5rem !important;
+            }
+
+            .login-card:hover {
+                transform: none !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.25rem !important;
+            }
+
+            .social-btn {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="mesh-bg"></div>
-    <div class="noise-texture"></div>
 
     <!-- ===== LOADER ===== -->
     <div id="loader" class="loader-wrapper" role="status" aria-label="Loading">
@@ -339,61 +1096,21 @@
             <div class="loader-ring"></div>
             <div class="loader-logo">E</div>
         </div>
-        <style>
-            .loader-container {
-                position: relative;
-                width: 80px;
-                height: 80px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .loader-ring {
-                position: absolute;
-                inset: 0;
-                border: 3px solid transparent;
-                border-top-color: var(--primary);
-                border-radius: 50%;
-                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            }
-            .loader-ring::before {
-                content: '';
-                position: absolute;
-                inset: 8px;
-                border: 3px solid transparent;
-                border-top-color: var(--accent);
-                border-radius: 50%;
-                animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
-            }
-            .loader-logo {
-                font-family: var(--font-heading);
-                font-size: 24px;
-                font-weight: 800;
-                background: var(--primary-gradient);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-        </style>
     </div>
-    
-    <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+    <div id="scroll-progress" class="scroll-progress" role="progressbar"></div>
     <a href="#main" class="skip-link">Skip to main content</a>
 
     <!-- ===== NAVBAR ===== -->
-    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="banner">
+    <header id="navbar" role="banner">
         <div class="container">
-            <div class="flex items-center justify-between h-[70px] lg:h-[80px]">
-                <a href="index.html" class="flex items-center gap-2 group" aria-label="EduSphere Home">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
-                        <span class="text-white font-bold text-lg">E</span>
-                    </div>
-                    <span class="text-xl font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
-                        Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
-                    </span>
+            <div class="navbar-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">E</div>
+                    <span class="logo-text">Edu<span>Sphere</span></span>
                 </a>
 
-                <nav class="hidden lg:flex items-center gap-8" role="navigation" aria-label="Main Navigation">
+                <nav class="nav-links" role="navigation" aria-label="Main Navigation">
                     <a href="index.html" class="nav-link">Home</a>
                     <a href="about.html" class="nav-link">About</a>
                     <a href="academics.html" class="nav-link">Academics</a>
@@ -402,213 +1119,326 @@
                     <a href="contact.html" class="nav-link">Contact</a>
                 </nav>
 
-                <div class="flex items-center gap-3">
-                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                     </button>
-                    <button id="menu-btn" class="lg:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    <button id="menu-btn" class="menu-btn" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
                     </button>
                 </div>
             </div>
         </div>
-
-        <div id="mobile-menu" class="lg:hidden fixed top-[70px] left-0 right-0 bg-white dark:bg-secondary shadow-2xl" role="navigation" aria-label="Mobile Navigation" aria-hidden="true">
-            <div class="container py-6">
-                <nav class="flex flex-col gap-2">
-                    <a href="index.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Home</a>
-                    <a href="about.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">About</a>
-                    <a href="academics.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Academics</a>
-                    <a href="programs.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Programs</a>
-                    <a href="admissions.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Admissions</a>
-                    <a href="contact.html" class="text-base font-medium text-secondary/70 hover:text-primary transition-all duration-300 px-4 py-3 rounded-lg hover:bg-primary/5">Contact</a>
-                    <div class="border-t border-gray-100 dark:border-gray-800 my-2"></div>
-                    <a href="login.html" class="btn btn-primary mt-2 w-full text-center">Login</a>
-                </nav>
-            </div>
-        </div>
     </header>
 
+    <!-- ===== MOBILE MENU ===== -->
+    <div id="mobile-menu" role="navigation" aria-label="Mobile Navigation">
+        <div class="container">
+            <nav class="mobile-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="academics.html">Academics</a>
+                <a href="programs.html">Programs</a>
+                <a href="admissions.html">Admissions</a>
+                <a href="contact.html">Contact</a>
+                <a href="login.html" class="btn btn-primary">Login</a>
+            </nav>
+        </div>
+    </div>
+
     <!-- ===== LOGIN FORM ===== -->
-    <main id="main" class="page-transition">
+    <main id="main">
         <div class="login-container">
             <!-- Background Orbs -->
             <div class="login-orb login-orb-1"></div>
             <div class="login-orb login-orb-2"></div>
             <div class="login-orb login-orb-3"></div>
-            
+
             <!-- Particles -->
-            <div class="login-particles" id="login-particles"></div>
+            <div class="particles-container" id="particles-container"></div>
 
-            <div class="container relative z-10">
-                <div class="max-w-md mx-auto" data-animate>
-                    <div class="login-card card p-6 md:p-8">
-                        <!-- Logo -->
-                        <div class="text-center mb-8">
-                            <div class="login-logo w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/20">
-                                <span class="text-white font-bold text-2xl">E</span>
-                            </div>
-                            <h2 class="text-2xl font-bold text-secondary">Welcome Back 👋</h2>
-                            <p class="text-gray-500 text-sm mt-1">Login to your EduSphere account</p>
+            <div class="login-card">
+                <!-- Logo -->
+                <div class="login-logo-wrapper">
+                    <div class="login-logo-icon"><span>E</span></div>
+                    <h1 class="login-title">Welcome Back 👋</h1>
+                    <p class="login-subtitle">Login to your EduSphere account</p>
+                </div>
+
+                <!-- Error/Success Messages -->
+                <div id="auth-error" class="auth-message error"></div>
+                <div id="auth-success" class="auth-message success"></div>
+
+                <!-- Login Form -->
+                <form id="login-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">Email Address</label>
+                        <div class="form-input-wrapper">
+                            <span class="form-input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </span>
+                            <input type="email" id="login-email" class="form-input" placeholder="Enter your email" autocomplete="email" required />
                         </div>
+                    </div>
 
-                        <!-- Error/Success Messages -->
-                        <div id="auth-error" class="auth-message error"></div>
-                        <div id="auth-success" class="auth-message success"></div>
-
-                        <!-- Login Form -->
-                        <form id="login-form" class="space-y-5" novalidate>
-                            <div class="form-group relative">
-                                <label class="form-label" for="login-email">Email Address</label>
-                                <div class="relative">
-                                    <span class="login-input-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                                    </span>
-                                    <input type="email" id="login-email" name="email" required 
-                                           class="login-input form-input" placeholder="Enter your email" 
-                                           autocomplete="email" />
-                                </div>
-                            </div>
-                            
-                            <div class="form-group relative">
-                                <label class="form-label" for="login-password">Password</label>
-                                <div class="relative">
-                                    <span class="login-input-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 6h12v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6z"/><circle cx="12" cy="13" r="2"/><path d="M8 21h8"/></svg>
-                                    </span>
-                                    <input type="password" id="login-password" name="password" required 
-                                           class="login-input form-input pr-12" placeholder="Enter your password" 
-                                           autocomplete="current-password" minlength="6" />
-                                    <button type="button" class="password-toggle-btn" id="password-toggle" aria-label="Toggle password visibility">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between text-sm">
-                                <label class="flex items-center gap-2 text-gray-600 dark:text-gray-400 cursor-pointer">
-                                    <input type="checkbox" id="remember-me" class="remember-checkbox" />
-                                    <span>Remember me</span>
-                                </label>
-                                <a href="forgot-password.html" class="text-primary hover:underline font-medium">Forgot password?</a>
-                            </div>
-
-                            <button type="submit" id="login-submit" class="btn btn-primary w-full btn-lg ripple relative">
-                                <span class="btn-text">Sign In</span>
-                                <span class="btn-spinner"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                            </button>
-                        </form>
-
-                        <!-- Register Link -->
-                        <div class="mt-6 text-center text-sm text-gray-500">
-                            Don't have an account? 
-                            <a href="register.html" class="text-primary font-semibold hover:underline hover:text-primary-dark transition-colors">Create one</a>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="relative my-6">
-                            <div class="absolute inset-0 flex items-center">
-                                <div class="divider-line w-full"></div>
-                            </div>
-                            <div class="relative flex justify-center text-sm">
-                                <span class="px-4 bg-white dark:bg-secondary text-gray-500">Or continue with</span>
-                            </div>
-                        </div>
-
-                        <!-- Social Login -->
-                        <div class="grid grid-cols-2 gap-3">
-                            <button class="social-btn flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-[#4285F4]"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                                Google
-                            </button>
-                            <button class="social-btn flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-[#1877F2]"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                                Facebook
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Password</label>
+                        <div class="form-input-wrapper">
+                            <span class="form-input-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M6 6h12v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6z"/><circle cx="12" cy="13" r="2"/><path d="M8 21h8"/></svg>
+                            </span>
+                            <input type="password" id="login-password" class="form-input form-input-password" placeholder="Enter your password" autocomplete="current-password" minlength="6" required />
+                            <button type="button" class="password-toggle-btn" id="password-toggle" aria-label="Toggle password visibility">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>
                     </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember-me" class="remember-checkbox" />
+                            Remember me
+                        </label>
+                        <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" id="login-submit" class="btn btn-primary btn-lg">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-spinner"></span>
+                    </button>
+                </form>
+
+                <!-- Register Link -->
+                <div class="register-link">
+                    Don't have an account? <a href="register.html">Create one</a>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">Or continue with</span>
+                </div>
+
+                <!-- Social Login -->
+                <div class="social-buttons">
+                    <button class="social-btn" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="google"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Google
+                    </button>
+                    <button class="social-btn" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="facebook"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        Facebook
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <footer class="bg-secondary text-white" role="contentinfo">
-        <div class="container section-padding-sm">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-                <div>
-                    <a href="index.html" class="flex items-center gap-2 mb-4 group">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <span class="text-white font-bold text-lg">E</span>
-                        </div>
-                        <span class="text-xl font-bold font-heading">Edu<span class="text-primary">Sphere</span></span>
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="margin-bottom:0.5rem;display:inline-flex;">
+                        <div class="logo-icon">E</div>
+                        <span class="logo-text" style="color:white;">Edu<span style="color:var(--primary);">Sphere</span></span>
                     </a>
-                    <p class="text-gray-400 text-sm leading-relaxed">Complete Ecosystem for Education.</p>
-                    <div class="flex gap-3 mt-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📘</a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">🐦</a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">📸</a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary/20 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 hover:scale-110">💼</a>
-                    </div>
+                    <p>Complete Ecosystem for Education.</p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="about.html" class="footer-link">About Us</a></li>
-                        <li><a href="admissions.html" class="footer-link">Admissions</a></li>
-                        <li><a href="academics.html" class="footer-link">Academics</a></li>
-                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="admissions.html">Admissions</a></li>
+                        <li><a href="academics.html">Academics</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Resources</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="faq.html" class="footer-link">FAQ</a></li>
-                        <li><a href="privacy.html" class="footer-link">Privacy Policy</a></li>
-                        <li><a href="terms.html" class="footer-link">Terms of Service</a></li>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Contact</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="text-gray-400">📍 123 Education Street</li>
-                        <li class="text-gray-400">📞 +1 (555) 123-4567</li>
-                        <li class="text-gray-400">✉️ info@edusphere.com</li>
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li>📍 123 Education Street</li>
+                        <li>📞 +1 (555) 123-4567</li>
+                        <li>✉️ info@edusphere.com</li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-sm text-gray-400">
+            <div class="footer-bottom">
                 <p>&copy; 2024 EduSphere. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- ===== BACK TO TOP ===== -->
     <button id="back-to-top" aria-label="Back to top">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
     <!-- ===== SCRIPTS ===== -->
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/loader.js"></script>
-    <script src="assets/js/theme.js"></script>
-    <script src="assets/js/navbar.js"></script>
-    <script src="assets/js/scroll.js"></script>
-    <script src="assets/js/app.js"></script>
-    <script src="assets/js/utils.js"></script>
-    <script src="assets/js/performance.js" defer></script>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 Login page loaded');
-            console.log('🔑 Auth available:', typeof window.Auth !== 'undefined');
+        // ============================================
+        // AUTH SYSTEM
+        // ============================================
+        window.Auth = {
+            users: [
+                { id: 1, firstName: 'Student', lastName: 'User', email: 'student@edusphere.com', password: 'student123', role: 'student' },
+                { id: 2, firstName: 'Teacher', lastName: 'User', email: 'teacher@edusphere.com', password: 'teacher123', role: 'teacher' },
+                { id: 3, firstName: 'Super', lastName: 'Admin', email: 'admin@edusphere.com', password: 'admin123', role: 'admin' },
+                { id: 4, firstName: 'Principal', lastName: 'User', email: 'principal@edusphere.com', password: 'principal123', role: 'principal' },
+                { id: 5, firstName: 'Parent', lastName: 'User', email: 'parent@edusphere.com', password: 'parent123', role: 'parent' }
+            ],
+            currentUser: null,
 
-            // ===== PARTICLES =====
-            const container = document.getElementById('login-particles');
+            login(email, password, remember) {
+                console.log('🔐 Login attempt:', email);
+                const user = this.users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    this.currentUser = user;
+                    const sessionData = {
+                        userId: user.id,
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        role: user.role
+                    };
+                    if (remember) {
+                        localStorage.setItem('edusphere_user', JSON.stringify(sessionData));
+                    } else {
+                        sessionStorage.setItem('edusphere_user', JSON.stringify(sessionData));
+                    }
+                    console.log('✅ Login successful:', user.email, 'Role:', user.role);
+                    return { success: true, user: user };
+                }
+                console.log('❌ Login failed');
+                return { success: false, message: 'Invalid email or password' };
+            },
+
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('edusphere_user');
+                sessionStorage.removeItem('edusphere_user');
+                console.log('🚪 Logged out');
+            },
+
+            getCurrentUser() {
+                if (this.currentUser) return this.currentUser;
+                const stored = localStorage.getItem('edusphere_user') || sessionStorage.getItem('edusphere_user');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    const user = this.users.find(u => u.id === data.userId);
+                    if (user) {
+                        this.currentUser = user;
+                        return user;
+                    }
+                }
+                return null;
+            },
+
+            isLoggedIn() {
+                return !!this.getCurrentUser();
+            }
+        };
+
+        console.log('🔑 Auth system initialized!');
+        console.log('📧 Admin: admin@edusphere.com / admin123');
+
+        // ============================================
+        // LOADER
+        // ============================================
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').classList.add('hidden');
+            }, 600);
+        });
+
+        // ============================================
+        // THEME TOGGLE
+        // ============================================
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('edusphere_theme') || 'light';
+
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                updateThemeIcon(true);
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const isDark = html.getAttribute('data-theme') === 'dark';
+                    const newTheme = isDark ? 'light' : 'dark';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('edusphere_theme', newTheme);
+                    updateThemeIcon(!isDark);
+                });
+            }
+
+            function updateThemeIcon(isDark) {
+                const toggle = document.getElementById('theme-toggle');
+                if (!toggle) return;
+                toggle.innerHTML = isDark
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+            }
+        })();
+
+        // ============================================
+        // MOBILE MENU
+        // ============================================
+        (function() {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', function() {
+                    const expanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !expanded);
+                    mobileMenu.classList.toggle('open');
+                });
+            }
+        })();
+
+        // ============================================
+        // NAVBAR SCROLL
+        // ============================================
+        (function() {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                navbar.classList.toggle('scrolled', window.scrollY > 50);
+            });
+        })();
+
+        // ============================================
+        // BACK TO TOP
+        // ============================================
+        (function() {
+            const backBtn = document.getElementById('back-to-top');
+            window.addEventListener('scroll', function() {
+                backBtn.classList.toggle('visible', window.scrollY > 300);
+            });
+            backBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+
+        // ============================================
+        // PARTICLES
+        // ============================================
+        (function() {
+            const container = document.getElementById('particles-container');
             if (container) {
                 for (let i = 0; i < 20; i++) {
                     const particle = document.createElement('div');
-                    particle.className = 'login-particle';
+                    particle.className = 'particle';
                     particle.style.left = Math.random() * 100 + '%';
                     particle.style.animationDuration = (15 + Math.random() * 20) + 's';
                     particle.style.animationDelay = (Math.random() * 15) + 's';
@@ -617,84 +1447,101 @@
                     container.appendChild(particle);
                 }
             }
+        })();
 
-            // ===== PASSWORD TOGGLE =====
-            const passwordToggle = document.getElementById('password-toggle');
-            const passwordInput = document.getElementById('login-password');
-            
-            if (passwordToggle && passwordInput) {
-                passwordToggle.addEventListener('click', function() {
-                    const type = passwordInput.type === 'password' ? 'text' : 'password';
-                    passwordInput.type = type;
-                    this.innerHTML = type === 'password' 
+        // ============================================
+        // PASSWORD TOGGLE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('password-toggle');
+            const input = document.getElementById('login-password');
+
+            if (toggle && input) {
+                toggle.addEventListener('click', function() {
+                    const type = input.type === 'password' ? 'text' : 'password';
+                    input.type = type;
+                    this.innerHTML = type === 'password'
                         ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
                         : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
                 });
             }
-
-            // ===== LOGIN FORM =====
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('📤 Login form submitted');
-                
-                const email = document.getElementById('login-email').value.trim();
-                const password = document.getElementById('login-password').value;
-                const remember = document.getElementById('remember-me').checked;
-                const errorEl = document.getElementById('auth-error');
-                const successEl = document.getElementById('auth-success');
-                const submitBtn = document.getElementById('login-submit');
-
-                // Reset messages
-                errorEl.classList.remove('show');
-                errorEl.textContent = '';
-                successEl.classList.remove('show');
-                successEl.textContent = '';
-
-                if (!email || !password) {
-                    errorEl.textContent = 'Please fill in all fields.';
-                    errorEl.classList.add('show');
-                    return;
-                }
-
-                if (!window.Auth) {
-                    errorEl.textContent = 'Authentication system not loaded. Please refresh.';
-                    errorEl.classList.add('show');
-                    return;
-                }
-
-                submitBtn.classList.add('btn-loading');
-                submitBtn.disabled = true;
-
-                setTimeout(function() {
-                    const result = window.Auth.login(email, password, remember);
-                    console.log('📊 Login result:', result);
-                    
-                    if (result.success) {
-                        successEl.textContent = 'Login successful! Redirecting...';
-                        successEl.classList.add('show');
-                        
-                        setTimeout(function() {
-                            const user = window.Auth.getCurrentUser();
-                            const roleRedirects = {
-                                'student': 'student-dashboard.html',
-                                'teacher': 'teacher-dashboard.html',
-                                'principal': 'principal-dashboard.html',
-                                'admin': 'admin-dashboard.html',
-                                'parent': 'student-dashboard.html'
-                            };
-                            const redirect = roleRedirects[user.role] || 'dashboard.html';
-                            console.log('➡️ Redirecting to:', redirect);
-                            window.location.href = redirect;
-                        }, 1000);
-                    } else {
-                        errorEl.textContent = result.message || 'Invalid email or password.';
-                        errorEl.classList.add('show');
-                        submitBtn.classList.remove('btn-loading');
-                        submitBtn.disabled = false;
-                    }
-                }, 800);
-            });
         });
+
+// ============================================
+// LOGIN WITH API - TOKEN SAVE
+// ============================================
+document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const remember = document.getElementById('remember-me').checked;
+    const errorEl = document.getElementById('auth-error');
+    const successEl = document.getElementById('auth-success');
+    const submitBtn = document.getElementById('login-submit');
+
+    errorEl.classList.remove('show');
+    successEl.classList.remove('show');
+
+    if (!email || !password) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.classList.add('show');
+        return;
+    }
+
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch('http://localhost:5001/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        console.log('📊 Login response:', data);
+        
+        if (data.success) {
+            // ✅ CRITICAL: Save token to localStorage
+            localStorage.setItem('adminToken', data.token);
+            localStorage.setItem('edusphere_user', JSON.stringify(data.user));
+            
+            console.log('✅ Token saved:', data.token);
+            
+            successEl.textContent = '✅ Login successful! Redirecting...';
+            successEl.classList.add('show');
+            
+            // Reset button
+            submitBtn.classList.remove('btn-loading');
+            submitBtn.disabled = false;
+            
+            // Redirect based on role
+            setTimeout(() => {
+                const redirects = {
+                    'admin': 'admin-dashboard.html',
+                    'student': 'student-dashboard.html',
+                    'teacher': 'teacher-dashboard.html',
+                    'principal': 'principal-dashboard.html',
+                    'parent': 'parent-dashboard.html'
+                };
+                window.location.href = redirects[data.user.role] || 'dashboard.html';
+            }, 1000);
+            
+        } else {
+            errorEl.textContent = data.message || '❌ Invalid email or password.';
+            errorEl.classList.add('show');
+            submitBtn.classList.remove('btn-loading');
+            submitBtn.disabled = false;
+        }
+    } catch (error) {
+        console.error('❌ Login error:', error);
+        errorEl.textContent = '❌ Error connecting to server. Make sure backend is running.';
+        errorEl.classList.add('show');
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.disabled = false;
+    }
+});
     </script>
 </body>
 </html>
