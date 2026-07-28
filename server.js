@@ -1,10 +1,30 @@
 // ============================================================
-// EDUSPHERE - Backend Server (Vercel Compatible)
+// ROOT ROUTE - For Vercel
+// ============================================================
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'EduSphere API is running!',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      login: '/api/auth/login',
+      users: '/api/users',
+      courses: '/api/courses',
+      fees: '/api/fees',
+      attendance: '/api/attendance',
+      settings: '/api/settings',
+      stats: '/api/dashboard/stats'
+    }
+  });
+});
+
+
+// ============================================================
+// EDUSPHERE - Backend Server (VERCEL COMPATIBLE)
 // ============================================================
 
-// Load environment variables
 require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,7 +32,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // ============================================================
-// IMPORT MODELS
+// MODELS
 // ============================================================
 const User = require('./models/User');
 const Course = require('./models/Course');
@@ -37,42 +57,50 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================================
-// MONGODB CONNECTION - FIXED FOR VERCEL
+// ROOT ROUTE - FIX 404
 // ============================================================
-const MONGODB_URI = process.env.MONGODB_URI;
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'EduSphere API is running!',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      login: '/api/auth/login',
+      users: '/api/users',
+      courses: '/api/courses',
+      fees: '/api/fees',
+      attendance: '/api/attendance',
+      settings: '/api/settings',
+      stats: '/api/dashboard/stats'
+    }
+  });
+});
 
-if (!MONGODB_URI) {
-  console.error('❌ MONGODB_URI is not defined in environment variables');
-  // Don't crash on Vercel, just log error
-}
+// ============================================================
+// MONGODB CONNECTION
+// ============================================================
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
 
 let isConnected = false;
 
 const connectDB = async () => {
   if (isConnected) {
-    console.log('✅ Using existing database connection');
+    console.log('✅ Using existing connection');
     return;
   }
-
   try {
-    console.log('🔄 Connecting to MongoDB Atlas...');
-    const conn = await mongoose.connect(MONGODB_URI, {
+    console.log('🔄 Connecting to MongoDB...');
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
     });
     isConnected = true;
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
-    console.log(`📊 Database: ${conn.connection.name}`);
-    
-    // Initialize database after connection
+    console.log('✅ MongoDB Connected!');
     await initializeDatabase();
-    
-    return conn;
   } catch (error) {
-    console.error(`❌ MongoDB Connection Error: ${error.message}`);
-    // Don't crash on Vercel, just log error
+    console.error('❌ MongoDB Error:', error.message);
     isConnected = false;
   }
 };
@@ -82,7 +110,6 @@ const connectDB = async () => {
 // ============================================================
 const initializeDatabase = async () => {
   try {
-    // Check if admin exists
     const adminExists = await User.findOne({ role: 'admin' });
     if (!adminExists) {
       const admin = new User({
@@ -94,34 +121,15 @@ const initializeDatabase = async () => {
         status: 'active'
       });
       await admin.save();
-      console.log('✅ Default admin created!');
-      console.log(`📧 Admin Email: ${admin.email}`);
+      console.log('✅ Admin created!');
     }
-
-    // Check settings
-    const settingsExists = await Settings.findOne({ key: 'school_name' });
-    if (!settingsExists) {
-      const defaultSettings = [
-        { key: 'school_name', value: 'EduSphere' },
-        { key: 'academic_year', value: '2024-25' },
-        { key: 'default_password', value: 'password123' },
-        { key: 'registration_status', value: 'disabled' }
-      ];
-      await Settings.insertMany(defaultSettings);
-      console.log('✅ Default settings created!');
-    }
-
-    console.log('🚀 Database initialized!');
   } catch (err) {
-    console.error('❌ Init Error:', err);
+    console.error('Init error:', err);
   }
 };
 
-// Connect to database on startup
-connectDB();
-
 // ============================================================
-// JWT AUTH MIDDLEWARE
+// AUTH MIDDLEWARE
 // ============================================================
 const authMiddleware = async (req, res, next) => {
   try {
@@ -129,13 +137,11 @@ const authMiddleware = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ success: false, message: 'No token provided' });
     }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'User not found' });
     }
-
     req.user = user;
     next();
   } catch (err) {
@@ -151,23 +157,32 @@ const adminMiddleware = (req, res, next) => {
 };
 
 // ============================================================
+// HEALTH CHECK
+// ============================================================
+app.get('/api/health', async (req, res) => {
+  try {
+    await connectDB();
+    res.json({
+      success: true,
+      message: 'EduSphere API is running',
+      database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================================
 // AUTH ROUTES
 // ============================================================
 app.post('/api/auth/login', async (req, res) => {
   try {
-    // Ensure database is connected
     await connectDB();
-    
     const { email, password } = req.body;
-    console.log('🔐 Login attempt:', email);
     
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-
-    if (user.status === 'inactive') {
-      return res.status(401).json({ success: false, message: 'Account is inactive' });
     }
 
     const isValid = await user.comparePassword(password);
@@ -178,7 +193,11 @@ app.post('/api/auth/login', async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: '7d' }
+    );
 
     res.json({
       success: true,
@@ -192,18 +211,13 @@ app.post('/api/auth/login', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Login error:', err);
+    console.error(err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
-// Get current user
-app.get('/api/auth/me', authMiddleware, async (req, res) => {
-  res.json({ success: true, user: req.user });
-});
-
 // ============================================================
-// USER ROUTES (Admin Only)
+// USER ROUTES
 // ============================================================
 app.get('/api/users', authMiddleware, adminMiddleware, async (req, res) => {
   try {
@@ -236,16 +250,6 @@ app.post('/api/users', authMiddleware, adminMiddleware, async (req, res) => {
     });
 
     await user.save();
-
-    // Create notification
-    const notification = new Notification({
-      user: user._id,
-      title: 'Welcome to EduSphere!',
-      message: `Welcome ${user.firstName}! Your account has been created.`,
-      type: 'success'
-    });
-    await notification.save();
-
     res.status(201).json({
       success: true,
       user: {
@@ -276,7 +280,6 @@ app.put('/api/users/:id', authMiddleware, adminMiddleware, async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-
     res.json({ success: true, user });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -320,7 +323,6 @@ app.post('/api/users/:id/reset-password', authMiddleware, adminMiddleware, async
 
     user.password = newPassword;
     await user.save();
-
     res.json({ success: true, message: 'Password reset successfully' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -418,7 +420,6 @@ app.post('/api/fees/:id/pay', authMiddleware, async (req, res) => {
     fee.paidAmount += amount;
     fee.payments.push({ amount, method, transactionId });
     await fee.save();
-
     res.json({ success: true, fee });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -525,30 +526,6 @@ app.put('/api/settings', authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 // ============================================================
-// HEALTH CHECK
-// ============================================================
-app.get('/api/health', async (req, res) => {
-  try {
-    // Check MongoDB connection
-    const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
-    
-    res.json({
-      success: true,
-      message: 'EduSphere API is running',
-      timestamp: new Date().toISOString(),
-      database: dbStatus,
-      environment: process.env.NODE_ENV || 'development'
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Health check failed',
-      error: error.message
-    });
-  }
-});
-
-// ============================================================
 // ERROR HANDLER
 // ============================================================
 app.use((err, req, res, next) => {
@@ -559,16 +536,16 @@ app.use((err, req, res, next) => {
 // ============================================================
 // EXPORT FOR VERCEL
 // ============================================================
-// This is the key for Vercel serverless deployment
 module.exports = app;
 
 // ============================================================
 // START SERVER (Local)
 // ============================================================
 if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📧 Admin: ${process.env.ADMIN_EMAIL || 'admin@edusphere.com'}`);
-    console.log(`📊 Database: MongoDB Atlas`);
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`📧 Admin: ${process.env.ADMIN_EMAIL || 'admin@edusphere.com'}`);
+    });
   });
 }

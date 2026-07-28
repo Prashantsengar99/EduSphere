@@ -8,14 +8,13 @@
   ],
   "routes": [
     {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico",
+      "status": 404
+    },
+    {
       "src": "/(.*)",
       "dest": "server.js"
     }
-  ],
-  "env": {
-    "MONGODB_URI": "mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0",
-    "JWT_SECRET": "edusphere_super_secret_key_2024_secure",
-    "ADMIN_EMAIL": "admin@edusphere.com",
-    "ADMIN_PASSWORD": "admin123"
-  }
+  ]
 }
