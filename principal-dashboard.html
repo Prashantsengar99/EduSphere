@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Principal Dashboard - EduSphere ERP</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.console && console.warn) {
+            const _warn = console.warn;
+            console.warn = function() {
+                if (arguments[0] && String(arguments[0]).includes('tailwindcss.com should not be used in production')) return;
+                _warn.apply(console, arguments);
+            };
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-gradient: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            --accent: #7C3AED;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.05);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --sidebar-width: 280px;
+            --navbar-height: 70px;
+        }
+
+        [data-theme="dark"] {
+            --gray-50: #0F172A;
+            --gray-100: #1E293B;
+            --gray-200: #334155;
+            --gray-300: #475569;
+            --gray-400: #64748B;
+            --gray-500: #94A3B8;
+            --gray-600: #CBD5E1;
+            --gray-700: #E2E8F0;
+            --gray-800: #F1F5F9;
+            --gray-900: #F8FAFC;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-body);
+            background: var(--gray-50);
+            color: var(--gray-800);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        [data-theme="dark"] body { background: #0F172A; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
+            padding: 1rem 0.75rem;
+        }
+        [data-theme="dark"] .sidebar {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+
+        .sidebar-section-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-400);
+            font-weight: 700;
+            padding: 0.75rem 0.75rem 0.5rem;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: var(--radius-sm);
+            color: var(--gray-600);
+            transition: var(--transition);
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        [data-theme="dark"] .sidebar-link { color: var(--gray-400); }
+        .sidebar-link:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+        [data-theme="dark"] .sidebar-link:hover { background: var(--gray-200); color: var(--primary); }
+        .sidebar-link.active {
+            background: rgba(37,99,235,0.08);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        [data-theme="dark"] .sidebar-link.active { background: rgba(37,99,235,0.15); color: var(--primary); }
+        .sidebar-link .icon { font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; }
+        .sidebar-link .badge {
+            margin-left: auto;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+        .sidebar-link.active .badge { background: rgba(37,99,235,0.15); color: var(--primary); }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 998;
+        }
+        .sidebar-overlay.show { display: block; }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0 !important; padding-top: calc(var(--navbar-height) + 1rem) !important; }
+            .menu-toggle { display: flex !important; }
+        }
+        .menu-toggle { display: none; }
+
+        /* ===== NAVBAR ===== */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            transition: var(--transition);
+        }
+        [data-theme="dark"] #navbar {
+            background: rgba(15,23,42,0.95);
+            border-color: var(--gray-300);
+        }
+        #navbar.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+        .navbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--gray-800);
+        }
+        [data-theme="dark"] .logo { color: var(--gray-900); }
+        .logo span { color: var(--primary); }
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .theme-toggle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--gray-200);
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+        }
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: rotate(180deg);
+        }
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem 0.3rem 0.5rem;
+            border-radius: 999px;
+            background: var(--gray-100);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        [data-theme="dark"] .user-badge { background: var(--gray-200); }
+        .user-badge:hover { background: var(--gray-200); }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .user-name { font-weight: 600; font-size: 0.85rem; color: var(--gray-700); }
+        [data-theme="dark"] .user-name { color: var(--gray-600); }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        .logout-btn:hover { background: rgba(239,68,68,0.1); }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: calc(var(--navbar-height) + 1.5rem) 1.5rem 2rem;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+        .page-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        [data-theme="dark"] .page-title { color: var(--gray-900); }
+        .page-subtitle {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* ===== STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--gray-100);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        [data-theme="dark"] .stat-card {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .stat-card .icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .stat-card .number {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gray-800);
+        }
+        [data-theme="dark"] .stat-card .number { color: var(--gray-900); }
+        .stat-card .label { font-size: 0.75rem; color: var(--gray-500); font-weight: 500; }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+        [data-theme="dark"] .card {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+        .card:hover { box-shadow: var(--shadow-hover); }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        [data-theme="dark"] .card-title { color: var(--gray-900); }
+
+        /* ===== GRID ===== */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+        @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.25);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,99,235,0.35); }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16,185,129,0.3); }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(239,68,68,0.3); }
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,158,11,0.3); }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+        .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.7rem; }
+
+        /* ===== CHART CONTAINER ===== */
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+
+        /* ===== QUICK ACTIONS ===== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-200);
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--gray-700);
+            font-weight: 600;
+            font-size: 0.75rem;
+            font-family: var(--font-body);
+        }
+        [data-theme="dark"] .quick-action {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+        .quick-action:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        .quick-action .icon { font-size: 1.5rem; }
+
+        /* ===== LOADER ===== */
+        .loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: var(--gray-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        [data-theme="dark"] .loader-wrapper { background: #0F172A; }
+        .loader-wrapper.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .main-content { padding: calc(var(--navbar-height) + 1rem) 0.75rem 1rem; }
+            #navbar { padding: 0 0.75rem; }
+            .logo-text { display: none; }
+            .user-name { display: none; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+            .stat-card { padding: 0.75rem; }
+            .stat-card .number { font-size: 1.3rem; }
+            .stat-card .icon { font-size: 1.3rem; }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        .animate-in:nth-child(1) { animation-delay: 0.05s; }
+        .animate-in:nth-child(2) { animation-delay: 0.1s; }
+        .animate-in:nth-child(3) { animation-delay: 0.15s; }
+        .animate-in:nth-child(4) { animation-delay: 0.2s; }
+        .animate-in:nth-child(5) { animation-delay: 0.25s; }
+        .animate-in:nth-child(6) { animation-delay: 0.3s; }
+        .animate-in:nth-child(7) { animation-delay: 0.35s; }
+        .animate-in:nth-child(8) { animation-delay: 0.4s; }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-sm);
+            background: var(--gray-800);
+            color: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+            max-width: 400px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOADER ===== -->
+    <div id="loader" class="loader-wrapper"><div class="loader"></div></div>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== SIDEBAR OVERLAY ===== -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header id="navbar">
+        <div class="navbar-inner">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <button id="menu-toggle" class="menu-toggle" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--gray-600);padding:0.25rem;">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="principal-dashboard.html" class="logo">
+                    <div class="logo-icon">E</div>
+                    <span class="logo-text">Edu<span>Sphere</span></span>
+                </a>
+            </div>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
+                <div class="user-badge">
+                    <div class="user-avatar" id="user-avatar">P</div>
+                    <span class="user-name" id="user-name">Principal</span>
+                    <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside id="sidebar" class="sidebar">
+        <nav>
+            <div class="sidebar-section-title">Main</div>
+            <a href="principal-dashboard.html" class="sidebar-link active"><span class="icon"><i class="fas fa-th-large"></i></span> Dashboard</a>
+            
+            <div class="sidebar-section-title">Management</div>
+            <a href="principal-teachers.html" class="sidebar-link"><span class="icon"><i class="fas fa-chalkboard-teacher"></i></span> Teachers <span class="badge" id="teacher-count">0</span></a>
+            <a href="principal-students.html" class="sidebar-link"><span class="icon"><i class="fas fa-user-graduate"></i></span> Students <span class="badge" id="student-count">0</span></a>
+            <a href="principal-classes.html" class="sidebar-link"><span class="icon"><i class="fas fa-school"></i></span> Classes <span class="badge" id="class-count">0</span></a>
+            
+            <div class="sidebar-section-title">Academics</div>
+            <a href="principal-academics.html" class="sidebar-link"><span class="icon"><i class="fas fa-book-open"></i></span> Academics</a>
+            <a href="principal-exams.html" class="sidebar-link"><span class="icon"><i class="fas fa-pencil-alt"></i></span> Examinations</a>
+            <a href="principal-attendance.html" class="sidebar-link"><span class="icon"><i class="fas fa-check-circle"></i></span> Attendance</a>
+            
+            <div class="sidebar-section-title">Operations</div>
+            <a href="principal-fees.html" class="sidebar-link"><span class="icon"><i class="fas fa-coins"></i></span> Fees</a>
+            <a href="principal-notices.html" class="sidebar-link"><span class="icon"><i class="fas fa-bullhorn"></i></span> Notices</a>
+            <a href="principal-events.html" class="sidebar-link"><span class="icon"><i class="fas fa-calendar-alt"></i></span> Events</a>
+            <a href="principal-leaves.html" class="sidebar-link"><span class="icon"><i class="fas fa-envelope"></i></span> Leave Requests <span class="badge" id="leave-count">0</span></a>
+            
+            <div class="sidebar-section-title">Analytics & Settings</div>
+            <a href="principal-analytics.html" class="sidebar-link"><span class="icon"><i class="fas fa-chart-line"></i></span> Analytics</a>
+            <a href="principal-reports.html" class="sidebar-link"><span class="icon"><i class="fas fa-file-alt"></i></span> Reports</a>
+            <a href="principal-settings.html" class="sidebar-link"><span class="icon"><i class="fas fa-cog"></i></span> Settings</a>
+            <a href="principal-logs.html" class="sidebar-link"><span class="icon"><i class="fas fa-shield-alt"></i></span> Activity Logs</a>
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+        <!-- ====== TAB: DASHBOARD ====== -->
+        <div class="tab-content active" id="tab-dashboard">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">📊 Dashboard</h1>
+                    <p class="page-subtitle" id="dashboard-date">Loading...</p>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="loadDashboardData()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-user-graduate" style="color:var(--primary);"></i></div>
+                    <div class="number" id="dash-students">0</div>
+                    <div class="label">Total Students</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-chalkboard-teacher" style="color:var(--accent);"></i></div>
+                    <div class="number" id="dash-teachers">0</div>
+                    <div class="label">Total Teachers</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-school" style="color:var(--success);"></i></div>
+                    <div class="number" id="dash-classes">0</div>
+                    <div class="label">Total Classes</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-layer-group" style="color:var(--warning);"></i></div>
+                    <div class="number" id="dash-sections">0</div>
+                    <div class="label">Total Sections</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-check-circle" style="color:var(--success);"></i></div>
+                    <div class="number" id="dash-today-attendance">0%</div>
+                    <div class="label">Today's Attendance</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-coins" style="color:var(--warning);"></i></div>
+                    <div class="number" id="dash-pending-fees">₹0</div>
+                    <div class="label">Pending Fees</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-envelope" style="color:var(--danger);"></i></div>
+                    <div class="number" id="dash-leave-requests">0</div>
+                    <div class="label">Pending Leave Requests</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="icon"><i class="fas fa-bullhorn" style="color:var(--primary);"></i></div>
+                    <div class="number" id="dash-notices">0</div>
+                    <div class="label">Recent Notices</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid-2" style="margin-bottom:1.5rem;">
+                <div class="card animate-in">
+                    <div class="card-header"><span class="card-title"><i class="fas fa-chart-line" style="color:var(--primary);"></i> Attendance Trend</span></div>
+                    <div class="chart-container"><canvas id="chart-attendance"></canvas></div>
+                </div>
+                <div class="card animate-in">
+                    <div class="card-header"><span class="card-title"><i class="fas fa-chart-bar" style="color:var(--success);"></i> Fee Collection</span></div>
+                    <div class="chart-container"><canvas id="chart-fees"></canvas></div>
+                </div>
+            </div>
+            <div class="grid-2" style="margin-bottom:1.5rem;">
+                <div class="card animate-in">
+                    <div class="card-header"><span class="card-title"><i class="fas fa-chart-pie" style="color:var(--accent);"></i> Class-wise Strength</span></div>
+                    <div class="chart-container"><canvas id="chart-classes"></canvas></div>
+                </div>
+                <div class="card animate-in">
+                    <div class="card-header"><span class="card-title"><i class="fas fa-chart-bar" style="color:var(--success);"></i> Performance Overview</span></div>
+                    <div class="chart-container"><canvas id="chart-performance"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card animate-in">
+                <div class="card-header"><span class="card-title"><i class="fas fa-bolt" style="color:var(--warning);"></i> Quick Actions</span></div>
+                <div class="quick-actions">
+                    <a href="principal-teachers.html" class="quick-action"><span class="icon"><i class="fas fa-chalkboard-teacher"></i></span> Add Teacher</a>
+                    <a href="principal-students.html" class="quick-action"><span class="icon"><i class="fas fa-user-graduate"></i></span> Add Student</a>
+                    <a href="principal-notices.html" class="quick-action"><span class="icon"><i class="fas fa-bullhorn"></i></span> Create Notice</a>
+                    <a href="principal-classes.html" class="quick-action"><span class="icon"><i class="fas fa-user-tie"></i></span> Assign Class Teacher</a>
+                    <a href="principal-exams.html" class="quick-action"><span class="icon"><i class="fas fa-pencil-alt"></i></span> Create Exam</a>
+                    <a href="principal-leaves.html" class="quick-action"><span class="icon"><i class="fas fa-check-double"></i></span> Approve Leave</a>
+                    <a href="principal-reports.html" class="quick-action"><span class="icon"><i class="fas fa-file-alt"></i></span> Generate Report</a>
+                    <a href="principal-settings.html" class="quick-action"><span class="icon"><i class="fas fa-cog"></i></span> Settings</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- ===== SCRIPTS ===== -->
+    <!-- ========================================================= -->
+    <script>
+        // ============================================
+        // API CONFIGURATION
+        // ============================================
+        const API_BASE = 'http://localhost:5002';
+        let charts = {};
+
+        function getToken() {
+            return localStorage.getItem('edusphere_token') || sessionStorage.getItem('edusphere_token');
+        }
+
+        function getUser() {
+            try {
+                return JSON.parse(localStorage.getItem('edusphere_user') || sessionStorage.getItem('edusphere_user'));
+            } catch { return null; }
+        }
+
+        async function apiFetch(endpoint, options = {}) {
+            const token = getToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+                if (response.status === 401) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'login.html';
+                    return null;
+                }
+                const data = await response.json();
+                console.log(`📡 ${endpoint}:`, data);
+                return data;
+            } catch (error) {
+                console.error('❌ API Error:', error);
+                showToast('Error connecting to server', 'error');
+                return null;
+            }
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // ============================================
+        // DARK MODE - PERSISTENT
+        // ============================================
+        (function() {
+            const savedTheme = localStorage.getItem('edusphere_theme') || 'light';
+            const html = document.documentElement;
+            
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+            }
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                if (savedTheme === 'dark') {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+                
+                themeToggle.addEventListener('click', function() {
+                    const isDark = html.getAttribute('data-theme') === 'dark';
+                    const newTheme = isDark ? 'light' : 'dark';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('edusphere_theme', newTheme);
+                    this.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                });
+            }
+        })();
+
+        // ============================================
+        // SIDEBAR TOGGLE
+        // ============================================
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebar-overlay').classList.toggle('show');
+        });
+        document.getElementById('sidebar-overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('show');
+        });
+
+        // ============================================
+        // LOGOUT
+        // ============================================
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // ============================================
+        // CHECK LOGIN
+        // ============================================
+        (function() {
+            const token = getToken();
+            const user = getUser();
+            if (!token || !user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            if (user.role !== 'principal' && user.role !== 'admin') {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('user-avatar').textContent = (user.firstName || 'P').charAt(0);
+            document.getElementById('user-name').textContent = user.firstName || 'Principal';
+            document.getElementById('dashboard-date').textContent = new Date().toLocaleDateString('en-IN', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        })();
+
+        // ============================================
+        // ANIMATED COUNTER
+        // ============================================
+        function animateCounter(el, target, prefix = '', suffix = '') {
+            if (!el) return;
+            const duration = 1200;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(eased * target);
+                el.textContent = prefix + current.toLocaleString() + suffix;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ============================================
+        // 🔥 FIXED: LOAD DASHBOARD DATA
+        // ============================================
+        async function loadDashboardData() {
+            try {
+                console.log('🔄 Loading dashboard data...');
+                
+                const res = await apiFetch('/api/admin/dashboard/stats');
+                console.log('📊 API Response:', res);
+                
+                if (res?.success) {
+                    const s = res.data;
+                    
+                    // 🔥 Extract values with proper fallbacks
+                    const students = s?.users?.students || 0;
+                    const teachers = s?.users?.teachers || 0;
+                    const classes = s?.academics?.totalClasses || 0;
+                    const sections = s?.academics?.totalSections || 0;
+                    const totalFees = s?.finance?.totalFeesCollected || 0;
+                    const pendingFees = s?.finance?.pendingFees || 0;
+                    
+                    console.log('📊 Values - Students:', students, 'Teachers:', teachers, 'Classes:', classes);
+                    
+                    // 🔥 Update stats with animation
+                    animateCounter(document.getElementById('dash-students'), students);
+                    animateCounter(document.getElementById('dash-teachers'), teachers);
+                    animateCounter(document.getElementById('dash-classes'), classes);
+                    animateCounter(document.getElementById('dash-sections'), sections);
+                    
+                    // Attendance (default 85% if not available)
+                    const attendanceRate = s?.attendance?.rate || 85;
+                    animateCounter(document.getElementById('dash-today-attendance'), attendanceRate, '', '%');
+                    
+                    // Fees
+                    animateCounter(document.getElementById('dash-pending-fees'), pendingFees, '₹');
+                    
+                    // Leave Requests
+                    const leaveCount = s?.leaves?.pending || 0;
+                    animateCounter(document.getElementById('dash-leave-requests'), leaveCount);
+                    
+                    // Notices
+                    const noticeCount = s?.notices?.recent || 0;
+                    animateCounter(document.getElementById('dash-notices'), noticeCount);
+                    
+                    // 🔥 Update sidebar badges
+                    const studentBadge = document.getElementById('student-count');
+                    if (studentBadge) studentBadge.textContent = students;
+                    
+                    const teacherBadge = document.getElementById('teacher-count');
+                    if (teacherBadge) teacherBadge.textContent = teachers;
+                    
+                    const classBadge = document.getElementById('class-count');
+                    if (classBadge) classBadge.textContent = classes;
+                    
+                    showToast('✅ Dashboard updated!', 'success');
+                    
+                    // 🔥 Create charts
+                    createAttendanceChart();
+                    createFeeChart();
+                    createClassChart();
+                    createPerformanceChart();
+                    
+                } else {
+                    console.error('❌ API returned error:', res);
+                    showToast('Error loading dashboard data', 'error');
+                }
+            } catch (error) {
+                console.error('❌ Dashboard load error:', error);
+                showToast('Error connecting to server', 'error');
+            }
+        }
+
+        // ============================================
+        // CHARTS
+        // ============================================
+        function createAttendanceChart() {
+            const ctx = document.getElementById('chart-attendance')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.attendance) charts.attendance.destroy();
+            charts.attendance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: [92, 88, 95, 90, 93, 85],
+                        borderColor: '#2563EB',
+                        backgroundColor: 'rgba(37,99,235,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#2563EB'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+
+        function createFeeChart() {
+            const ctx = document.getElementById('chart-fees')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.fees) charts.fees.destroy();
+            charts.fees = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Collection (₹)',
+                        data: [25000, 28000, 22000, 30000, 27000, 32000, 29000, 35000, 31000, 28000, 33000, 38000],
+                        backgroundColor: '#2563EB',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function createClassChart() {
+            const ctx = document.getElementById('chart-classes')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.classes) charts.classes.destroy();
+            charts.classes = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'],
+                    datasets: [{
+                        data: [30, 28, 32, 29, 27, 31, 26, 33, 28, 30],
+                        backgroundColor: ['#2563EB', '#7C3AED', '#10B981', '#F59E0B', '#EF4444', '#3B82F6', '#8B5CF6', '#34D399', '#FBBF24', '#F87171']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { boxWidth: 12, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPerformanceChart() {
+            const ctx = document.getElementById('chart-performance')?.getContext('2d');
+            if (!ctx) return;
+            if (charts.performance) charts.performance.destroy();
+            charts.performance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'],
+                    datasets: [{
+                        label: 'Avg Score (%)',
+                        data: [78, 82, 75, 88, 80, 85, 79, 83, 87, 81],
+                        backgroundColor: '#10B981',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+
+        // ============================================
+        // LOADER
+        // ============================================
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                loadDashboardData();
+                console.log('👨‍💼 Principal Dashboard loaded!');
+            }, 800);
+        });
+    </script>
+</body>
+</html>

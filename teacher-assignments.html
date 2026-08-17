@@ -81,13 +81,7 @@
             --shadow-hover: 0 8px 30px rgba(0,0,0,0.4);
         }
 
-        /* ===== BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font-body);
             background: var(--gray-50);
@@ -95,60 +89,9 @@
             transition: background 0.3s ease, color 0.3s ease;
             min-height: 100vh;
         }
+        [data-theme="dark"] body { background: #0F172A; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
 
-        [data-theme="dark"] body {
-            background: #0F172A;
-        }
-
-        [data-theme="dark"] .text-secondary {
-            color: var(--gray-800) !important;
-        }
-
-        [data-theme="dark"] .text-gray-500,
-        [data-theme="dark"] .text-gray-400,
-        [data-theme="dark"] .text-gray-600 {
-            color: var(--gray-400) !important;
-        }
-
-        [data-theme="dark"] .text-gray-700 {
-            color: var(--gray-300) !important;
-        }
-
-        [data-theme="dark"] .text-gray-800 {
-            color: var(--gray-200) !important;
-        }
-
-        [data-theme="dark"] .bg-gray-50 {
-            background: var(--gray-100) !important;
-        }
-
-        [data-theme="dark"] .bg-gray-100 {
-            background: var(--gray-200) !important;
-        }
-
-        [data-theme="dark"] .border-gray-200 {
-            border-color: var(--gray-300) !important;
-        }
-
-        [data-theme="dark"] .border-gray-300 {
-            border-color: var(--gray-400) !important;
-        }
-
-        [data-theme="dark"] .hover\:bg-gray-50:hover {
-            background: var(--gray-200) !important;
-        }
-
-        [data-theme="dark"] .bg-white {
-            background: var(--gray-100) !important;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* ===== SKIP LINK ===== */
         .skip-link {
             position: fixed;
             top: -100%;
@@ -162,11 +105,8 @@
             font-weight: 600;
             transition: top 0.3s ease;
         }
-        .skip-link:focus {
-            top: 0;
-        }
+        .skip-link:focus { top: 0; }
 
-        /* ===== NAVBAR ===== */
         #navbar {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(12px);
@@ -174,15 +114,11 @@
             transition: var(--transition);
             z-index: 1000;
         }
-
         [data-theme="dark"] #navbar {
             background: rgba(15,23,42,0.95);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-
-        #navbar.scrolled {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-        }
+        #navbar.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
 
         .nav-link {
             font-weight: 500;
@@ -191,9 +127,7 @@
             position: relative;
             padding: 0.5rem 0;
         }
-        [data-theme="dark"] .nav-link {
-            color: var(--gray-400);
-        }
+        [data-theme="dark"] .nav-link { color: var(--gray-400); }
         .nav-link::after {
             content: '';
             position: absolute;
@@ -204,20 +138,11 @@
             background: var(--primary-gradient);
             transition: width 0.3s ease;
         }
-        .nav-link:hover {
-            color: var(--primary);
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        .nav-link.active {
-            color: var(--primary);
-        }
-        .nav-link.active::after {
-            width: 100%;
-        }
+        .nav-link:hover { color: var(--primary); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: var(--primary); }
+        .nav-link.active::after { width: 100%; }
 
-        /* ===== BUTTONS ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -234,7 +159,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .btn-primary {
             background: var(--primary-gradient);
             color: white;
@@ -244,7 +168,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(37,99,235,0.35);
         }
-
         .btn-success {
             background: var(--success);
             color: white;
@@ -253,7 +176,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(16,185,129,0.3);
         }
-
         .btn-outline {
             background: transparent;
             color: var(--primary);
@@ -264,7 +186,6 @@
             color: white;
             transform: translateY(-2px);
         }
-
         .btn-danger {
             background: var(--error);
             color: white;
@@ -273,7 +194,6 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(239,68,68,0.3);
         }
-
         .btn-warning {
             background: var(--warning);
             color: white;
@@ -282,17 +202,8 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(245,158,11,0.3);
         }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
 
-        .btn-sm {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.75rem;
-        }
-        .btn-lg {
-            padding: 0.875rem 2rem;
-            font-size: 1rem;
-        }
-
-        /* ===== CARDS ===== */
         .card {
             background: white;
             border-radius: var(--radius);
@@ -301,18 +212,15 @@
             transition: var(--transition);
             border: 1px solid rgba(0,0,0,0.03);
         }
-
         [data-theme="dark"] .card {
             background: var(--gray-100);
             border-color: rgba(255,255,255,0.05);
         }
-
         .card:hover {
             box-shadow: var(--shadow-hover);
             transform: translateY(-2px);
         }
 
-        /* ===== STAT CARDS ===== */
         .stat-card {
             padding: 1.5rem;
             border-radius: var(--radius);
@@ -323,11 +231,7 @@
             overflow: hidden;
             border-left: 4px solid var(--primary);
         }
-
-        [data-theme="dark"] .stat-card {
-            background: var(--gray-100);
-        }
-
+        [data-theme="dark"] .stat-card { background: var(--gray-100); }
         .stat-card::before {
             content: '';
             position: absolute;
@@ -338,12 +242,10 @@
             background: radial-gradient(circle, rgba(37,99,235,0.05) 0%, transparent 70%);
             pointer-events: none;
         }
-
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
         }
-
         .stat-card .stat-icon {
             width: 48px;
             height: 48px;
@@ -354,39 +256,18 @@
             font-size: 1.5rem;
             margin-bottom: 0.75rem;
         }
+        .stat-card .stat-icon.blue { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .stat-card .stat-icon.green { background: rgba(16,185,129,0.1); color: var(--success); }
+        .stat-card .stat-icon.yellow { background: rgba(245,158,11,0.1); color: var(--warning); }
+        .stat-card .stat-icon.purple { background: rgba(124,58,237,0.1); color: var(--accent); }
+        .stat-card .stat-icon.red { background: rgba(239,68,68,0.1); color: var(--error); }
 
-        .stat-card .stat-icon.blue {
-            background: rgba(37,99,235,0.1);
-            color: var(--primary);
-        }
-        .stat-card .stat-icon.green {
-            background: rgba(16,185,129,0.1);
-            color: var(--success);
-        }
-        .stat-card .stat-icon.yellow {
-            background: rgba(245,158,11,0.1);
-            color: var(--warning);
-        }
-        .stat-card .stat-icon.purple {
-            background: rgba(124,58,237,0.1);
-            color: var(--accent);
-        }
-        .stat-card .stat-icon.red {
-            background: rgba(239,68,68,0.1);
-            color: var(--error);
-        }
-
-        /* ===== TABLE ===== */
         .table-container {
             overflow-x: auto;
             border-radius: var(--radius-lg);
             border: 1px solid var(--gray-200);
         }
-
-        [data-theme="dark"] .table-container {
-            border-color: var(--gray-300);
-        }
-
+        [data-theme="dark"] .table-container { border-color: var(--gray-300); }
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -405,28 +286,16 @@
             color: var(--gray-700);
             border-color: var(--gray-300);
         }
-        [data-theme="dark"] .table th {
-            color: var(--gray-800);
-        }
+        [data-theme="dark"] .table th { color: var(--gray-800); }
         .table td {
             padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--gray-100);
         }
-        [data-theme="dark"] .table td {
-            border-color: var(--gray-300);
-            color: var(--gray-700);
-        }
-        [data-theme="dark"] .table td {
-            color: var(--gray-800);
-        }
-        .table tr:hover td {
-            background: var(--gray-50);
-        }
-        [data-theme="dark"] .table tr:hover td {
-            background: var(--gray-200);
-        }
+        [data-theme="dark"] .table td { border-color: var(--gray-300); color: var(--gray-700); }
+        [data-theme="dark"] .table td { color: var(--gray-800); }
+        .table tr:hover td { background: var(--gray-50); }
+        [data-theme="dark"] .table tr:hover td { background: var(--gray-200); }
 
-        /* ===== BADGE ===== */
         .badge {
             display: inline-block;
             padding: 0.2rem 0.6rem;
@@ -434,28 +303,12 @@
             font-size: 0.7rem;
             font-weight: 600;
         }
-        .badge-success {
-            background: var(--success-50);
-            color: var(--success);
-        }
-        .badge-warning {
-            background: var(--warning-50);
-            color: var(--warning);
-        }
-        .badge-error {
-            background: var(--error-50);
-            color: var(--error);
-        }
-        .badge-info {
-            background: var(--info-50);
-            color: var(--info);
-        }
-        .badge-primary {
-            background: rgba(37,99,235,0.1);
-            color: var(--primary);
-        }
+        .badge-success { background: var(--success-50); color: var(--success); }
+        .badge-warning { background: var(--warning-50); color: var(--warning); }
+        .badge-error { background: var(--error-50); color: var(--error); }
+        .badge-info { background: var(--info-50); color: var(--info); }
+        .badge-primary { background: rgba(37,99,235,0.1); color: var(--primary); }
 
-        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 70px;
@@ -469,12 +322,10 @@
             z-index: 999;
             transition: transform 0.3s ease;
         }
-
         [data-theme="dark"] .sidebar {
             background: var(--gray-100);
             border-color: var(--gray-300);
         }
-
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -486,34 +337,17 @@
             text-decoration: none;
             margin-bottom: 0.25rem;
         }
-        [data-theme="dark"] .sidebar-link {
-            color: var(--gray-400);
-        }
-        .sidebar-link:hover {
-            background: var(--gray-50);
-            color: var(--primary);
-        }
-        [data-theme="dark"] .sidebar-link:hover {
-            background: var(--gray-200);
-            color: var(--primary);
-        }
+        [data-theme="dark"] .sidebar-link { color: var(--gray-400); }
+        .sidebar-link:hover { background: var(--gray-50); color: var(--primary); }
+        [data-theme="dark"] .sidebar-link:hover { background: var(--gray-200); color: var(--primary); }
         .sidebar-link.active {
             background: rgba(37,99,235,0.08);
             color: var(--primary);
             font-weight: 600;
         }
-        [data-theme="dark"] .sidebar-link.active {
-            background: rgba(37,99,235,0.15);
-            color: var(--primary);
-        }
+        [data-theme="dark"] .sidebar-link.active { background: rgba(37,99,235,0.15); color: var(--primary); }
+        .sidebar-link .icon { width: 20px; height: 20px; flex-shrink: 0; }
 
-        .sidebar-link .icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 260px;
             padding: 2rem 1.5rem;
@@ -521,7 +355,6 @@
             min-height: 100vh;
         }
 
-        /* ===== ASSIGNMENT CARD ===== */
         .assignment-card {
             border: 1px solid var(--gray-200);
             border-radius: var(--radius-lg);
@@ -546,12 +379,8 @@
             top: 1rem;
             right: 1rem;
         }
-        .assignment-card .assignment-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
+        .assignment-card .assignment-icon { font-size: 2rem; margin-bottom: 0.5rem; }
 
-        /* ===== PROGRESS BAR ===== */
         .progress-bar {
             height: 6px;
             background: var(--gray-200);
@@ -565,17 +394,10 @@
             transition: width 1s ease;
             background: var(--primary-gradient);
         }
-        .progress-bar .progress-fill.green {
-            background: var(--success);
-        }
-        .progress-bar .progress-fill.yellow {
-            background: var(--warning);
-        }
-        .progress-bar .progress-fill.red {
-            background: var(--error);
-        }
+        .progress-bar .progress-fill.green { background: var(--success); }
+        .progress-bar .progress-fill.yellow { background: var(--warning); }
+        .progress-bar .progress-fill.red { background: var(--error); }
 
-        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -587,9 +409,7 @@
             justify-content: center;
             padding: 1rem;
         }
-        .modal-overlay.show {
-            display: flex;
-        }
+        .modal-overlay.show { display: flex; }
         .modal {
             background: white;
             border-radius: var(--radius);
@@ -600,18 +420,10 @@
             padding: 2rem;
             animation: modalIn 0.3s ease;
         }
-        [data-theme="dark"] .modal {
-            background: var(--gray-100);
-        }
+        [data-theme="dark"] .modal { background: var(--gray-100); }
         @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         .modal-close {
             position: sticky;
@@ -624,12 +436,8 @@
             color: var(--gray-400);
             transition: var(--transition);
         }
-        .modal-close:hover {
-            color: var(--error);
-            transform: rotate(90deg);
-        }
+        .modal-close:hover { color: var(--error); transform: rotate(90deg); }
 
-        /* ===== FORM INPUTS ===== */
         .form-input {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -651,9 +459,7 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
         }
-        .form-input::placeholder {
-            color: var(--gray-400);
-        }
+        .form-input::placeholder { color: var(--gray-400); }
         .form-label {
             display: block;
             font-weight: 600;
@@ -661,27 +467,13 @@
             color: var(--gray-700);
             margin-bottom: 0.4rem;
         }
-        [data-theme="dark"] .form-label {
-            color: var(--gray-300);
-        }
-        textarea.form-input {
-            resize: vertical;
-            min-height: 100px;
-        }
+        [data-theme="dark"] .form-label { color: var(--gray-300); }
+        textarea.form-input { resize: vertical; min-height: 100px; }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-                padding-top: 80px;
-            }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 1rem; padding-top: 80px; }
             .sidebar-overlay {
                 display: none;
                 position: fixed;
@@ -689,71 +481,32 @@
                 background: rgba(0,0,0,0.3);
                 z-index: 998;
             }
-            .sidebar-overlay.show {
-                display: block;
-            }
-            .menu-toggle {
-                display: flex !important;
-            }
+            .sidebar-overlay.show { display: block; }
+            .menu-toggle { display: flex !important; }
         }
-
         @media (max-width: 640px) {
-            .stat-card {
-                padding: 1rem;
-            }
-            .card {
-                padding: 1rem;
-            }
-            .container {
-                padding: 0 0.75rem;
-            }
-            .modal {
-                padding: 1.5rem;
-            }
-            .assignment-card {
-                padding: 1rem;
-            }
+            .stat-card { padding: 1rem; }
+            .card { padding: 1rem; }
+            .container { padding: 0 0.75rem; }
+            .modal { padding: 1.5rem; }
+            .assignment-card { padding: 1rem; }
         }
+        .menu-toggle { display: none; }
 
-        .menu-toggle {
-            display: none;
-        }
-
-        /* ===== ANIMATIONS ===== */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-in {
-            animation: fadeInUp 0.6s ease forwards;
-        }
+        .animate-in { animation: fadeInUp 0.6s ease forwards; }
         .animate-in:nth-child(2) { animation-delay: 0.1s; }
         .animate-in:nth-child(3) { animation-delay: 0.2s; }
         .animate-in:nth-child(4) { animation-delay: 0.3s; }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--gray-100);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--gray-300);
-            border-radius: 999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-400);
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
 
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 2rem;
@@ -769,28 +522,13 @@
             z-index: 9999;
             max-width: 400px;
         }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            background: var(--success);
-        }
-        .toast.error {
-            background: var(--error);
-        }
-        .toast.warning {
-            background: var(--warning);
-        }
-        .toast.info {
-            background: var(--primary);
-        }
-        [data-theme="dark"] .toast {
-            background: var(--gray-200);
-            color: var(--gray-900);
-        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--primary); }
+        [data-theme="dark"] .toast { background: var(--gray-200); color: var(--gray-900); }
 
-        /* ===== SEARCH & FILTER ===== */
         .search-input {
             padding: 0.5rem 1rem 0.5rem 2.5rem;
             border: 2px solid var(--gray-200);
@@ -811,9 +549,7 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
         }
-        .search-wrapper {
-            position: relative;
-        }
+        .search-wrapper { position: relative; }
         .search-wrapper .search-icon {
             position: absolute;
             left: 0.75rem;
@@ -822,7 +558,6 @@
             color: var(--gray-400);
         }
 
-        /* ===== FILE UPLOAD ===== */
         .file-upload {
             border: 2px dashed var(--gray-300);
             border-radius: var(--radius-lg);
@@ -831,38 +566,31 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        [data-theme="dark"] .file-upload {
-            border-color: var(--gray-400);
-        }
+        [data-theme="dark"] .file-upload { border-color: var(--gray-400); }
         .file-upload:hover {
             border-color: var(--primary);
             background: var(--gray-50);
         }
-        [data-theme="dark"] .file-upload:hover {
-            background: var(--gray-200);
-        }
+        [data-theme="dark"] .file-upload:hover { background: var(--gray-200); }
         .file-upload.dragover {
             border-color: var(--primary);
             background: var(--info-50);
         }
 
-        /* ===== SKELETON ===== */
-        .skeleton {
-            animation: skeleton-loading 1s linear infinite alternate;
-        }
-        @keyframes skeleton-loading {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
         .skeleton-card {
             border-radius: var(--radius-lg);
             padding: 1.25rem;
             background: var(--gray-100);
             border: 1px solid var(--gray-200);
+            animation: skeleton-loading 1s linear infinite alternate;
         }
         [data-theme="dark"] .skeleton-card {
             background: var(--gray-200);
             border-color: var(--gray-300);
+        }
+        @keyframes skeleton-loading {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         .skeleton-card .skeleton-icon {
             width: 32px;
@@ -871,34 +599,21 @@
             background: var(--gray-200);
             margin-bottom: 0.5rem;
         }
-        [data-theme="dark"] .skeleton-card .skeleton-icon {
-            background: var(--gray-300);
-        }
+        [data-theme="dark"] .skeleton-card .skeleton-icon { background: var(--gray-300); }
         .skeleton-card .skeleton-line {
             height: 12px;
             background: var(--gray-200);
             border-radius: 4px;
             margin: 0.4rem 0;
         }
-        [data-theme="dark"] .skeleton-card .skeleton-line {
-            background: var(--gray-300);
-        }
-        .skeleton-card .skeleton-line.short {
-            width: 40%;
-        }
-        .skeleton-card .skeleton-line.medium {
-            width: 60%;
-        }
-        .skeleton-card .skeleton-line.long {
-            width: 80%;
-        }
+        [data-theme="dark"] .skeleton-card .skeleton-line { background: var(--gray-300); }
+        .skeleton-card .skeleton-line.short { width: 40%; }
+        .skeleton-card .skeleton-line.medium { width: 60%; }
+        .skeleton-card .skeleton-line.long { width: 80%; }
     </style>
 </head>
 <body>
-    <!-- ===== SKIP LINK ===== -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- ===== TOAST ===== -->
     <div id="toast" class="toast"></div>
 
     <!-- ===== NAVBAR ===== -->
@@ -932,9 +647,7 @@
                     </button>
                     <div class="relative group">
                         <button class="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300" aria-label="User menu">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm">
-                                T
-                            </div>
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm">T</div>
                             <span class="hidden md:block text-sm font-medium text-secondary">Teacher</span>
                         </button>
                         <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
@@ -951,56 +664,43 @@
         </div>
     </header>
 
-    <!-- ===== SIDEBAR OVERLAY ===== -->
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
-
     <!-- ===== SIDEBAR ===== -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
     <aside id="sidebar" class="sidebar" role="navigation" aria-label="Dashboard Navigation">
         <div class="space-y-1">
             <a href="teacher-dashboard.html" class="sidebar-link">
-                <span class="icon">📊</span>
-                Dashboard
+                <span class="icon">📊</span> Dashboard
             </a>
             <a href="teacher-classes.html" class="sidebar-link">
-                <span class="icon">🏫</span>
-                My Classes
+                <span class="icon">🏫</span> My Classes
             </a>
             <a href="teacher-students.html" class="sidebar-link">
-                <span class="icon">👨‍🎓</span>
-                Students
+                <span class="icon">👨‍🎓</span> Students
             </a>
             <a href="teacher-assignments.html" class="sidebar-link active">
-                <span class="icon">📝</span>
-                Assignments
+                <span class="icon">📝</span> Assignments
             </a>
             <a href="teacher-attendance.html" class="sidebar-link">
-                <span class="icon">✅</span>
-                Attendance
+                <span class="icon">✅</span> Attendance
             </a>
             <a href="teacher-grades.html" class="sidebar-link">
-                <span class="icon">📊</span>
-                Grades
+                <span class="icon">📊</span> Grades
             </a>
             <a href="teacher-schedule.html" class="sidebar-link">
-                <span class="icon">📅</span>
-                Schedule
+                <span class="icon">📅</span> Schedule
             </a>
             <a href="teacher-communication.html" class="sidebar-link">
-                <span class="icon">✉️</span>
-                Communication
+                <span class="icon">✉️</span> Communication
             </a>
             <hr class="my-4 border-gray-200 dark:border-gray-300" />
             <a href="teacher-profile.html" class="sidebar-link">
-                <span class="icon">👤</span>
-                Profile
+                <span class="icon">👤</span> Profile
             </a>
             <a href="teacher-settings.html" class="sidebar-link">
-                <span class="icon">⚙️</span>
-                Settings
+                <span class="icon">⚙️</span> Settings
             </a>
             <button id="sidebar-logout" class="sidebar-link w-full text-left text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
-                <span class="icon">🚪</span>
-                Logout
+                <span class="icon">🚪</span> Logout
             </button>
         </div>
     </aside>
@@ -1015,9 +715,7 @@
                     <p class="text-gray-500 text-sm mt-1" id="assignment-count">Loading assignments...</p>
                 </div>
                 <div class="flex gap-3 mt-3 md:mt-0">
-                    <button class="btn btn-primary" id="create-assignment-btn">
-                        ➕ Create Assignment
-                    </button>
+                    <button class="btn btn-primary" id="create-assignment-btn">➕ Create Assignment</button>
                 </div>
             </div>
 
@@ -1055,10 +753,10 @@
                     <input type="text" id="search-assignment" class="search-input" placeholder="Search assignments..." />
                 </div>
                 <div class="flex gap-2 flex-wrap">
-                    <select id="filter-class" class="form-input" style="max-width: 150px;">
+                    <select id="filter-class" class="form-input" style="max-width:150px;">
                         <option value="all">All Classes</option>
                     </select>
-                    <select id="filter-status" class="form-input" style="max-width: 150px;">
+                    <select id="filter-status" class="form-input" style="max-width:150px;">
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
                         <option value="pending">Pending</option>
@@ -1069,9 +767,7 @@
             </div>
 
             <!-- Assignment Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="assignment-grid">
-                <!-- Skeleton loaders will be shown here -->
-            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="assignment-grid"></div>
 
             <!-- Empty State -->
             <div id="empty-state" class="text-center py-12 hidden">
@@ -1089,8 +785,7 @@
             <button class="modal-close" id="modal-close">✕</button>
             <div id="modal-content">
                 <h2 class="text-2xl font-bold text-secondary mb-2" id="modal-assignment-title">Assignment Title</h2>
-                <p class="text-gray-500 text-sm mb-4" id="modal-assignment-detail">Class • Due: Date</p>
-                
+                <p class="text-gray-500 text-sm mb-4" id="modal-assignment-detail">Loading...</p>
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="p-3 bg-gray-50 dark:bg-gray-200 rounded-lg text-center">
                         <p class="text-xs text-gray-500">Total Students</p>
@@ -1105,23 +800,13 @@
                         <p class="text-xl font-bold text-secondary" id="modal-pending">0</p>
                     </div>
                 </div>
-
                 <h4 class="font-semibold text-secondary mb-2">📋 Submissions</h4>
                 <div class="table-container">
                     <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Status</th>
-                                <th>Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modal-submissions">
-                            <!-- Dynamic content -->
-                        </tbody>
+                        <thead><tr><th>Student</th><th>Status</th><th>Grade</th></tr></thead>
+                        <tbody id="modal-submissions"></tbody>
                     </table>
                 </div>
-
                 <div class="flex gap-3 mt-4">
                     <button class="btn btn-success" id="modal-download">📥 Download All</button>
                     <button class="btn btn-primary" id="modal-remind">🔔 Remind Students</button>
@@ -1136,43 +821,43 @@
         <div class="modal">
             <button class="modal-close" id="create-modal-close">✕</button>
             <h2 class="text-2xl font-bold text-secondary mb-4">➕ Create New Assignment</h2>
-            
             <form id="create-assignment-form" class="space-y-4">
                 <div>
-                    <label class="form-label" for="assignment-title">Assignment Title</label>
+                    <label class="form-label" for="assignment-title">Assignment Title *</label>
                     <input type="text" id="assignment-title" class="form-input" placeholder="e.g., Algebra Quiz" required />
                 </div>
                 <div>
-                    <label class="form-label" for="assignment-class">Class</label>
+                    <label class="form-label" for="assignment-class">Class *</label>
                     <select id="assignment-class" class="form-input" required>
                         <option value="">Select Class</option>
                     </select>
                 </div>
                 <div>
-                    <label class="form-label" for="assignment-description">Description</label>
+                    <label class="form-label" for="assignment-subject">Subject *</label>
+                    <select id="assignment-subject" class="form-input" required>
+                        <option value="">Select Subject</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="assignment-description">Description *</label>
                     <textarea id="assignment-description" class="form-input" placeholder="Describe the assignment..." rows="3" required></textarea>
                 </div>
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
-                        <label class="form-label" for="assignment-due">Due Date</label>
+                        <label class="form-label" for="assignment-due">Due Date *</label>
                         <input type="date" id="assignment-due" class="form-input" required />
                     </div>
                     <div>
-                        <label class="form-label" for="assignment-max">Max Score</label>
+                        <label class="form-label" for="assignment-max">Max Score *</label>
                         <input type="number" id="assignment-max" class="form-input" placeholder="e.g., 100" min="1" required />
                     </div>
                 </div>
-                <div>
-                    <label class="form-label">Attach File (Optional)</label>
-                    <div class="file-upload" id="file-upload">
-                        <div class="text-4xl mb-2">📎</div>
-                        <p class="text-gray-500">Drop files here or click to upload</p>
-                        <p class="text-xs text-gray-400 mt-1">PDF, DOC, DOCX, or ZIP (Max 10MB)</p>
-                        <input type="file" id="file-input" class="hidden" multiple />
-                    </div>
-                </div>
+                <div id="create-message" class="form-message"></div>
                 <div class="flex gap-3">
-                    <button type="submit" class="btn btn-primary">✅ Create Assignment</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span id="create-submit-text">✅ Create Assignment</span>
+                        <span id="create-submit-spinner" class="spinner" style="display:none;"></span>
+                    </button>
                     <button type="reset" class="btn btn-outline">🗑️ Clear</button>
                 </div>
             </form>
@@ -1185,20 +870,10 @@
             <button class="modal-close" id="grade-modal-close">✕</button>
             <h2 class="text-2xl font-bold text-secondary mb-4">📊 Grade Assignment</h2>
             <p class="text-gray-500 text-sm mb-4" id="grade-assignment-name">Assignment - Class</p>
-            
             <div class="table-container">
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Score</th>
-                            <th>Grade</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="grade-students-list">
-                        <!-- Dynamic content -->
-                    </tbody>
+                    <thead><tr><th>Student</th><th>Score</th><th>Grade</th><th>Action</th></tr></thead>
+                    <tbody id="grade-students-list"></tbody>
                 </table>
             </div>
             <div class="flex gap-3 mt-4">
@@ -1223,91 +898,52 @@
     </footer>
 
     <!-- ============================================================ -->
-    <!-- ===== DATA MANAGEMENT SCRIPT ===== -->
+    <!-- ===== COMPLETE SCRIPT - API INTEGRATION ===== -->
     <!-- ============================================================ -->
     <script>
         // ============================================
-        // DATA MANAGEMENT SYSTEM
+        // API CONFIGURATION
         // ============================================
-        const AppData = {
-            KEYS: {
-                ASSIGNMENTS: 'edusphere_assignments',
-                STUDENTS: 'edusphere_students',
-                CLASSES: 'edusphere_classes'
-            },
+        const API_BASE = 'http://localhost:5002';
 
-            getAssignments() {
-                const data = localStorage.getItem(this.KEYS.ASSIGNMENTS);
-                return data ? JSON.parse(data) : [];
-            },
+        function getToken() {
+            return localStorage.getItem('edusphere_token') || sessionStorage.getItem('edusphere_token');
+        }
 
-            getStudents() {
-                const data = localStorage.getItem(this.KEYS.STUDENTS);
-                return data ? JSON.parse(data) : [];
-            },
+        function getUser() {
+            try {
+                return JSON.parse(localStorage.getItem('edusphere_user') || sessionStorage.getItem('edusphere_user'));
+            } catch { return null; }
+        }
 
-            getClasses() {
-                const data = localStorage.getItem(this.KEYS.CLASSES);
-                return data ? JSON.parse(data) : [];
-            },
+        async function apiFetch(endpoint, options = {}) {
+            const token = getToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
 
-            getStudentsByClass(className) {
-                return this.getStudents().filter(s => s.class === className);
-            },
-
-            addAssignment(assignment) {
-                const assignments = this.getAssignments();
-                assignment.id = 'ASG-' + String(assignments.length + 1).padStart(3, '0');
-                assignment.submissions = assignment.submissions || {};
-                assignments.push(assignment);
-                localStorage.setItem(this.KEYS.ASSIGNMENTS, JSON.stringify(assignments));
-                return assignment;
-            },
-
-            updateAssignment(id, data) {
-                const assignments = this.getAssignments();
-                const index = assignments.findIndex(a => a.id === id);
-                if (index !== -1) {
-                    assignments[index] = { ...assignments[index], ...data };
-                    localStorage.setItem(this.KEYS.ASSIGNMENTS, JSON.stringify(assignments));
-                    return assignments[index];
-                }
-                return null;
-            },
-
-            getStats() {
-                const assignments = this.getAssignments();
-                const students = this.getStudents();
-                let totalSubmitted = 0;
-                let totalStudents = 0;
-
-                assignments.forEach(a => {
-                    const classStudents = students.filter(s => s.class === a.class);
-                    const submitted = Object.keys(a.submissions || {}).length;
-                    totalSubmitted += submitted;
-                    totalStudents += classStudents.length;
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers
                 });
-
-                const submissionRate = totalStudents > 0 ? Math.round((totalSubmitted / totalStudents) * 100) : 0;
-                const completed = assignments.filter(a => {
-                    const classStudents = students.filter(s => s.class === a.class);
-                    const submitted = Object.keys(a.submissions || {}).length;
-                    return classStudents.length > 0 && submitted === classStudents.length;
-                }).length;
-                const pending = assignments.filter(a => {
-                    const classStudents = students.filter(s => s.class === a.class);
-                    const submitted = Object.keys(a.submissions || {}).length;
-                    return classStudents.length > 0 && submitted < classStudents.length;
-                }).length;
-
-                return {
-                    total: assignments.length,
-                    completed: completed,
-                    pending: pending,
-                    submissionRate: submissionRate
-                };
+                if (response.status === 401) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'login.html';
+                    return null;
+                }
+                const data = await response.json();
+                console.log(`📡 ${endpoint}:`, data);
+                return data;
+            } catch (error) {
+                console.error('❌ API Error:', error);
+                showToast('Error connecting to server', 'error');
+                return null;
             }
-        };
+        }
 
         // ============================================
         // TOAST NOTIFICATION
@@ -1317,14 +953,11 @@
             toast.textContent = message;
             toast.className = 'toast ' + type;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000);
+            setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         // ============================================
-        // THEME TOGGLE
+        // THEME TOGGLE - FIXED
         // ============================================
         (function() {
             const themeToggle = document.getElementById('theme-toggle');
@@ -1333,19 +966,25 @@
             
             if (savedTheme === 'dark') {
                 html.setAttribute('data-theme', 'dark');
-                themeToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
             }
 
             if (themeToggle) {
+                function updateThemeIcon(isDark) {
+                    if (isDark) {
+                        themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+                    } else {
+                        themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+                    }
+                }
+
+                updateThemeIcon(savedTheme === 'dark');
+
                 themeToggle.addEventListener('click', function() {
                     const isDark = html.getAttribute('data-theme') === 'dark';
                     const newTheme = isDark ? 'light' : 'dark';
                     html.setAttribute('data-theme', newTheme);
                     localStorage.setItem('edusphere_theme', newTheme);
-                    
-                    this.innerHTML = newTheme === 'dark' 
-                        ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
-                        : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+                    updateThemeIcon(newTheme === 'dark');
                 });
             }
         })();
@@ -1357,25 +996,15 @@
             const menuToggle = document.getElementById('menu-toggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-
             function toggleSidebar() {
                 sidebar.classList.toggle('open');
                 overlay.classList.toggle('show');
                 document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
             }
-
-            if (menuToggle) {
-                menuToggle.addEventListener('click', toggleSidebar);
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', toggleSidebar);
-            }
-
+            if (menuToggle) menuToggle.addEventListener('click', toggleSidebar);
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-                    toggleSidebar();
-                }
+                if (e.key === 'Escape' && sidebar.classList.contains('open')) toggleSidebar();
             });
         })();
 
@@ -1385,11 +1014,7 @@
         (function() {
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', function() {
-                if (window.pageYOffset > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
+                navbar.classList.toggle('scrolled', window.pageYOffset > 50);
             });
         })();
 
@@ -1397,14 +1022,12 @@
         // LOGOUT
         // ============================================
         (function() {
-            const logoutBtns = document.querySelectorAll('#logout-btn, #sidebar-logout');
-            
-            logoutBtns.forEach(btn => {
+            document.querySelectorAll('#logout-btn, #sidebar-logout').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     if (confirm('Are you sure you want to logout?')) {
-                        localStorage.removeItem('edusphere_user');
-                        sessionStorage.removeItem('edusphere_user');
+                        localStorage.clear();
+                        sessionStorage.clear();
                         window.location.href = 'login.html';
                     }
                 });
@@ -1412,46 +1035,110 @@
         })();
 
         // ============================================
-        // AUTO REDIRECT IF NOT LOGGED IN
+        // CHECK LOGIN STATUS
         // ============================================
         (function() {
-            const user = localStorage.getItem('edusphere_user') || sessionStorage.getItem('edusphere_user');
-            if (!user) {
+            const token = getToken();
+            const user = getUser();
+            if (!token || !user || user.role !== 'teacher') {
                 window.location.href = 'login.html';
-            } else {
-                try {
-                    const userData = JSON.parse(user);
-                    if (userData.role !== 'teacher') {
-                        window.location.href = 'login.html';
-                    }
-                } catch {
-                    window.location.href = 'login.html';
-                }
+                return;
             }
         })();
 
         // ============================================
-        // POPULATE FILTERS & CLASS DROPDOWN
+        // LOAD CLASSES & SUBJECTS
         // ============================================
-        function populateFilters() {
-            const classes = AppData.getClasses();
-            const classFilter = document.getElementById('filter-class');
-            const classSelect = document.getElementById('assignment-class');
-            
-            classFilter.innerHTML = '<option value="all">All Classes</option>';
-            classSelect.innerHTML = '<option value="">Select Class</option>';
-            
-            classes.forEach(cls => {
-                const option1 = document.createElement('option');
-                option1.value = cls.section;
-                option1.textContent = cls.section;
-                classFilter.appendChild(option1);
+        async function loadClassesAndSubjects() {
+            try {
+                // Load classes
+                const classRes = await apiFetch('/api/teacher/classes');
+                if (classRes?.success && classRes.data) {
+                    const classSelect = document.getElementById('filter-class');
+                    const assignmentClass = document.getElementById('assignment-class');
+                    
+                    classSelect.innerHTML = '<option value="all">All Classes</option>';
+                    assignmentClass.innerHTML = '<option value="">Select Class</option>';
+                    
+                    classRes.data.forEach(cls => {
+                        const opt1 = document.createElement('option');
+                        opt1.value = cls._id;
+                        opt1.textContent = `${cls.name} - ${cls.section || ''}`;
+                        classSelect.appendChild(opt1);
+                        
+                        const opt2 = document.createElement('option');
+                        opt2.value = cls._id;
+                        opt2.textContent = `${cls.name} - ${cls.section || ''}`;
+                        assignmentClass.appendChild(opt2);
+                    });
+                }
+
+                // Load subjects
+                const subjectRes = await apiFetch('/api/admin/subjects');
+                if (subjectRes?.success && subjectRes.data) {
+                    const subjectSelect = document.getElementById('assignment-subject');
+                    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                    subjectRes.data.forEach(sub => {
+                        const opt = document.createElement('option');
+                        opt.value = sub._id;
+                        opt.textContent = sub.name;
+                        subjectSelect.appendChild(opt);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading classes/subjects:', error);
+            }
+        }
+
+        // ============================================
+        // LOAD ASSIGNMENTS - FROM API
+        // ============================================
+        async function loadAssignments() {
+            try {
+                const token = getToken();
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Show skeleton loaders
+                const grid = document.getElementById('assignment-grid');
+                grid.innerHTML = '';
+                for (let i = 0; i < 6; i++) {
+                    const skeleton = document.createElement('div');
+                    skeleton.className = 'skeleton-card';
+                    skeleton.innerHTML = `
+                        <div class="skeleton-icon"></div>
+                        <div class="skeleton-line long"></div>
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line long" style="margin-top:0.8rem;"></div>
+                    `;
+                    grid.appendChild(skeleton);
+                }
+
+                // ✅ API CALL
+                const res = await apiFetch('/api/teacher/assignments');
                 
-                const option2 = document.createElement('option');
-                option2.value = cls.section;
-                option2.textContent = cls.section;
-                classSelect.appendChild(option2);
-            });
+                if (res?.success && res.data) {
+                    const assignments = res.data || [];
+                    renderAssignments(assignments);
+                    updateStats(assignments);
+                    document.getElementById('assignment-count').textContent = `Showing ${assignments.length} assignments`;
+                } else {
+                    showToast('Error loading assignments', 'error');
+                    document.getElementById('assignment-grid').innerHTML = `
+                        <div class="col-span-full text-center py-8">
+                            <div class="text-4xl mb-3">❌</div>
+                            <h3 class="text-lg font-semibold text-secondary">Failed to load assignments</h3>
+                            <button class="btn btn-primary btn-sm mt-3" onclick="loadAssignments()">🔄 Retry</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ Error loading assignments:', error);
+                showToast('Error loading assignments', 'error');
+            }
         }
 
         // ============================================
@@ -1459,20 +1146,11 @@
         // ============================================
         const icons = ['📐', '🔬', '📖', '📝', '✍️', '🧪', '🎨', '💻', '🌍', '🎭'];
 
-        function getStatusBadge(status) {
-            const map = {
-                'active': 'badge-success',
-                'pending': 'badge-warning',
-                'completed': 'badge-primary'
-            };
-            return map[status] || 'badge-info';
-        }
-
         function renderAssignments(assignments) {
             const grid = document.getElementById('assignment-grid');
             const emptyState = document.getElementById('empty-state');
             
-            if (assignments.length === 0) {
+            if (!assignments || assignments.length === 0) {
                 grid.innerHTML = '';
                 emptyState.classList.remove('hidden');
                 return;
@@ -1480,12 +1158,11 @@
             emptyState.classList.add('hidden');
 
             grid.innerHTML = '';
-            const students = AppData.getStudents();
             
             assignments.forEach((assignment, index) => {
-                const classStudents = students.filter(s => s.class === assignment.class);
-                const submitted = Object.keys(assignment.submissions || {}).length;
-                const total = classStudents.length;
+                const stats = assignment.stats || {};
+                const total = stats.totalStudents || 0;
+                const submitted = stats.submittedCount || 0;
                 const percentage = total > 0 ? Math.round((submitted / total) * 100) : 0;
                 
                 let status = 'active';
@@ -1494,27 +1171,26 @@
                 
                 const icon = icons[index % icons.length];
                 const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-                const badgeClass = getStatusBadge(status);
+                const badgeClass = status === 'completed' ? 'badge-success' : status === 'pending' ? 'badge-warning' : 'badge-primary';
                 
                 const card = document.createElement('div');
                 card.className = 'assignment-card animate-in';
-                card.dataset.title = assignment.title;
-                card.dataset.class = assignment.class;
-                card.dataset.status = status;
+                card.dataset.id = assignment._id;
                 card.style.animationDelay = `${index * 0.05}s`;
                 
-                const dueDate = new Date(assignment.dueDate);
-                const formattedDate = dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const dueDate = assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString() : 'No due date';
+                const className = assignment.class?.section || assignment.class?.name || 'N/A';
+                const subjectName = assignment.subject?.name || 'N/A';
                 
                 card.innerHTML = `
                     <div class="status-badge">
                         <span class="badge ${badgeClass}">${statusText}</span>
                     </div>
                     <div class="assignment-icon">${icon}</div>
-                    <h3 class="text-lg font-bold text-secondary">${assignment.title}</h3>
-                    <p class="text-sm text-gray-500">${assignment.class}</p>
+                    <h3 class="text-lg font-bold text-secondary">${assignment.title || 'Untitled'}</h3>
+                    <p class="text-sm text-gray-500">${className}</p>
                     <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                        <span>📅 Due: ${formattedDate}</span>
+                        <span>📅 Due: ${dueDate}</span>
                         <span>👨‍🎓 ${total} Students</span>
                     </div>
                     <div class="mt-2">
@@ -1527,35 +1203,31 @@
                         </div>
                     </div>
                     <div class="flex gap-2 mt-3">
-                        <button class="btn btn-primary btn-sm flex-1 view-assignment" data-title="${assignment.title}">View Details</button>
-                        <button class="btn btn-outline btn-sm grade-assignment" data-title="${assignment.title}">📊</button>
+                        <button class="btn btn-primary btn-sm flex-1 view-assignment" data-id="${assignment._id}">View Details</button>
+                        <button class="btn btn-outline btn-sm grade-assignment" data-id="${assignment._id}">📊</button>
                     </div>
                 `;
-                
                 grid.appendChild(card);
             });
 
-            // Add event listeners
+            // Event listeners
             document.querySelectorAll('.view-assignment').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const title = this.dataset.title;
-                    openAssignmentModal(title);
+                    openAssignmentModal(this.dataset.id);
                 });
             });
 
             document.querySelectorAll('.grade-assignment').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const title = this.dataset.title;
-                    openGradeModal(title);
+                    openGradeModal(this.dataset.id);
                 });
             });
 
             document.querySelectorAll('.assignment-card').forEach(card => {
                 card.addEventListener('click', function() {
-                    const title = this.dataset.title;
-                    openAssignmentModal(title);
+                    openAssignmentModal(this.dataset.id);
                 });
             });
         }
@@ -1563,85 +1235,96 @@
         // ============================================
         // UPDATE STATS
         // ============================================
-        function updateStats() {
-            const stats = AppData.getStats();
-            const assignments = AppData.getAssignments();
+        function updateStats(assignments) {
+            const total = assignments?.length || 0;
+            let completed = 0, pending = 0;
+            let totalStudents = 0, totalSubmitted = 0;
             
-            document.getElementById('stat-total').textContent = stats.total;
-            document.getElementById('stat-completed').textContent = stats.completed;
-            document.getElementById('stat-pending').textContent = stats.pending;
-            document.getElementById('stat-submission').textContent = stats.submissionRate + '%';
-            document.getElementById('stat-progress').style.width = stats.submissionRate + '%';
-            document.getElementById('assignment-count').textContent = `Showing ${assignments.length} assignments`;
+            assignments?.forEach(a => {
+                const stats = a.stats || {};
+                totalStudents += stats.totalStudents || 0;
+                totalSubmitted += stats.submittedCount || 0;
+                if (stats.pendingCount === 0 && stats.totalStudents > 0) completed++;
+                else if (stats.pendingCount > 0) pending++;
+            });
+            
+            const submissionRate = totalStudents > 0 ? Math.round((totalSubmitted / totalStudents) * 100) : 0;
+            
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-completed').textContent = completed;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-submission').textContent = submissionRate + '%';
+            document.getElementById('stat-progress').style.width = submissionRate + '%';
         }
 
         // ============================================
-        // ASSIGNMENT MODAL
+        // OPEN ASSIGNMENT MODAL
         // ============================================
-        const assignmentModal = document.getElementById('assignment-modal');
-        const modalClose = document.getElementById('modal-close');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-
-        function openAssignmentModal(title) {
-            const assignments = AppData.getAssignments();
-            const assignment = assignments.find(a => a.title === title);
-            if (!assignment) {
-                showToast('❌ Assignment not found!', 'error');
-                return;
-            }
-
-            const students = AppData.getStudentsByClass(assignment.class);
-            const submissions = assignment.submissions || {};
-            const submitted = Object.keys(submissions).length;
-            const total = students.length;
-
-            document.getElementById('modal-assignment-title').textContent = assignment.title;
-            document.getElementById('modal-assignment-detail').textContent = `${assignment.class} • Due: ${new Date(assignment.dueDate).toLocaleDateString()}`;
-            document.getElementById('modal-total').textContent = total;
-            document.getElementById('modal-submitted').textContent = submitted;
-            document.getElementById('modal-pending').textContent = total - submitted;
-
-            // Render submissions
-            const tbody = document.getElementById('modal-submissions');
-            tbody.innerHTML = '';
-            students.forEach(student => {
-                const score = submissions[student.id];
-                const status = score !== undefined ? 'Submitted' : 'Pending';
-                const statusClass = score !== undefined ? 'badge-success' : 'badge-warning';
-                const grade = score !== undefined ? (score >= 90 ? 'A+' : score >= 80 ? 'A' : score >= 70 ? 'B+' : score >= 60 ? 'C+' : 'D') : '-';
+        async function openAssignmentModal(id) {
+            try {
+                showToast('Loading assignment details...', 'info');
+                const res = await apiFetch(`/api/teacher/assignments/${id}`);
                 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-secondary">${student.name}</td>
-                    <td><span class="badge ${statusClass}">${status}</span></td>
-                    <td><span class="badge badge-primary">${grade}</span></td>
-                `;
-                tbody.appendChild(tr);
-            });
+                if (res?.success && res.data) {
+                    const assignment = res.data;
+                    const submissions = assignment.submissions || [];
+                    
+                    document.getElementById('modal-assignment-title').textContent = assignment.title || 'Assignment';
+                    document.getElementById('modal-assignment-detail').textContent = `${assignment.class?.section || 'N/A'} • Due: ${assignment.dueDate ? new Date(assignment.dueDate).toLocaleDateString() : 'N/A'}`;
+                    
+                    const total = submissions.length || assignment.stats?.totalStudents || 0;
+                    const submitted = submissions.filter(s => s.status === 'submitted' || s.marks !== undefined).length;
+                    document.getElementById('modal-total').textContent = total;
+                    document.getElementById('modal-submitted').textContent = submitted;
+                    document.getElementById('modal-pending').textContent = total - submitted;
 
-            assignmentModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
+                    const tbody = document.getElementById('modal-submissions');
+                    tbody.innerHTML = '';
+                    if (submissions.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="3" class="text-center text-gray-500 py-4">No submissions yet</td></tr>`;
+                    } else {
+                        submissions.forEach(s => {
+                            const status = s.status || 'pending';
+                            const statusClass = status === 'submitted' ? 'badge-success' : 'badge-warning';
+                            const grade = s.marks !== undefined ? (s.marks >= 90 ? 'A+' : s.marks >= 80 ? 'A' : s.marks >= 70 ? 'B+' : s.marks >= 60 ? 'C+' : 'D') : '-';
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="text-secondary">${s.student?.user?.firstName || 'Student'} ${s.student?.user?.lastName || ''}</td>
+                                <td><span class="badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                                <td><span class="badge badge-primary">${grade}</span></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+
+                    document.getElementById('assignment-modal').classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    showToast('Error loading assignment details', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading assignment:', error);
+                showToast('Error loading assignment details', 'error');
+            }
         }
 
         function closeAssignmentModal() {
-            assignmentModal.classList.remove('show');
+            document.getElementById('assignment-modal').classList.remove('show');
             document.body.style.overflow = '';
         }
 
-        modalClose.addEventListener('click', closeAssignmentModal);
-        modalCloseBtn.addEventListener('click', closeAssignmentModal);
-        assignmentModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAssignmentModal();
-            }
+        document.getElementById('modal-close').addEventListener('click', closeAssignmentModal);
+        document.getElementById('modal-close-btn').addEventListener('click', closeAssignmentModal);
+        document.getElementById('assignment-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeAssignmentModal();
         });
 
-        document.getElementById('modal-download')?.addEventListener('click', function() {
+        document.getElementById('modal-download').addEventListener('click', function() {
             const title = document.getElementById('modal-assignment-title').textContent;
             showToast(`📥 Downloading submissions for "${title}"...`, 'success');
         });
 
-        document.getElementById('modal-remind')?.addEventListener('click', function() {
+        document.getElementById('modal-remind').addEventListener('click', function() {
             const title = document.getElementById('modal-assignment-title').textContent;
             showToast(`🔔 Reminder sent to pending students for "${title}"!`, 'info');
         });
@@ -1655,7 +1338,7 @@
         const createAssignmentEmpty = document.getElementById('create-assignment-empty');
 
         function openCreateModal() {
-            populateFilters();
+            loadClassesAndSubjects();
             createModal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
@@ -1666,166 +1349,158 @@
         }
 
         createAssignmentBtn.addEventListener('click', openCreateModal);
-        if (createAssignmentEmpty) {
-            createAssignmentEmpty.addEventListener('click', openCreateModal);
-        }
+        if (createAssignmentEmpty) createAssignmentEmpty.addEventListener('click', openCreateModal);
         createModalClose.addEventListener('click', closeCreateModal);
         createModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCreateModal();
-            }
+            if (e.target === this) closeCreateModal();
         });
 
-        // File Upload
-        const fileUpload = document.getElementById('file-upload');
-        const fileInput = document.getElementById('file-input');
-
-        fileUpload.addEventListener('click', () => fileInput.click());
-        fileUpload.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileUpload.classList.add('dragover');
-        });
-        fileUpload.addEventListener('dragleave', () => {
-            fileUpload.classList.remove('dragover');
-        });
-        fileUpload.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fileUpload.classList.remove('dragover');
-            fileInput.files = e.dataTransfer.files;
-            if (fileInput.files.length > 0) {
-                showToast(`📎 ${fileInput.files.length} file(s) attached!`, 'success');
-            }
-        });
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                showToast(`📎 ${this.files.length} file(s) attached!`, 'success');
-            }
-        });
-
-        // Create Assignment Form
-        document.getElementById('create-assignment-form').addEventListener('submit', function(e) {
+        // Create Assignment Form - API
+        document.getElementById('create-assignment-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const title = document.getElementById('assignment-title').value.trim();
-            const classVal = document.getElementById('assignment-class').value;
+            const classId = document.getElementById('assignment-class').value;
+            const subjectId = document.getElementById('assignment-subject').value;
             const description = document.getElementById('assignment-description').value.trim();
-            const due = document.getElementById('assignment-due').value;
-            const maxScore = parseInt(document.getElementById('assignment-max').value);
+            const dueDate = document.getElementById('assignment-due').value;
+            const maxMarks = parseInt(document.getElementById('assignment-max').value);
 
-            if (!title || !classVal || !description || !due || !maxScore) {
+            if (!title || !classId || !subjectId || !description || !dueDate || !maxMarks) {
                 showToast('❌ Please fill all required fields!', 'error');
                 return;
             }
 
-            const newAssignment = {
-                title,
-                class: classVal,
-                description,
-                dueDate: due,
-                maxScore,
-                submissions: {}
-            };
+            const submitText = document.getElementById('create-submit-text');
+            const spinner = document.getElementById('create-submit-spinner');
+            submitText.style.display = 'none';
+            spinner.style.display = 'inline-block';
 
-            AppData.addAssignment(newAssignment);
-            
-            // Refresh the page data
-            const assignments = AppData.getAssignments();
-            renderAssignments(assignments);
-            updateStats();
-            
-            showToast(`✅ Assignment "${title}" created successfully!`, 'success');
-            closeCreateModal();
-            this.reset();
-            fileInput.value = '';
+            try {
+                const res = await apiFetch('/api/teacher/assignments', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title,
+                        class: classId,
+                        subject: subjectId,
+                        description,
+                        dueDate: new Date(dueDate).toISOString(),
+                        maxMarks
+                    })
+                });
+
+                if (res?.success) {
+                    showToast(`✅ Assignment "${title}" created successfully!`, 'success');
+                    closeCreateModal();
+                    this.reset();
+                    loadAssignments();
+                } else {
+                    showToast('❌ Failed to create assignment', 'error');
+                }
+            } catch (error) {
+                showToast('❌ Error creating assignment', 'error');
+            }
+
+            submitText.style.display = 'inline';
+            spinner.style.display = 'none';
         });
 
         // ============================================
         // GRADE ASSIGNMENT MODAL
         // ============================================
-        const gradeModal = document.getElementById('grade-modal');
-        const gradeModalClose = document.getElementById('grade-modal-close');
-        const gradeCloseBtn = document.getElementById('grade-close-btn');
-
-        function openGradeModal(title) {
-            const assignments = AppData.getAssignments();
-            const assignment = assignments.find(a => a.title === title);
-            if (!assignment) {
-                showToast('❌ Assignment not found!', 'error');
-                return;
-            }
-
-            document.getElementById('grade-assignment-name').textContent = `${assignment.title} - ${assignment.class}`;
-            
-            const students = AppData.getStudentsByClass(assignment.class);
-            const submissions = assignment.submissions || {};
-            const tbody = document.getElementById('grade-students-list');
-            tbody.innerHTML = '';
-            
-            students.forEach(student => {
-                const score = submissions[student.id] || '';
-                const grade = score ? (score >= 90 ? 'A+' : score >= 80 ? 'A' : score >= 70 ? 'B+' : score >= 60 ? 'C+' : 'D') : '-';
-                const gradeClass = score ? 'badge-primary' : 'badge-warning';
-                
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-secondary">${student.name}</td>
-                    <td><input type="number" class="form-input grade-score" style="max-width: 80px;" value="${score}" min="0" max="${assignment.maxScore}" data-student="${student.id}" /></td>
-                    <td><span class="badge ${gradeClass} grade-display">${grade}</span></td>
-                    <td><button class="btn btn-success btn-sm save-grade" data-student="${student.id}">💾 Save</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Add grade input listeners
-            document.querySelectorAll('.grade-score').forEach(input => {
-                input.addEventListener('input', function() {
-                    const value = parseInt(this.value) || 0;
-                    const maxScore = parseInt(assignment.maxScore) || 100;
-                    const gradeDisplay = this.closest('tr').querySelector('.grade-display');
-                    const grade = value >= 90 ? 'A+' : value >= 80 ? 'A' : value >= 70 ? 'B+' : value >= 60 ? 'C+' : 'D';
-                    gradeDisplay.textContent = grade;
-                    gradeDisplay.className = `badge ${value ? 'badge-primary' : 'badge-warning'} grade-display`;
-                });
-            });
-
-            // Save individual grade
-            document.querySelectorAll('.save-grade').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const row = this.closest('tr');
-                    const studentId = this.dataset.student;
-                    const scoreInput = row.querySelector('.grade-score');
-                    const score = parseInt(scoreInput.value) || 0;
+        async function openGradeModal(id) {
+            try {
+                const res = await apiFetch(`/api/teacher/assignments/${id}`);
+                if (res?.success && res.data) {
+                    const assignment = res.data;
+                    const submissions = assignment.submissions || [];
                     
-                    const assignments = AppData.getAssignments();
-                    const idx = assignments.findIndex(a => a.id === assignment.id);
-                    if (idx !== -1) {
-                        assignments[idx].submissions = assignments[idx].submissions || {};
-                        assignments[idx].submissions[studentId] = score;
-                        localStorage.setItem('edusphere_assignments', JSON.stringify(assignments));
-                        showToast(`💾 Grade saved for ${row.querySelector('td:first-child').textContent}`, 'success');
-                    }
-                });
-            });
+                    document.getElementById('grade-assignment-name').textContent = `${assignment.title || 'Assignment'} - ${assignment.class?.section || 'N/A'}`;
 
-            gradeModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
+                    const tbody = document.getElementById('grade-students-list');
+                    tbody.innerHTML = '';
+                    if (submissions.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-500 py-4">No submissions to grade</td></tr>`;
+                    } else {
+                        submissions.forEach(s => {
+                            const score = s.marks || '';
+                            const grade = score ? (score >= 90 ? 'A+' : score >= 80 ? 'A' : score >= 70 ? 'B+' : score >= 60 ? 'C+' : 'D') : '-';
+                            const gradeClass = score ? 'badge-primary' : 'badge-warning';
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="text-secondary">${s.student?.user?.firstName || 'Student'} ${s.student?.user?.lastName || ''}</td>
+                                <td><input type="number" class="form-input grade-score" style="max-width:80px;" value="${score}" min="0" max="${assignment.maxMarks || 100}" data-submission="${s._id}" /></td>
+                                <td><span class="badge ${gradeClass} grade-display">${grade}</span></td>
+                                <td><button class="btn btn-success btn-sm save-grade" data-submission="${s._id}">💾 Save</button></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+
+                    // Grade input listeners
+                    document.querySelectorAll('.grade-score').forEach(input => {
+                        input.addEventListener('input', function() {
+                            const value = parseInt(this.value) || 0;
+                            const maxScore = parseInt(assignment.maxMarks) || 100;
+                            const gradeDisplay = this.closest('tr').querySelector('.grade-display');
+                            const grade = value >= 90 ? 'A+' : value >= 80 ? 'A' : value >= 70 ? 'B+' : value >= 60 ? 'C+' : 'D';
+                            gradeDisplay.textContent = value ? grade : '-';
+                            gradeDisplay.className = `badge ${value ? 'badge-primary' : 'badge-warning'} grade-display`;
+                        });
+                    });
+
+                    // Save individual grade
+                    document.querySelectorAll('.save-grade').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            const row = this.closest('tr');
+                            const submissionId = this.dataset.submission;
+                            const scoreInput = row.querySelector('.grade-score');
+                            const score = parseInt(scoreInput.value) || 0;
+                            
+                            try {
+                                const res = await apiFetch(`/api/teacher/assignments/${id}/grade`, {
+                                    method: 'PUT',
+                                    body: JSON.stringify({
+                                        studentId: submissionId,
+                                        marks: score,
+                                        feedback: ''
+                                    })
+                                });
+                                if (res?.success) {
+                                    showToast('💾 Grade saved!', 'success');
+                                    this.textContent = '✅ Saved';
+                                    this.className = 'btn btn-success btn-sm saved';
+                                } else {
+                                    showToast('❌ Failed to save grade', 'error');
+                                }
+                            } catch (error) {
+                                showToast('❌ Error saving grade', 'error');
+                            }
+                        });
+                    });
+
+                    document.getElementById('grade-modal').classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            } catch (error) {
+                console.error('Error loading grade modal:', error);
+                showToast('Error loading grade data', 'error');
+            }
         }
 
         function closeGradeModal() {
-            gradeModal.classList.remove('show');
+            document.getElementById('grade-modal').classList.remove('show');
             document.body.style.overflow = '';
         }
 
-        gradeModalClose.addEventListener('click', closeGradeModal);
-        gradeCloseBtn.addEventListener('click', closeGradeModal);
-        gradeModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeGradeModal();
-            }
+        document.getElementById('grade-modal-close').addEventListener('click', closeGradeModal);
+        document.getElementById('grade-close-btn').addEventListener('click', closeGradeModal);
+        document.getElementById('grade-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeGradeModal();
         });
 
-        document.getElementById('grade-save-all')?.addEventListener('click', function() {
-            document.querySelectorAll('.save-grade').forEach(btn => btn.click());
+        document.getElementById('grade-save-all').addEventListener('click', function() {
+            document.querySelectorAll('.save-grade:not(.saved)').forEach(btn => btn.click());
             showToast('💾 All grades saved successfully!', 'success');
             closeGradeModal();
         });
@@ -1837,46 +1512,32 @@
         const filterClass = document.getElementById('filter-class');
         const filterStatus = document.getElementById('filter-status');
         const resetFilter = document.getElementById('reset-filter');
-        const emptyState = document.getElementById('empty-state');
 
         function filterAssignments() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const classFilter = filterClass.value;
             const statusFilter = filterStatus.value;
+            const cards = document.querySelectorAll('#assignment-grid .assignment-card');
             
-            let assignments = AppData.getAssignments();
-            
-            if (searchTerm) {
-                assignments = assignments.filter(a => a.title.toLowerCase().includes(searchTerm));
-            }
-            
-            if (classFilter !== 'all') {
-                assignments = assignments.filter(a => a.class === classFilter);
-            }
-            
-            if (statusFilter !== 'all') {
-                const students = AppData.getStudents();
-                assignments = assignments.filter(a => {
-                    const classStudents = students.filter(s => s.class === a.class);
-                    const submitted = Object.keys(a.submissions || {}).length;
-                    const total = classStudents.length;
-                    const percentage = total > 0 ? Math.round((submitted / total) * 100) : 0;
-                    
-                    if (statusFilter === 'completed') return percentage === 100 && total > 0;
-                    if (statusFilter === 'pending') return percentage < 100 && new Date(a.dueDate) < new Date();
-                    if (statusFilter === 'active') return percentage < 100 && new Date(a.dueDate) >= new Date();
-                    return true;
-                });
-            }
-            
-            renderAssignments(assignments);
-            document.getElementById('assignment-count').textContent = `Showing ${assignments.length} assignments`;
-            
-            if (assignments.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-            }
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                const className = card.querySelector('p.text-gray-500')?.textContent?.toLowerCase() || '';
+                const badge = card.querySelector('.status-badge .badge')?.textContent?.toLowerCase() || '';
+                
+                let show = true;
+                if (searchTerm && !title.includes(searchTerm) && !className.includes(searchTerm)) {
+                    show = false;
+                }
+                if (classFilter !== 'all') {
+                    // Check if card belongs to selected class
+                    const cardClass = card.dataset.class || '';
+                    if (cardClass !== classFilter) show = false;
+                }
+                if (statusFilter !== 'all' && badge !== statusFilter) {
+                    show = false;
+                }
+                card.style.display = show ? '' : 'none';
+            });
         }
 
         searchInput.addEventListener('input', filterAssignments);
@@ -1892,39 +1553,9 @@
         });
 
         // ============================================
-        // INITIALIZE PAGE
+        // ANIMATE IN
         // ============================================
-        function initPage() {
-            // Show skeleton loaders
-            const grid = document.getElementById('assignment-grid');
-            grid.innerHTML = '';
-            for (let i = 0; i < 6; i++) {
-                const skeleton = document.createElement('div');
-                skeleton.className = 'skeleton-card';
-                skeleton.innerHTML = `
-                    <div class="skeleton-icon"></div>
-                    <div class="skeleton-line long"></div>
-                    <div class="skeleton-line medium"></div>
-                    <div class="skeleton-line short"></div>
-                    <div class="skeleton-line long" style="margin-top: 0.8rem;"></div>
-                `;
-                grid.appendChild(skeleton);
-            }
-
-            setTimeout(() => {
-                populateFilters();
-                const assignments = AppData.getAssignments();
-                renderAssignments(assignments);
-                updateStats();
-                console.log('📝 Assignments loaded:', assignments.length);
-            }, 500);
-        }
-
-        // ============================================
-        // ANIMATION ON SCROLL
-        // ============================================
-        (function() {
-            const animateElements = document.querySelectorAll('.animate-in');
+        function initAnimateIn() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1934,18 +1565,23 @@
                 });
             }, { threshold: 0.1 });
 
-            animateElements.forEach(el => {
+            document.querySelectorAll('.animate-in').forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
                 el.style.transition = 'all 0.6s ease';
                 observer.observe(el);
             });
-        })();
+        }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initPage);
-
-        console.log('📝 Teacher Assignments page loaded successfully!');
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initAnimateIn();
+            loadClassesAndSubjects();
+            loadAssignments();
+            console.log('📝 Teacher Assignments page with API integration loaded!');
+        });
     </script>
 </body>
 </html>

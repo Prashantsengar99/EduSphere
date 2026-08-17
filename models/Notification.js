@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
 
 const NotificationSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
   title: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
   message: {
     type: String,
@@ -17,18 +11,48 @@ const NotificationSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['info', 'warning', 'success', 'error'],
+    enum: ['info', 'warning', 'success', 'error', 'notice'],
     default: 'info'
   },
-  isRead: {
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high', 'urgent'],
+    default: 'medium'
+  },
+  recipients: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  roles: [{
+    type: String,
+    enum: ['student', 'teacher', 'admin', 'principal', 'all']
+  }],
+  readBy: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    readAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  link: String,
+  expiresAt: Date,
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  isGlobal: {
     type: Boolean,
     default: false
-  },
-  link: {
-    type: String
   }
 }, {
   timestamps: true
 });
+
+NotificationSchema.index({ createdAt: -1 });
+NotificationSchema.index({ 'recipients': 1 });
 
 module.exports = mongoose.model('Notification', NotificationSchema);

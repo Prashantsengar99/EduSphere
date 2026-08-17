@@ -3,66 +3,88 @@ const mongoose = require('mongoose');
 const FeeSchema = new mongoose.Schema({
   student: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Student',
     required: true
   },
-  course: {
+  class: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: 'Class',
     required: true
   },
-  totalAmount: {
+  feeType: {
+    type: String,
+    enum: ['tuition', 'development', 'library', 'sports', 'lab', 'annual', 'transport', 'other'],
+    required: true
+  },
+  amount: {
     type: Number,
-    required: true,
-    min: 0
+    required: true
+  },
+  dueDate: {
+    type: Date,
+    required: true
   },
   paidAmount: {
     type: Number,
-    default: 0,
-    min: 0
-  },
-  pendingAmount: {
-    type: Number,
     default: 0
-  },
-  dueDate: {
-    type: Date
   },
   status: {
     type: String,
-    enum: ['paid', 'pending', 'overdue'],
+    enum: ['pending', 'partially-paid', 'paid', 'overdue'],
     default: 'pending'
   },
   payments: [{
     amount: Number,
-    method: {
-      type: String,
-      enum: ['card', 'upi', 'netbanking', 'cash']
-    },
-    transactionId: String,
-    paidAt: {
+    date: {
       type: Date,
       default: Date.now
     },
-    status: {
+    method: {
       type: String,
-      enum: ['success', 'failed', 'pending'],
-      default: 'success'
-    }
-  }]
+      enum: ['cash', 'card', 'upi', 'bank-transfer', 'online']
+    },
+    transactionId: String,
+    receiptId: String,
+    notes: String
+  }],
+  lateFee: {
+    type: Number,
+    default: 0
+  },
+  discount: {
+    type: Number,
+    default: 0
+  },
+  scholarship: {
+    type: Number,
+    default: 0
+  },
+  academicYear: {
+    type: String,
+    required: true
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 }, {
   timestamps: true
 });
 
-// Calculate pending amount before saving
+// Update status based on payments
 FeeSchema.pre('save', function(next) {
-  this.pendingAmount = this.totalAmount - this.paidAmount;
-  if (this.pendingAmount === 0) {
+  if (this.paidAmount >= this.amount) {
     this.status = 'paid';
-  } else if (this.dueDate && new Date() > this.dueDate) {
+  } else if (this.paidAmount > 0) {
+    this.status = 'partially-paid';
+  } else if (new Date() > this.dueDate && this.paidAmount === 0) {
     this.status = 'overdue';
+  } else {
+    this.status = 'pending';
   }
   next();
 });
+
+FeeSchema.index({ student: 1, status: 1 });
 
 module.exports = mongoose.model('Fee', FeeSchema);

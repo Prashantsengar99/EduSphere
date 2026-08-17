@@ -442,5 +442,108 @@
 <script src="assets/js/performance.js" defer></script>
 
 
+
+<!-- Add this before closing body tag -->
+<script>
+// ============================================
+// ADMISSION FORM SUBMIT - API
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[data-validate]');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const grade = document.getElementById('grade').value;
+        const message = document.getElementById('message').value.trim();
+
+        // Validation
+        if (!firstName || !lastName || !email || !phone || !grade) {
+            showToast('❌ Please fill all required fields', 'error');
+            return;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '⏳ Submitting...';
+
+        try {
+            const response = await fetch('http://localhost:5002/api/admission', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    grade,
+                    message
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showToast('✅ ' + data.message, 'success');
+                form.reset();
+            } else {
+                showToast('❌ ' + data.message, 'error');
+            }
+        } catch (error) {
+            console.error('Admission Form Error:', error);
+            showToast('❌ Error submitting form. Please try again.', 'error');
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    });
+});
+
+// ============================================
+// TOAST NOTIFICATION
+// ============================================
+function showToast(message, type = 'info') {
+    // Remove existing toast
+    const existing = document.querySelector('.custom-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast fixed bottom-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium max-w-sm transition-all duration-300 transform translate-y-20 opacity-0';
+    
+    const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        warning: 'bg-yellow-500',
+        info: 'bg-blue-500'
+    };
+    toast.className += ' ' + (colors[type] || colors.info);
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-y-20', 'opacity-0');
+    }, 10);
+
+    // Remove after 4 seconds
+    setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        setTimeout(() => toast.remove(), 500);
+    }, 4000);
+}
+
+console.log('📝 Admission form with API integration loaded!');
+</script>
+
+
 </body>
 </html>

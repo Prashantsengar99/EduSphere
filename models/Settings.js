@@ -4,16 +4,25 @@ const SettingsSchema = new mongoose.Schema({
   key: {
     type: String,
     required: true,
-    unique: true,
-    trim: true
+    unique: true
   },
   value: {
     type: mongoose.Schema.Types.Mixed,
     required: true
   },
-  description: {
+  category: {
     type: String,
-    trim: true
+    enum: ['general', 'academic', 'fee', 'attendance', 'communication', 'security', 'appearance'],
+    default: 'general'
+  },
+  description: String,
+  isPublic: {
+    type: Boolean,
+    default: false
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, {
   timestamps: true

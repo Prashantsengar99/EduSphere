@@ -1,52 +1,70 @@
 const mongoose = require('mongoose');
 
 const AssignmentSchema = new mongoose.Schema({
-  course: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
-    required: true
-  },
   title: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
   description: {
     type: String,
-    trim: true
+    required: true
+  },
+  class: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class',
+    required: true
+  },
+  subject: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subject',
+    required: true
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
   dueDate: {
     type: Date,
     required: true
   },
-  maxScore: {
+  maxMarks: {
     type: Number,
+    required: true,
     default: 100
   },
+  attachments: [{
+    name: String,
+    url: String,
+    type: String
+  }],
   submissions: [{
     student: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'Student'
     },
     submittedAt: {
       type: Date,
       default: Date.now
     },
-    score: Number,
+    fileUrl: String,
+    remarks: String,
+    marks: Number,
     feedback: String,
     status: {
       type: String,
-      enum: ['submitted', 'graded', 'late'],
-      default: 'submitted'
+      enum: ['pending', 'submitted', 'graded'],
+      default: 'pending'
     }
   }],
-  status: {
-    type: String,
-    enum: ['active', 'completed'],
-    default: 'active'
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true
 });
+
+AssignmentSchema.index({ class: 1, dueDate: 1 });
 
 module.exports = mongoose.model('Assignment', AssignmentSchema);

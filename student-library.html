@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library - Student Dashboard | EduSphere</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (window.console && console.warn) {
+            const _warn = console.warn;
+            console.warn = function() {
+                if (arguments[0] && String(arguments[0]).includes('tailwindcss.com should not be used in production')) return;
+                _warn.apply(console, arguments);
+            };
+        }
+    </script>
+
+    <style>
+        /* ===== ALL STYLES SAME (copy from above) ===== */
+        :root {
+            --primary: #2563EB;
+            --primary-gradient: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            --accent: #7C3AED;
+            --secondary: #1E293B;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --success-50: #ECFDF5;
+            --error: #EF4444;
+            --error-50: #FEF2F2;
+            --warning: #F59E0B;
+            --warning-50: #FFFBEB;
+            --radius: 16px;
+            --radius-lg: 12px;
+            --radius-sm: 8px;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.05);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        [data-theme="dark"] {
+            --secondary: #F8FAFC;
+            --gray-50: #0F172A;
+            --gray-100: #1E293B;
+            --gray-200: #334155;
+            --gray-300: #475569;
+            --gray-400: #64748B;
+            --gray-500: #94A3B8;
+            --gray-600: #CBD5E1;
+            --gray-700: #E2E8F0;
+            --gray-800: #F1F5F9;
+            --gray-900: #F8FAFC;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-body);
+            background: var(--gray-50);
+            color: var(--gray-800);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+        [data-theme="dark"] body { background: #0F172A; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+        .skip-link {
+            position: fixed;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            z-index: 9999;
+            font-weight: 600;
+            transition: top 0.3s ease;
+        }
+        .skip-link:focus { top: 0; }
+
+        #navbar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        [data-theme="dark"] #navbar {
+            background: rgba(15,23,42,0.9);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        #navbar.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--gray-600);
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: var(--primary); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: var(--primary); }
+        .nav-link.active::after { width: 100%; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37,99,235,0.35);
+        }
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        [data-theme="dark"] .card {
+            background: var(--gray-100);
+            border-color: rgba(255,255,255,0.05);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            background: white;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--primary);
+        }
+        [data-theme="dark"] .stat-card { background: var(--gray-100); }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(37,99,235,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .stat-card .stat-icon.blue { background: rgba(37,99,235,0.1); color: var(--primary); }
+        .stat-card .stat-icon.green { background: rgba(16,185,129,0.1); color: var(--success); }
+        .stat-card .stat-icon.yellow { background: rgba(245,158,11,0.1); color: var(--warning); }
+        .stat-card .stat-icon.purple { background: rgba(124,58,237,0.1); color: var(--accent); }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-success { background: var(--success-50); color: var(--success); }
+        .badge-warning { background: var(--warning-50); color: var(--warning); }
+        .badge-error { background: var(--error-50); color: var(--error); }
+        .badge-primary { background: rgba(37,99,235,0.1); color: var(--primary); }
+
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            bottom: 0;
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+        [data-theme="dark"] .sidebar {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--gray-600);
+            transition: var(--transition);
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+        }
+        [data-theme="dark"] .sidebar-link { color: var(--gray-400); }
+        .sidebar-link:hover { background: var(--gray-50); color: var(--primary); }
+        [data-theme="dark"] .sidebar-link:hover { background: var(--gray-200); color: var(--primary); }
+        .sidebar-link.active {
+            background: rgba(37,99,235,0.08);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        [data-theme="dark"] .sidebar-link.active { background: rgba(37,99,235,0.15); color: var(--primary); }
+        .sidebar-link .icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem 1.5rem;
+            padding-top: 90px;
+            min-height: 100vh;
+        }
+
+        .book-card {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            transition: var(--transition);
+            background: white;
+        }
+        [data-theme="dark"] .book-card {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+        .book-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+        .book-card .book-icon { font-size: 2.5rem; }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 1rem; padding-top: 80px; }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 998;
+            }
+            .sidebar-overlay.show { display: block; }
+            .menu-toggle { display: flex !important; }
+        }
+        @media (max-width: 640px) {
+            .stat-card { padding: 1rem; }
+            .card { padding: 1rem; }
+            .container { padding: 0 0.75rem; }
+        }
+        .menu-toggle { display: none; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeInUp 0.6s ease forwards; }
+        .animate-in:nth-child(2) { animation-delay: 0.1s; }
+        .animate-in:nth-child(3) { animation-delay: 0.2s; }
+        .animate-in:nth-child(4) { animation-delay: 0.3s; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--gray-100); }
+        ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            background: var(--gray-800);
+            color: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+            max-width: 400px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--primary); }
+        [data-theme="dark"] .toast { background: var(--gray-200); color: var(--gray-900); }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="toast" class="toast"></div>
+
+    <!-- NAVBAR -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container">
+            <div class="flex items-center justify-between h-[70px]">
+                <div class="flex items-center gap-3">
+                    <button id="menu-toggle" class="menu-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300" aria-label="Toggle sidebar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <a href="index.html" class="flex items-center gap-2 group">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                            <span class="text-white font-bold text-sm">E</span>
+                        </div>
+                        <span class="text-lg font-bold font-heading text-secondary transition-colors duration-300 group-hover:text-primary">
+                            Edu<span class="text-primary group-hover:text-secondary transition-colors duration-300">Sphere</span>
+                        </span>
+                    </a>
+                </div>
+
+                <nav class="hidden lg:flex items-center gap-6">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="about.html" class="nav-link">About</a>
+                    <a href="academics.html" class="nav-link">Academics</a>
+                    <a href="student-dashboard.html" class="nav-link">Dashboard</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-110" aria-label="Toggle theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <div class="relative group">
+                        <button class="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300" aria-label="User menu">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm" id="user-avatar">S</div>
+                            <span class="hidden md:block text-sm font-medium text-secondary" id="user-name">Student</span>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <div class="p-2">
+                                <a href="student-profile.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm">👤 Profile</a>
+                                <a href="student-settings.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm">⚙️ Settings</a>
+                                <hr class="my-1 border-gray-200 dark:border-gray-700" />
+                                <button id="logout-btn" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 transition-colors text-sm w-full">🚪 Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <aside id="sidebar" class="sidebar">
+        <div class="space-y-1">
+            <a href="student-dashboard.html" class="sidebar-link">
+                <span class="icon">📊</span> Dashboard
+            </a>
+            <a href="student-grades.html" class="sidebar-link">
+                <span class="icon">📝</span> Grades
+            </a>
+            <a href="student-attendance.html" class="sidebar-link">
+                <span class="icon">✅</span> Attendance
+            </a>
+            <a href="student-assignments.html" class="sidebar-link">
+                <span class="icon">📚</span> Assignments
+            </a>
+            <a href="student-schedule.html" class="sidebar-link">
+                <span class="icon">📅</span> Schedule
+            </a>
+            <a href="student-fees.html" class="sidebar-link">
+                <span class="icon">💰</span> Fees
+            </a>
+            <a href="student-library.html" class="sidebar-link active">
+                <span class="icon">📖</span> Library
+            </a>
+            <hr class="my-4 border-gray-200 dark:border-gray-300" />
+            <a href="student-profile.html" class="sidebar-link">
+                <span class="icon">👤</span> Profile
+            </a>
+            <a href="student-settings.html" class="sidebar-link">
+                <span class="icon">⚙️</span> Settings
+            </a>
+            <button id="sidebar-logout" class="sidebar-link w-full text-left text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20">
+                <span class="icon">🚪</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="main-content">
+        <div class="container">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 animate-in">
+                <div>
+                    <h1 class="text-2xl font-bold text-secondary">📖 Library</h1>
+                    <p class="text-gray-500 text-sm mt-1" id="library-info">Loading library...</p>
+                </div>
+                <div class="flex gap-3 mt-3 md:mt-0">
+                    <button class="btn btn-primary btn-sm" id="refresh-library">🔄 Refresh</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="stat-card animate-in">
+                    <div class="stat-icon blue">📚</div>
+                    <div class="text-2xl font-bold text-secondary" id="stat-total">--</div>
+                    <div class="text-sm text-gray-500">Total Books</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="stat-icon green">✅</div>
+                    <div class="text-2xl font-bold text-secondary" id="stat-available">--</div>
+                    <div class="text-sm text-gray-500">Available</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="stat-icon yellow">📤</div>
+                    <div class="text-2xl font-bold text-secondary" id="stat-issued">--</div>
+                    <div class="text-sm text-gray-500">Issued to Me</div>
+                </div>
+                <div class="stat-card animate-in">
+                    <div class="stat-icon purple">📅</div>
+                    <div class="text-2xl font-bold text-secondary" id="stat-due">--</div>
+                    <div class="text-sm text-gray-500">Due Soon</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="books-grid">
+                <div class="col-span-full text-center text-gray-500 py-4">Loading...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-secondary text-white mt-8" style="margin-left:260px;">
+        <div class="container py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+                <p>&copy; 2024 EduSphere. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // API CONFIGURATION
+        // ============================================
+        const API_BASE = 'http://localhost:5002';
+
+        function getToken() {
+            return localStorage.getItem('edusphere_token') || sessionStorage.getItem('edusphere_token');
+        }
+
+        function getUser() {
+            try {
+                return JSON.parse(localStorage.getItem('edusphere_user') || sessionStorage.getItem('edusphere_user'));
+            } catch { return null; }
+        }
+
+        async function apiFetch(endpoint, options = {}) {
+            const token = getToken();
+            const headers = { 'Content-Type': 'application/json', ...options.headers };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+                if (response.status === 401) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'login.html';
+                    return null;
+                }
+                const data = await response.json();
+                console.log(`📡 ${endpoint}:`, data);
+                return data;
+            } catch (error) {
+                console.error('❌ API Error:', error);
+                showToast('Error connecting to server', 'error');
+                return null;
+            }
+        }
+
+        // ============================================
+        // TOAST NOTIFICATION
+        // ============================================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // ============================================
+        // THEME TOGGLE
+        // ============================================
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('edusphere_theme') || 'light';
+            
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+            }
+
+            if (themeToggle) {
+                function updateThemeIcon(isDark) {
+                    if (isDark) {
+                        themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+                    } else {
+                        themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+                    }
+                }
+
+                updateThemeIcon(savedTheme === 'dark');
+
+                themeToggle.addEventListener('click', function() {
+                    const isDark = html.getAttribute('data-theme') === 'dark';
+                    const newTheme = isDark ? 'light' : 'dark';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('edusphere_theme', newTheme);
+                    updateThemeIcon(newTheme === 'dark');
+                });
+            }
+        })();
+
+        // ============================================
+        // SIDEBAR TOGGLE
+        // ============================================
+        (function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            function toggleSidebar() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('show');
+                document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            }
+            if (menuToggle) menuToggle.addEventListener('click', toggleSidebar);
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
+        })();
+
+        // ============================================
+        // NAVBAR SCROLL
+        // ============================================
+        (function() {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                navbar.classList.toggle('scrolled', window.pageYOffset > 50);
+            });
+        })();
+
+        // ============================================
+        // LOGOUT
+        // ============================================
+        (function() {
+            document.querySelectorAll('#logout-btn, #sidebar-logout').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        window.location.href = 'login.html';
+                    }
+                });
+            });
+        })();
+
+        // ============================================
+        // CHECK LOGIN STATUS
+        // ============================================
+        (function() {
+            const token = getToken();
+            const user = getUser();
+            if (!token || !user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            if (user.role !== 'student') {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('user-name').textContent = user.firstName || 'Student';
+            document.getElementById('user-avatar').textContent = (user.firstName || 'S').charAt(0);
+        })();
+
+        // ============================================
+        // ANIMATED COUNTER
+        // ============================================
+        function animateCounter(el, target) {
+            const duration = 1200;
+            const startTime = performance.now();
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(eased * target);
+                el.textContent = current;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ============================================
+        // LOAD LIBRARY - ONLY API
+        // ============================================
+        async function loadLibrary() {
+            try {
+                const token = getToken();
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Show loading state
+                document.getElementById('books-grid').innerHTML = `
+                    <div class="col-span-full text-center text-gray-500 py-4">Loading books from server...</div>
+                `;
+                document.getElementById('library-info').textContent = 'Loading library data...';
+                document.getElementById('stat-total').textContent = '--';
+                document.getElementById('stat-available').textContent = '--';
+                document.getElementById('stat-issued').textContent = '--';
+                document.getElementById('stat-due').textContent = '--';
+
+                // ✅ ONLY API CALL - NO SAMPLE DATA FALLBACK
+                const res = await apiFetch('/api/library/books');
+                
+                // ✅ Check if API returned data
+                if (res?.success && res.data) {
+                    const books = res.data.books || [];
+                    const total = res.data.total || books.length;
+                    const available = res.data.available || 0;
+                    const issued = res.data.issued || 0;
+                    const dueSoon = res.data.dueSoon || 0;
+
+                    // Update stats with animation
+                    animateCounter(document.getElementById('stat-total'), total);
+                    animateCounter(document.getElementById('stat-available'), available);
+                    animateCounter(document.getElementById('stat-issued'), issued);
+                    animateCounter(document.getElementById('stat-due'), dueSoon);
+                    document.getElementById('library-info').textContent = `✅ Showing ${total} books from database`;
+
+                    // Render books
+                    const grid = document.getElementById('books-grid');
+                    if (books.length === 0) {
+                        grid.innerHTML = `<div class="col-span-full text-center text-gray-500 py-4">📚 No books available in library</div>`;
+                    } else {
+                        grid.innerHTML = books.map((b, index) => `
+                            <div class="book-card animate-in" style="animation-delay: ${index * 0.05}s">
+                                <div class="book-icon">${getBookIcon(b.category || 'General')}</div>
+                                <h3 class="font-semibold text-secondary mt-2">${b.title || 'Untitled'}</h3>
+                                <p class="text-sm text-gray-500">${b.author || 'Unknown Author'}</p>
+                                <p class="text-xs text-gray-400">${b.category || 'General'} • ${b.isbn || 'N/A'}</p>
+                                <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-200 dark:border-gray-300">
+                                    <span class="badge badge-${b.status === 'available' ? 'success' : 'warning'}">${(b.status || 'available').toUpperCase()}</span>
+                                    <button class="btn ${b.status === 'available' ? 'btn-primary' : 'btn-outline'} btn-sm" onclick="handleBookAction('${b.id}', '${b.status}')">
+                                        ${b.status === 'available' ? '📥 Borrow' : '📤 Return'}
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    // ✅ API failed - show error, NO SAMPLE DATA
+                    document.getElementById('books-grid').innerHTML = `
+                        <div class="col-span-full text-center py-8">
+                            <div class="text-4xl mb-3">❌</div>
+                            <h3 class="text-lg font-semibold text-secondary">No Library Data</h3>
+                            <p class="text-gray-500 text-sm mt-1">Could not load library data from server</p>
+                            <button class="btn btn-primary btn-sm mt-3" onclick="loadLibrary()">🔄 Try Again</button>
+                        </div>
+                    `;
+                    document.getElementById('library-info').textContent = '❌ Failed to load library data';
+                    showToast('Could not load library data', 'error');
+                }
+
+            } catch (error) {
+                console.error('❌ Error loading library:', error);
+                // ✅ Show error, NO SAMPLE DATA
+                document.getElementById('books-grid').innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <div class="text-4xl mb-3">⚠️</div>
+                        <h3 class="text-lg font-semibold text-secondary">Connection Error</h3>
+                        <p class="text-gray-500 text-sm mt-1">Unable to connect to server</p>
+                        <button class="btn btn-primary btn-sm mt-3" onclick="loadLibrary()">🔄 Retry</button>
+                    </div>
+                `;
+                document.getElementById('library-info').textContent = '❌ Connection error';
+                showToast('Error connecting to server', 'error');
+            }
+        }
+
+        // ============================================
+        // BOOK ICON HELPER
+        // ============================================
+        function getBookIcon(category) {
+            const icons = {
+                'Fiction': '📖',
+                'Non-Fiction': '📕',
+                'Classic': '📗',
+                'Fantasy': '📘',
+                'Sci-Fi': '📙',
+                'Romance': '📒',
+                'Thriller': '📓',
+                'History': '📔',
+                'Science': '🔬',
+                'Math': '📐',
+                'Art': '🎨',
+                'Music': '🎵',
+                'General': '📚'
+            };
+            return icons[category] || '📚';
+        }
+
+        // ============================================
+        // BOOK ACTION HANDLER
+        // ============================================
+        function handleBookAction(bookId, status) {
+            if (status === 'available') {
+                if (confirm('Are you sure you want to borrow this book?')) {
+                    showToast('📥 Book borrowed successfully!', 'success');
+                    loadLibrary(); // Reload to update status
+                }
+            } else {
+                if (confirm('Are you sure you want to return this book?')) {
+                    showToast('📤 Book returned successfully!', 'success');
+                    loadLibrary(); // Reload to update status
+                }
+            }
+        }
+
+        // ============================================
+        // REFRESH LIBRARY
+        // ============================================
+        document.getElementById('refresh-library').addEventListener('click', function() {
+            showToast('🔄 Fetching latest library data...', 'info');
+            loadLibrary();
+        });
+
+        // ============================================
+        // ANIMATE IN
+        // ============================================
+        function initAnimateIn() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initAnimateIn();
+            loadLibrary();
+            console.log('✅ Student Library page with API integration loaded!');
+        });
+    </script>
+</body>
+</html>

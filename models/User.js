@@ -18,36 +18,54 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: 6,
+    minlength: [6, 'Password must be at least 6 characters'],
     select: false
   },
   role: {
     type: String,
-    enum: ['student', 'teacher', 'parent', 'principal', 'admin'],
+    enum: ['student', 'teacher', 'admin', 'principal'],
     default: 'student'
   },
   status: {
     type: String,
-    enum: ['active', 'inactive'],
+    enum: ['active', 'inactive', 'suspended'],
     default: 'active'
   },
+  profileImage: {
+    type: String,
+    default: null
+  },
+  phone: {
+    type: String,
+    trim: true
+  },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+  },
+  dateOfBirth: Date,
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'other']
+  },
+  lastLogin: Date,
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  lastLogin: {
-    type: Date
-  },
-  profile: {
-    phone: String,
-    address: String,
-    dateOfBirth: Date,
-    avatar: String
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
+  emailVerified: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true
@@ -56,7 +74,9 @@ const UserSchema = new mongoose.Schema({
 // Hash password before saving
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
@@ -64,5 +84,10 @@ UserSchema.pre('save', async function(next) {
 UserSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
+
+// Get full name
+UserSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`;
+});
 
 module.exports = mongoose.model('User', UserSchema);
