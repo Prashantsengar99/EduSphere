@@ -2515,16 +2515,16 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================================
-// START SERVER
+// 🔥 FIXED: START SERVER - Render ke liye (NO if condition)
 // ============================================================
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📚 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🔗 API URL: http://localhost:${PORT}`);
-    console.log(`🔍 Debug: http://localhost:${PORT}/api/debug/students`);
-  });
-}
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📚 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 API URL: http://localhost:${PORT}`);
+  console.log(`🔍 Debug: http://localhost:${PORT}/api/debug/students`);
+});
 
 // ============================================================
 // EXPORT FOR VERCEL
