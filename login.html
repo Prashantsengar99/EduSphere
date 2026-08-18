@@ -1479,10 +1479,10 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const successEl = document.getElementById('auth-success');
     const submitBtn = document.getElementById('login-submit');
 
-    // 🔥 DYNAMIC API BASE URL
+    // 🔥 DYNAMIC API BASE URL - FIXED
     const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://edusphere-jveg.onrender.com'
-        : 'https://edusphere-jveg.onrender.com';
+        ? 'http://localhost:5002'   // ✅ Local development
+        : 'https://edusphere-jveg.onrender.com';  // ✅ Production
 
     errorEl.classList.remove('show');
     successEl.classList.remove('show');
@@ -1497,7 +1497,6 @@ document.getElementById('login-form').addEventListener('submit', async function(
     submitBtn.disabled = true;
 
     try {
-        // 🔥 YAHAN CHANGE KARO
         const response = await fetch(`${API_BASE}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
