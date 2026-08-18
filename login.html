@@ -1466,7 +1466,6 @@
                 });
             }
         });
-
 // ============================================
 // LOGIN WITH API - TOKEN SAVE
 // ============================================
@@ -1479,6 +1478,11 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const errorEl = document.getElementById('auth-error');
     const successEl = document.getElementById('auth-success');
     const submitBtn = document.getElementById('login-submit');
+
+    // 🔥 DYNAMIC API BASE URL
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:5002'
+        : 'https://edusphere-jveg.onrender.com';
 
     errorEl.classList.remove('show');
     successEl.classList.remove('show');
@@ -1493,7 +1497,8 @@ document.getElementById('login-form').addEventListener('submit', async function(
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('http://localhost:5002/api/auth/login', {
+        // 🔥 YAHAN CHANGE KARO
+        const response = await fetch(`${API_BASE}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -1518,36 +1523,25 @@ document.getElementById('login-form').addEventListener('submit', async function(
             submitBtn.classList.remove('btn-loading');
             submitBtn.disabled = false;
             
-           // ✅ FIXED: Role-based redirect
-setTimeout(() => {
-    const role = data.user.role;
-    console.log('🔄 Redirecting to role:', role);
-    
-    // Admin -> Admin Dashboard
-    if (role === 'admin') {
-        window.location.href = 'admin-dashboard.html';
-    } 
-    // Principal -> Principal Dashboard
-    else if (role === 'principal') {
-        window.location.href = 'principal-dashboard.html';
-    } 
-    // Student -> Student Dashboard
-    else if (role === 'student') {
-        window.location.href = 'student-dashboard.html';
-    } 
-    // Teacher -> Teacher Dashboard
-    else if (role === 'teacher') {
-        window.location.href = 'teacher-dashboard.html';
-    } 
-    // Parent -> Parent Dashboard
-    else if (role === 'parent') {
-        window.location.href = 'parent-dashboard.html';
-    } 
-    // Default fallback
-    else {
-        window.location.href = 'index.html';
-    }
-}, 1000);
+            // Role-based redirect
+            setTimeout(() => {
+                const role = data.user.role;
+                console.log('🔄 Redirecting to role:', role);
+                
+                if (role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else if (role === 'principal') {
+                    window.location.href = 'principal-dashboard.html';
+                } else if (role === 'student') {
+                    window.location.href = 'student-dashboard.html';
+                } else if (role === 'teacher') {
+                    window.location.href = 'teacher-dashboard.html';
+                } else if (role === 'parent') {
+                    window.location.href = 'parent-dashboard.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
         } else {
             errorEl.textContent = data.message || '❌ Invalid email or password.';
             errorEl.classList.add('show');
@@ -1556,7 +1550,7 @@ setTimeout(() => {
         }
     } catch (error) {
         console.error('❌ Login error:', error);
-        errorEl.textContent = '❌ Error connecting to server. Make sure backend is running on port 5002.';
+        errorEl.textContent = '❌ Error connecting to server. Make sure backend is running.';
         errorEl.classList.add('show');
         submitBtn.classList.remove('btn-loading');
         submitBtn.disabled = false;
