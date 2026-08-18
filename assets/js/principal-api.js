@@ -2,7 +2,7 @@
 // PRINCIPAL API CONFIGURATION
 // ============================================
 
-const API_BASE = 'http://localhost:5002';
+const API_BASE = 'http://edusphere-jveg.onrender.com';
 
 function getToken() {
     return localStorage.getItem('edusphere_token') || sessionStorage.getItem('edusphere_token');
