@@ -14,7 +14,7 @@ const jwt = require('jsonwebtoken');
 // ============================================================
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://thakurprashant9720_db_user:CZ3SKvgHdyPyAkM5@cluster0.zlfum93.mongodb.net/?appName=Cluster0';
 const JWT_SECRET = process.env.JWT_SECRET || 'edusphere_super_secret_key_2024_secure';
-
+const PORT = process.env.PORT || 5000;
 
 // ============================================================
 // EXPRESS APP
@@ -2515,7 +2515,7 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================================
-// 🔥 FIXED: START SERVER - Render ke liye (PORT already declared at top)
+// 🔥 FIXED: START SERVER - Render ke liye
 // ============================================================
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
