@@ -1479,10 +1479,10 @@ document.getElementById('login-form').addEventListener('submit', async function(
     const successEl = document.getElementById('auth-success');
     const submitBtn = document.getElementById('login-submit');
 
-// ✅ SAHI - Local pe localhost, Vercel pe Render
+// ✅ Ab (naya URL)
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5002'   // ✅ Local backend
-    : 'https://edusphere-jveg.onrender.com';  // ✅ Production backend
+    ? 'http://localhost:5002'
+    : 'https://edusphere-1-r62a.onrender.com';  // ✅ Naya Render URL
 
     errorEl.classList.remove('show');
     successEl.classList.remove('show');
