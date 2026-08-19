@@ -24,38 +24,32 @@ const app = express();
 
 
 // ============================================================
-// MIDDLEWARE - CORS FIXED
+// MIDDLEWARE - CORS FIXED (Vercel + Render + Local)
 // ============================================================
 app.use(cors({
   origin: [
-    'http://localhost:5500', 
-    'http://127.0.0.1:5500', 
-    'http://localhost:5000', 
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:5000',
     'http://127.0.0.1:5000',
-    'https://edu-sphere-blli.vercel.app',   // 👈 YEH DALO
-    'https://edusphere-jveg.onrender.com'
+    'https://edu-sphere-blli.vercel.app',    // 👈 VERCEL DOMAIN
+    'https://edusphere-jveg.onrender.com'     // 👈 RENDER BACKEND
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
+// 🔥 PREFLIGHT REQUESTS KE LIYE BHI
 app.options('*', cors({
   origin: [
-    'http://localhost:5500', 
-    'http://127.0.0.1:5500', 
-    'http://localhost:5000', 
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:5000',
     'http://127.0.0.1:5000',
     'https://edu-sphere-blli.vercel.app',
     'https://edusphere-jveg.onrender.com'
   ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
-}));
-
-app.options('*', cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:5000', 'http://127.0.0.1:5000', '*'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
